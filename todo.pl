@@ -16,7 +16,6 @@ if($UserID eq "vcherepa"){
 #    $UserDir="--vcherepa";
 }
 
-$CMSSWRel = "8_0_25";
 $PWD=getcwd;
 
 printf("\n ---> Your user ID is:   $UserID \n");
