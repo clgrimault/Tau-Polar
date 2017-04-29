@@ -24,7 +24,7 @@ if($ARGV[0] eq "--help" || $ARGV[0] eq ""){
     printf("\nThe installation follows the recomendation given in the description");
     printf("\nof LLRHiggsTauTau for the latest CMSSW release: https://github.com/LLRCMS/LLRHiggsTauTau");
     printf("\n\nThis code requires one input option. The syntax is: ./todo.pl [OPTION]");
-    printf("\n\nRun todo script first with the 'settings' optins to set up environment variable");
+    printf("\n\nRun todo script first with the '--settings <tauoladir>' optins to set up environment variable");
     printf("\n\nAfter this step is complet prcoceed further and ");
     printf("\npchoose from the following options:\n");
     printf("\n./todo.pl --help                                   Prints this message\n");
@@ -39,8 +39,18 @@ $time= strftime("%h_%d_%Y",localtime);
 for($l=0;$l<$numArgs; $l++){
     
     if($ARGV[$l] eq "--settings"){
+	$setdir=$ARGV[l+1];
 
-	system(sprintf("echo \"export PYTHIA8DATA='/home-pbs/vcherepa/taua1/Installation/Tau-Polar/taudir/tauola++/1.1.5/pythia8/176/xmldoc'\" >> Install_TauolaEnvironment_$time"));
+	system(sprintf("rm Install_TauolaEnvironment_*"));	
+	system(sprintf("echo \"export PYTHIA8DATA='$PWD/$setdir/tauola++/1.1.5/pythia8/176/xmldoc'\">> Install_TauolaEnvironment_$time"));
+#	system(sprintf("echo \"export PYTHIA8DATA='/home-pbs/vcherepa/taua1/Installation/Tau-Polar/taudir/tauola++/1.1.5/pythia8/176/xmldoc'\" >> Install_TauolaEnvironment_$time"));
+	system(sprintf("echo \"export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:$PWD/TauSpiner/tauola++/1.1.5/lib\">> Install_TauolaEnvironment_$time"));
+	system(sprintf("echo \"export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:$PWD/$setdir/tauola++/1.1.5/pythia8/176/lib/\">> Install_TauolaEnvironment_$time"));
+	system(sprintf("echo \"export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:$PWD/$setdir/tauola++/1.1.5/HepMC-2.06.05/workdir/lib \">> Install_TauolaEnvironment_$time"));
+	system(sprintf("echo \"export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:$PWD/$setdir/tauola++/1.1.5/lhapdf-5.9.1/workdir/lib\">> Install_TauolaEnvironment_$time"));
+
+  
+
 	printf("\n\nInstructions:");
 	printf("\nTo complete this step do source Install_TauolaEnvironment_$time \n\n");
     }
@@ -48,7 +58,7 @@ for($l=0;$l<$numArgs; $l++){
 	$tauoladir=$ARGV[l+1];
 #	$l++;
 	$currentdir=getcwd;
-	system(sprintf("rm Install_TauolaSoftware_$time"));
+
 
 	system(sprintf("cernlib-use --version 5.34.18 root \n"));
                                 
@@ -89,7 +99,10 @@ for($l=0;$l<$numArgs; $l++){
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/$tauoladir/tauola++/1.1.5/lhapdf-5.9.1/workdir/lib"));
 	system(sprintf("mkdir $PWD/$tauoladir/tauola++/1.1.5/workdir; "));
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/;   ./configure --prefix=$PWD/$tauoladir/tauola++/1.1.5/workdir  --with-hepmc=$PWD/$tauoladir/tauola++/1.1.5/HepMC-2.06.05/workdir  --with-pythia8=$PWD/$tauoladir/tauola++/1.1.5/pythia8/176/  --with-lhapdf=$PWD/$tauoladir/tauola++/1.1.5/lhapdf-5.9.1/workdir/ --with-mc-tester=$PWD/$tauoladir/tauola++/1.1.5/MC-TESTER/   --with-tau-spinner; "));
-	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/;"));
+	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/; make;"));
+	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/; make all;"));
+	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/; make install;"));
+	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/examples; make"));
     }
 
 }
