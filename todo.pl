@@ -101,6 +101,7 @@ for($l=0;$l<$numArgs; $l++){
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/;   ./configure --prefix=$PWD/$tauoladir/tauola++/1.1.5/workdir  --with-hepmc=$PWD/$tauoladir/tauola++/1.1.5/HepMC-2.06.05/workdir  --with-pythia8=$PWD/$tauoladir/tauola++/1.1.5/pythia8/176/  --with-lhapdf=$PWD/$tauoladir/tauola++/1.1.5/lhapdf-5.9.1/workdir/ --with-mc-tester=$PWD/$tauoladir/tauola++/1.1.5/MC-TESTER/   --with-tau-spinner; "));
 	system(sprintf("cp Makefile  $PWD/$tauoladir/tauola++/1.1.5/examples;"));
 	system(sprintf("cp mypythia_example.cxx  $PWD/$tauoladir/tauola++/1.1.5/examples;"));
+	system(sprintf("echo \"\#dummy\">> $PWD/$tauoladir/tauola++/1.1.5/examples/.deps/mypythia_example.Po"));
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/; make;"));
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/; make all;"));
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/; make install;"));
