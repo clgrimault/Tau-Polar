@@ -1,15 +1,19 @@
 /**
- * Example of use of tauola C++ interface. Pythia events are
- * generated with a stable tau. Taus are subsequently decay via
- * tauola.
+ * Example of use of tauola C++ interfate. Pythia events are
+ * generated with a stable tau. Taus are subseuently decay via
+ * tauola, plots of polatization observables for tau-> mununu and tau-> pinu
+ * are produced.
  *
- * @author Nadia Davidson
- * @date 17 June 2008
+ * @author Vladimir Cherepanov
+ * @date  01 MAY 2017
  */
 
 #include "Tauola/Log.h"
 #include "Tauola/Tauola.h"
 #include "Tauola/TauolaHepMCEvent.h"
+#include "TFile.h"
+#include "TH1F.h"
+#include "TLorentzVector.h"
 
 //pythia header files
 #ifdef PYTHIA8180_OR_LATER
@@ -24,14 +28,14 @@
 #include "Generate.h"
 #include "HepMCEvent.H"
 #include "Setup.H"
-
+ 
 #include "tauola_print_parameters.h"
 using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents = 3000;
-int EventsToCheck=20;
+int NumberOfEvents = 10000; 
+int EventsToCheck=10;
 
 // elementary test of HepMC typically executed before
 // detector simulation based on http://home.fnal.gov/~mrenna/HCPSS/HCPSShepmc.html
@@ -39,26 +43,25 @@ int EventsToCheck=20;
 // we perform it before and after Tauola (for the first several events)
 void checkMomentumConservationInEvent(HepMC::GenEvent *evt)
 {
-	//cout<<"List of stable particles: "<<endl;
+ 	cout<<"List of stable particles: "<<endl;
 
 	double px=0.0,py=0.0,pz=0.0,e=0.0;
-	
-	for ( HepMC::GenEvent::particle_const_iterator p = evt->particles_begin();
-	      p != evt->particles_end(); ++p )
-	{
-		if( (*p)->status() == 1 )
-		{
-			HepMC::FourVector m = (*p)->momentum();
-			px+=m.px();
-			py+=m.py();
-			pz+=m.pz();
-			e +=m.e();
-			//(*p)->print();
-		}
-	}
-  cout.precision(6);
-  cout.setf(ios_base::floatfield);
-	cout<<endl<<"Vector Sum: "<<px<<" "<<py<<" "<<pz<<" "<<e<<endl;
+
+	int barcodetau1vertex(0),barcodetau2vertex(0);
+	for ( HepMC::GenEvent::particle_const_iterator p = evt->particles_begin();  p != evt->particles_end(); ++p )
+	  {
+	    if( (*p)->status() == 1 )
+	      {
+		HepMC::FourVector m = (*p)->momentum();
+		HepMC::GenVertex *productProductionvertex = (*p)->production_vertex();
+		px+=m.px();
+		py+=m.py();
+		pz+=m.pz();
+		e +=m.e();
+	      }
+	  }
+	cout.precision(6);
+	cout.setf(ios_base::floatfield);
 }
 
 void redMinus(TauolaParticle *minus)
@@ -102,6 +105,14 @@ int main(int argc,char **argv){
   // Initialization of pythia
   Pythia pythia;
   Event& event = pythia.event;
+  TFile *file = new TFile("output.root","RECREATE");
+
+  TH1F *pi_plus= new TH1F("pi_plus","#pi  plus",20,0,1);
+  TH1F *pi_minus= new TH1F("pi_minus","#pi minus",20,0,1);
+
+  TH1F *mu_plus= new TH1F("mu_plus","#mu plus",20,0,1);
+  TH1F *mu_minus= new TH1F("mu_minus","#mu  minus",20,0,1);
+  
 
   // Pythia8 HepMC interface depends on Pythia8 version
 #ifdef PYTHIA8180_OR_LATER
@@ -131,8 +142,8 @@ int main(int argc,char **argv){
   // Set up Tauola
 
   // Set Tauola decay mode (if needed)
-  Tauola::setSameParticleDecayMode(Tauola::PionMode);     //19 and 22 contains K0 
-  Tauola::setOppositeParticleDecayMode(Tauola::A1Mode); // 20 contains eta
+    Tauola::setSameParticleDecayMode(2);     //19 and 22 contains K0 
+    Tauola::setOppositeParticleDecayMode(3); // 20 contains eta
 
   // Set Higgs scalar-pseudoscalar mixing angle
   //  Tauola::setHiggsScalarPseudoscalarMixingAngle(0.7853);
@@ -151,7 +162,7 @@ int main(int argc,char **argv){
   // Other usefull settings:
   //  Tauola::setEtaK0sPi(0,0,0);  // switches to decay eta K0_S and pi0 1/0 on/off. 
   //  Tauola::setTauLifetime(0.0); //new tau lifetime in mm
-  //  Tauola::spin_correlation.setAll(false);
+    Tauola::spin_correlation.setAll(true);
 
   //  Log::LogDebug(true);
 
@@ -192,11 +203,63 @@ int main(int argc,char **argv){
 
     if(iEvent<EventsToCheck)
     {
+
+
       checkMomentumConservationInEvent(HepMCEvt);
     }
+    TLorentzVector tau1(0,0,0,0);
 
+    TLorentzVector mu1(0,0,0,0);
+    TLorentzVector pi2(0,0,0,0);
+
+    TLorentzVector numu1(0,0,0,0);
+    TLorentzVector nutau1(0,0,0,0);
+    TLorentzVector nutau2(0,0,0,0);
+
+
+    TLorentzVector tau2(0,0,0,0);
+    int barcodetau1vertex(0),barcodetau2vertex(0);
+    for ( HepMC::GenEvent::particle_const_iterator p =HepMCEvt->particles_begin();  p != HepMCEvt->particles_end(); ++p )
+      {
+
+	if((*p)->pdg_id()==15){
+	  HepMC::GenVertex * tau1endvertex =(*p)->end_vertex(); 
+	  barcodetau1vertex = tau1endvertex->barcode();  
+	  tau1.SetPxPyPzE((*p)->momentum().px(), (*p)->momentum().py(), (*p)->momentum().pz(), (*p)->momentum().e());
+	}
+	if((*p)->pdg_id()==-15){
+	  HepMC::GenVertex * tau2endvertex =(*p)->end_vertex(); 
+	  tau2.SetPxPyPzE((*p)->momentum().px(), (*p)->momentum().py(), (*p)->momentum().pz(), (*p)->momentum().e());
+	  barcodetau2vertex = tau2endvertex->barcode();  
+	}
+	if( (*p)->status() == 1 )
+	  {
+	    HepMC::FourVector m = (*p)->momentum();
+	    HepMC::GenVertex *productProductionvertex = (*p)->production_vertex();
+	    if(productProductionvertex->barcode()==barcodetau1vertex ){
+	      if(abs((*p)->pdg_id())==13)mu1.SetPxPyPzE((*p)->momentum().px(), (*p)->momentum().py(), (*p)->momentum().pz(), (*p)->momentum().e());
+	      if(abs((*p)->pdg_id())==14)numu1.SetPxPyPzE((*p)->momentum().px(), (*p)->momentum().py(), (*p)->momentum().pz(), (*p)->momentum().e());
+	      if(abs((*p)->pdg_id())==16)nutau1.SetPxPyPzE((*p)->momentum().px(), (*p)->momentum().py(), (*p)->momentum().pz(), (*p)->momentum().e());
+	    }
+	    if(productProductionvertex->barcode()==barcodetau2vertex ){
+	      if(abs((*p)->pdg_id())==16)nutau2.SetPxPyPzE((*p)->momentum().px(), (*p)->momentum().py(), (*p)->momentum().pz(), (*p)->momentum().e());
+	      if(abs((*p)->pdg_id())==211)pi2.SetPxPyPzE((*p)->momentum().px(), (*p)->momentum().py(), (*p)->momentum().pz(), (*p)->momentum().e());
+	    }
+	  }
+      }
     Log::Debug(5)<<"helicites =  "<<Tauola::getHelPlus()<<" "<<Tauola::getHelMinus()
                  <<" electroweak wt= "<<Tauola::getEWwt()<<endl;
+    if(Tauola::getHelPlus() ==1){
+      if(tau2.E()!=0 && pi2.E()!=0) pi_plus->Fill(pi2.E()/tau2.E());
+      if(tau1.E()!=0 && mu1.E()!=0) mu_plus->Fill(mu1.E()/tau1.E());
+    }
+
+    if(Tauola::getHelPlus() ==-1 ){
+      if(tau2.E()!=0 && pi2.E()!=0) pi_minus->Fill(pi2.E()/tau2.E());
+      if(tau1.E()!=0 && mu1.E()!=0) mu_minus->Fill(mu1.E()/tau1.E());
+    }
+
+
 
     // Run MC-TESTER on the event
     HepMCEvent temp_event(*HepMCEvt,false);
@@ -204,13 +267,21 @@ int main(int argc,char **argv){
 
     // Print some events at the end of the run
     if(iEvent>=NumberOfEvents-5){  
-      pythia.event.list();
+      // pythia.event.list();
       HepMCEvt->print();
     }
 
     // Clean up HepMC event
     delete HepMCEvt;  
   }
+  pi_plus->Write();
+  pi_minus->Write();
+
+  mu_plus->Write();
+  mu_minus->Write();
+
+  file->Write();
+  file->Close();
   pythia.statistics();
   MC_Finalize();
 
