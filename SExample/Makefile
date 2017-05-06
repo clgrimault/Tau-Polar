@@ -62,23 +62,23 @@ $(OBJS): %.o : %.cc
 
 .PHONY: clean cleanall cleandf all dataformats install sharedlib 
 
-install:  Analysis.exe
+install:  run.exe
 
 clean:
 	@rm *.o
 	@rm run.exe
 
-cleandf:
-	@cd DataFormats; gmake clean; cd ../
+#cleandf:
+#	@cd DataFormats; gmake clean; cd ../
 
-cleanall:
-	@for subdir in $(SUBDIRS); do \
-		echo "Making all in $$subdir"; \
-		cd $$subdir && $(MAKE) -f Makefile.standalone clean && cd ../../; \
-	done
-	@cd DataFormats; gmake clean; cd ../
-	@rm *.o
-	@rm run.exe
+#cleanall:
+#	@for subdir in $(SUBDIRS); do \
+#		echo "Making all in $$subdir"; \
+#		cd $$subdir && $(MAKE) -f Makefile.standalone clean && cd ../../; \
+#	done
+#	@cd DataFormats; gmake clean; cd ../
+#	@rm *.o
+#	@rm run.exe
 
 all: sharedlib dataformats install
 
