@@ -34,7 +34,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents = 10000; 
+int NumberOfEvents = 2000000; 
 int EventsToCheck=10;
 
 // elementary test of HepMC typically executed before
@@ -107,11 +107,18 @@ int main(int argc,char **argv){
   Event& event = pythia.event;
   TFile *file = new TFile("output.root","RECREATE");
 
-  TH1F *pi_plus= new TH1F("pi_plus","#pi  plus",20,0,1);
-  TH1F *pi_minus= new TH1F("pi_minus","#pi minus",20,0,1);
+  TH1F *pi_plus= new TH1F("pi_plus","#pi  plus",50,0,1);
+  TH1F *pi_minus= new TH1F("pi_minus","#pi minus",50,0,1);
 
-  TH1F *mu_plus= new TH1F("mu_plus","#mu plus",20,0,1);
-  TH1F *mu_minus= new TH1F("mu_minus","#mu  minus",20,0,1);
+  TH1F *piom_plus= new TH1F("piom_plus","#pi  plus",50,-1,1);
+  TH1F *piom_minus= new TH1F("piom_minus","#pi minus",50,-1,1);
+
+
+  TH1F *mu_plus= new TH1F("mu_plus","#mu plus",50,0,1);
+  TH1F *mu_minus= new TH1F("mu_minus","#mu  minus",50,0,1);
+  
+  TH1F *om_plus= new TH1F("om_plus","#omega plus",50,-1,1);
+  TH1F *om_minus= new TH1F("om_minus","#omega  minus",50,-1,1);
   
 
   // Pythia8 HepMC interface depends on Pythia8 version
@@ -249,18 +256,23 @@ int main(int argc,char **argv){
       }
     Log::Debug(5)<<"helicites =  "<<Tauola::getHelPlus()<<" "<<Tauola::getHelMinus()
                  <<" electroweak wt= "<<Tauola::getEWwt()<<endl;
+    double x1p(0),x2p(0);
+    double x1m(0),x2m(0);
+    double omp(0),omm(0),OmegaP(0), OmegaM(0);
     if(Tauola::getHelPlus() ==1){
-      if(tau2.E()!=0 && pi2.E()!=0) pi_plus->Fill(pi2.E()/tau2.E());
-      if(tau1.E()!=0 && mu1.E()!=0) mu_plus->Fill(mu1.E()/tau1.E());
+      if(tau2.E()!=0 && pi2.E()!=0) {x1p=2*pi2.E()/tau2.E() - 1; pi_plus->Fill(pi2.E()/tau2.E()); piom_plus->Fill(x1p);}
+      if(tau1.E()!=0 && mu1.E()!=0){x2p =2*mu1.E()/tau1.E()-1;  mu_plus->Fill(mu1.E()/tau1.E());}
+      if(x1p!=0 && x2p!=0){OmegaP = (x1p+x2p)/(1+x1p*x2p);om_plus->Fill(OmegaP);}
     }
 
     if(Tauola::getHelPlus() ==-1 ){
-      if(tau2.E()!=0 && pi2.E()!=0) pi_minus->Fill(pi2.E()/tau2.E());
-      if(tau1.E()!=0 && mu1.E()!=0) mu_minus->Fill(mu1.E()/tau1.E());
+      if(tau2.E()!=0 && pi2.E()!=0) { x1m = 2*pi2.E()/tau2.E()-1; pi_minus->Fill(pi2.E()/tau2.E()); piom_minus->Fill(x1m);}
+      if(tau1.E()!=0 && mu1.E()!=0) {x2m = 2*mu1.E()/tau1.E()-1; mu_minus->Fill(mu1.E()/tau1.E());}
+      if(x1m!=0 && x2m!=0){OmegaM = (x1m+x2m)/(1+x1m*x2m); om_minus->Fill(OmegaM);}
     }
+  
 
-
-
+  
     // Run MC-TESTER on the event
     HepMCEvent temp_event(*HepMCEvt,false);
     MC_Analyze(&temp_event);
@@ -279,6 +291,10 @@ int main(int argc,char **argv){
 
   mu_plus->Write();
   mu_minus->Write();
+  om_plus->Write();
+  om_minus->Write();
+  piom_plus->Write();
+  piom_minus->Write();
 
   file->Write();
   file->Close();
