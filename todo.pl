@@ -116,6 +116,10 @@ for($l=0;$l<$numArgs; $l++){
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/; make all;"));
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/; make install;"));
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/examples; make"));
+
+
+	printf("\nInstruction:   \n    ");
+	printf(" cd $PWD/$tauoladir/tauola++/1.1.5/examples/; ./mypythia_example | tee log.out;   \n\n\n");
     }
 
 }
