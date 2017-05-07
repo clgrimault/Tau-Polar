@@ -46,12 +46,16 @@ $(SHAREDLIB): $(OBJS2)
 	@g++  -shared -o $(SHAREDLIB) $(OBJS2)
 	@echo "Linking SharedLib: $(SHAREDLIB) Complete"
 	@echo $(LD) $(LDFLAGS) *.o $(LIBS) -o $(PROGRAM)
-	@$(LD) $(LDFLAGS) *.o $(LIBS) -o $(PROGRAM)
+#	@$(LD) $(LDFLAGS) *.o $(LIBS) -o $(PROGRAM)
 	@echo "======================================================="
 
 
 
-
+$(PROGRAM): $(OBJS)
+	@echo "Linking $(PROGRAM) ..."
+	@echo $(LD) $(LDFLAGS) *.o $(LIBS) -o $(PROGRAM)
+	@$(LD) $(LDFLAGS) *.o $(LIBS) -o $(PROGRAM)
+	@echo "done"
 
 #vpath %.cc TauDataFormat/TauNtuple/src/ 
 #vpath %.cc Validation/EventGenerator/src/
@@ -64,14 +68,14 @@ $(SHAREDLIB): $(OBJS2)
 
 $(OBJS2): %.o: %.cc
 	$(CXX) $(CXXFLAGS) $(DEFS) -fPIC $< -o $@
-#	@echo " jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj "
+
 
 
 
 .PHONY: clean install 
 
 install: $(SHAREDLIB)
-
+all:  $(SHAREDLIB) $(PROGRAM)
 clean:
 	@rm *.o
 	@rm *.so
