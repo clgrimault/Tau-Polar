@@ -52,9 +52,9 @@ am__append_9 = -L$(PYTHIA8_DIR)/lib/archive -lpythia8 -llhapdfdummy -lhepmcinter
 am__append_10 = single_tau_gun_example.exe taummk_pythia_example.exe
 
 ### Main example (requires Pythia8 and MC-Tester) ###
-am__append_11 = -R $(MCTESTER_DIR)/lib
-am__append_12 = -I$(PYTHIA8_DIR)/include -I$(MCTESTER_DIR)/include -I$(ROOTINC)
-am__append_13 = -L$(MCTESTER_DIR)/lib -lHEPEvent -lHepMCEvent -lMCTester $(ROOTLIBS)
+am__append_11 = -R $(MCTESTER_DIR)/lib  
+am__append_12 = -I$(PYTHIA8_DIR)/include -I$(MCTESTER_DIR)/include -I$(ROOTINC)   -I$(USERINC)  
+am__append_13 = -L$(MCTESTER_DIR)/lib -lHEPEvent -lHepMCEvent -lMCTester $(ROOTLIBS) $(USERLIBS)
 am__append_14 = taumain_pythia_example.exe
 am__append_15 = mypythia_example.exe
 subdir = examples
@@ -235,6 +235,8 @@ PYTHIA8_DIR = /grid_mnt/home-pbs/vcherepa/taua1/Installation/taudir/tauola++/1.1
 RANLIB = ranlib
 ROOTINC = /libcern/root/5.34.18/sl6.3-x86_64/include
 ROOTLIBS = -L/libcern/root/5.34.18/sl6.3-x86_64/lib -lGui -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lThread -pthread -lm -ldl -rdynamic
+USERINC = UserCodes
+USERLIBS = -L./UserCodes -lUserLib
 SED = /bin/sed
 SET_MAKE = 
 SHELL = /bin/sh

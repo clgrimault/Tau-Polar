@@ -6,14 +6,15 @@
  *
  * @author Vladimir Cherepanov
  * @date  01 MAY 2017
- */
-
+ */ 
+  
 #include "Tauola/Log.h"
 #include "Tauola/Tauola.h"
 #include "Tauola/TauolaHepMCEvent.h"
 #include "TFile.h"
 #include "TH1F.h"
 #include "TLorentzVector.h"
+#include "UserCodes/MultiplyNumbers.h"
 
 //pythia header files
 #ifdef PYTHIA8180_OR_LATER
@@ -34,7 +35,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents = 2000000; 
+int NumberOfEvents = 200; 
 int EventsToCheck=10;
 
 // elementary test of HepMC typically executed before
@@ -286,6 +287,14 @@ int main(int argc,char **argv){
     // Clean up HepMC event
     delete HepMCEvt;  
   }
+ int a, b;
+ a = 5;//atoi(argv[1]);
+ b =4;// atoi(argv[2]);
+ MultiplyNumbers ab;
+  ab.setA(a);
+  ab.setB(b);
+  printf(" test  %d + %d = %d\n", ab.getA(), ab.getB(), ab.getProduct());
+ 
   pi_plus->Write();
   pi_minus->Write();
 
@@ -304,5 +313,5 @@ int main(int argc,char **argv){
   // This is an access to old FORTRAN info on generated tau sample. 
   // That is why it refers to old version number (eg. 2.7) for TAUOLA.
   //Tauola::summary();
-}
+} 
 
