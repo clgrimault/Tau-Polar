@@ -117,6 +117,7 @@ for($l=0;$l<$numArgs; $l++){
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/; make all;"));
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/; make install;"));
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/examples; make"));
+	system(sprintf("cp MakeSimplePlots.C $PWD/$tauoladir/tauola++/1.1.5/examples/"));
 
 
 	printf("\nInstruction:   \n    ");
