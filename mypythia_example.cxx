@@ -20,7 +20,7 @@
 #ifdef PYTHIA8180_OR_LATER
 #include "Pythia8/Pythia.h"
 #include "Pythia8/Pythia8ToHepMC.h"
-#else
+#else 
 #include "Pythia.h"
 #include "HepMCInterface.h"
 #endif
@@ -35,7 +35,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents = 500; 
+int NumberOfEvents = 1000000; 
 int EventsToCheck=10;
 
 // elementary test of HepMC typically executed before
@@ -439,8 +439,9 @@ int main(int argc,char **argv){
       if(x2m!=0 && x3m!=0){OmegaMMuRho = (x2m+x3m)/(1+x2m*x3m); ommurho_minus->Fill(OmegaMMuRho);}
 
 
-      if(x1m!=0 && x1pim!=0){ompipi_minus = (x1p+x1pim)/(1+x1p*x1pim);Omegapipi_minus->Fill(ompipi_minus);}
-      if(x1pim!=0 && x3m!=0){ompirho_minus = (x1pim+x3p)/(1+x1pim*x3m);Omegapirho_minus->Fill(ompirho_minus);}
+      if(x1m!=0 && x1pim!=0){ompipi_minus = (x1m+x1pim)/(1+x1m*x1pim);Omegapipi_minus->Fill(ompipi_minus);}
+
+      if(x1pim!=0 && x3m!=0){ompirho_minus = (x1pim+x3m)/(1+x1pim*x3m);Omegapirho_minus->Fill(ompirho_minus);}
 
     }
   
