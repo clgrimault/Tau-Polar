@@ -64,7 +64,7 @@ class a1Helper {
   TComplex F1(double s1, double s2, double Q);
   TComplex F2(double s1, double s2, double Q);
   TComplex F4(double s1, double s2, double s3, double Q);
-
+  TComplex   Conjugate(TComplex a);
   double  Widths(double Q, string type="rho");
   double ppi(double QQ);
   double ga1(double  Q);
@@ -78,7 +78,7 @@ class a1Helper {
   float gForGammaA1(float QQ);
   float GammaRho(float QQ);
   float  GammaRhoPrime(float QQ);
-  TComplex   Conjugate(TComplex a);
+
 
 
   double GetOmegaA1();

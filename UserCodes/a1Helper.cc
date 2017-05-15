@@ -561,10 +561,6 @@ double a1Helper::ppi(double QQ){return 0.5*sqrt(QQ - 4*mpi*mpi);}
 //   return out;
 // }
 
-// TComplex 
-// a1Helper::Conjugate(TComplex a){
-//   return TComplex(a.Re(), -a.Im());
-// }
 
 
 // double
@@ -609,7 +605,10 @@ double a1Helper::ppi(double QQ){return 0.5*sqrt(QQ - 4*mpi*mpi);}
 // 	return omega;
 // }
 
-
+TComplex 
+a1Helper::Conjugate(TComplex a){
+  return TComplex(a.Re(), -a.Im());
+}
 TMatrixT<double> a1Helper::convertToMatrix(TVectorT<double> V){
   TMatrixT<double> M(V.GetNrows(),1);
   for(int i=0; i < M.GetNrows(); i++){
