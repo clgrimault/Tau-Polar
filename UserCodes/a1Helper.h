@@ -83,11 +83,6 @@ class a1Helper {
 
   double GetOmegaA1();
 
-  TLorentzVector Get1TauSolution(){return TauMu1_;}
-  TLorentzVector Get2TauSolution(){return TauMu2_;}
-  bool BothSidesAreOK(){return Flag_;}
-
-
 
 
  private:
