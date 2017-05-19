@@ -61,10 +61,9 @@ for($l=0;$l<$numArgs; $l++){
 	$tauoladir=$ARGV[l+1];
 #	$l++;
 	$currentdir=getcwd;
-
+	$s1_par='\$(pwd)';
 
 	system(sprintf("cernlib-use --version 5.34.18 root \n"));
-                                
 
 	system(sprintf("rm -rf $tauoladir \n"));
 	printf("\nInstalling Tauola++  to  $tauoladir \n");
@@ -117,13 +116,24 @@ for($l=0;$l<$numArgs; $l++){
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/; make all;"));
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/; make install;"));
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/examples; make"));
-	system(sprintf("cp MakeSimplePlots.C $PWD/$tauoladir/tauola++/1.1.5/examples/"));
+
+       # Setting up qsub submitter
+        system(sprintf("cp submit $PWD/$tauoladir/tauola++/1.1.5/examples/; "));
+	system(sprintf("echo \"#! /bin/bash     \">> qsub_submit.sh"));
+	system(sprintf("echo \"echo 'Starting Job'       \">> qsub_submit.sh"));
+	system(sprintf("echo \"export workdir=$s1_par     \">> qsub_submit.sh"));
+	system(sprintf("echo \"cd $PWD/$tauoladir/tauola++/1.1.5/examples/;    \">> qsub_submit.sh"));
+	system(sprintf("echo \"source $PWD/Install_TauolaEnvironment_$time   \">> qsub_submit.sh"));
+	system(sprintf("echo \"$PWD/$tauoladir/tauola++/1.1.5/examples/mypythia_example.exe   \">> qsub_submit.sh"));
+	system(sprintf("echo \"echo 'Completed Job'    \">> qsub_submit.sh"));
+	system(sprintf("mv qsub_submit.sh $PWD/$tauoladir/tauola++/1.1.5/examples/; "));
 
 
 	printf("\nInstruction:   \n    ");
 	printf(" cd $PWD/$tauoladir/tauola++/1.1.5/examples/; ./mypythia_example | tee log.out;   \n\n\n");
     }
 
+    
 
     if($ARGV[$l] eq "--tauoladefault"){
 	$tauoladir=$ARGV[l+1];
