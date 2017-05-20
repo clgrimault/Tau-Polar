@@ -1,8 +1,25 @@
 #include "a1Helper.h"
 #include <iostream>
 
+a1Helper::a1Helper(vector<TLorentzVector> TauA1andProd){
+  if(TauA1andProd.size()!=4){
+    std::cout<<" Warning!! Size of input vector != 4 !! "<<std::endl;
+  }
+  TLorentzVector fakeboost(0,0,0,0);
+  Setup(TauA1andProd,fakeboost);
+}
 
-a1Helper::a1Helper(){
+
+a1Helper::a1Helper(vector<TLorentzVector> TauA1andProd, TLorentzVector RefernceFrame){
+  if(TauA1andProd.size()!=4){
+    std::cout<<" Warning!! Size of input vector != 4 !! "<<std::endl;
+  }
+  Setup(TauA1andProd,RefernceFrame);
+}
+
+
+void 
+a1Helper::Setup(vector<TLorentzVector> TauA1andProd, TLorentzVector ReferenceFrame){
    mpi   = 0.13957018; // GeV 
    mpi0 = 0.1349766;   // GeV
    mtau = 1.776; // GeV
@@ -20,7 +37,13 @@ a1Helper::a1Helper(){
    gpiprimerhopi = 5.8; //GeV
    grhopipi = 6.08;  //GeV
    beta = -0.145;
+
+   for(int i=0; i<TauA1andProd.size(); i++){
+     TauA1andProd_RF.push_back(Boost(TauA1andProd.at(i),ReferenceFrame));
+   }
+
 }
+
 void 
 a1Helper::Configure(TLorentzVector OSPion, TLorentzVector SSPion1, TLorentzVector SSPion2,TLorentzVector TauA1, TLorentzVector TauMu  ){
 
@@ -237,6 +260,7 @@ a1Helper::Boost(TLorentzVector pB, TLorentzVector frame){
    TMatrixT<double> result(4,1);
    TVectorT<double> vec(4); 
    TVector3 b;
+   if(frame.Vect().Mag()==0){ std::cout<<" Boost is not set, perfrom calculation in the Lab Frame   "<<std::endl; return pB;}
     if(frame.E()==0){ std::cout<<" Caution: Please check that you perform boost correctly!  " <<std::endl; return pB;} 
    else   b=frame.Vect()*(1/frame.E());
    vec(0)  = pB.E();    vec(1)  = pB.Px();

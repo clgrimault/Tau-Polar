@@ -9,21 +9,23 @@
 #include "TVectorT.h"
 #include "TMatrixTSym.h"
 #include <string.h>
-
+#include <vector>
+#include "TLorentzVector.h"
 using namespace std;
 
 
 class a1Helper {
 
  public:
-  a1Helper(); 
-  //  a1Helper();
+  a1Helper(vector<TLorentzVector> TauA1andProd);
+  a1Helper(vector<TLorentzVector> TauA1andProd, TLorentzVector RefernceFrame);
   ~a1Helper();
   void Configure(TLorentzVector OSPion, TLorentzVector SSPion1, TLorentzVector SSPion2,TLorentzVector TauA1, TLorentzVector TauMu );
+  void Setup(vector<TLorentzVector> TauA1andProd, TLorentzVector ReferenceFrame );
 
   void Initialize(TLorentzVector t, TLorentzVector mu);
   bool OmegaIsValid(){return isValid_;}
- 
+  std::vector<TLorentzVector> getBoosted(){return TauA1andProd_RF;}
 
 
   void SetParametersReco(TLorentzVector tau, TLorentzVector mu );
@@ -95,7 +97,7 @@ class a1Helper {
   double ma1;
   double mpiprime;
   double Gamma0rho; 
-  double Gamma0rhoprime;
+  double Gamma0rhoprime; 
   double Gamma0a1;
   double Gamma0piprime;
   double fpi;
@@ -103,6 +105,15 @@ class a1Helper {
   double gpiprimerhopi;
   double grhopipi;
   double beta;
+
+  const TLorentzVector a1pos;
+  const TLorentzVector a1pss1;
+  const TLorentzVector a1pss2;
+
+
+
+  vector<TLorentzVector> TauA1andProd_RF;
+
 
 
   TLorentzVector Boost_;

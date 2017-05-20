@@ -12,6 +12,10 @@ SHELL = /bin/sh
 ####################################
 ###                              ###
 ####################################
+USERINC    = 
+USERLIBS   = 
+SHAREDLIBFLAGS =
+
 
 override CXXFLAGS += -I$(ROOTSYS)/include -I./ -c
 LDFLAGS       =  
@@ -25,11 +29,12 @@ SF_HDRS    = $(SF_SRCS:.cc=.h)
 
 HDRS          = MultiplyNumbers.h \
 		AddNumbers.h \
-		a1Helper.h 
+	        a1Helper
+
 
 SRCS          = MultiplyNumbers.cc \
-		AddNumbers.cc \
 		a1Helper.cc \
+		AddNumbers.cc \
 		main.cc
 
 OBJS1          = $(SRCS:.cc=.o) 
