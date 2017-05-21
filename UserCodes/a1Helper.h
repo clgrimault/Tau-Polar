@@ -39,7 +39,17 @@ class a1Helper {
   std::vector<float> Sin2Cos2Gamma(TLorentzVector p1,TLorentzVector p2, TLorentzVector p3);
   float CosPsi();
 
+  //====================
+  double temp_costheta();
+  double temp_cosbeta();
+  double temp_cospsi();
+  double temp_ultrarel_cospsi();
+  double temp_cosgamma();
+  double temp_singamma();
+  double temp_cos2gamma();
+  double temp_sin2gamma();
 
+  //====================
 
 
 
@@ -54,18 +64,18 @@ class a1Helper {
   float WD(TLorentzVector s1,TLorentzVector s2,TLorentzVector s3,float QQ);
   float WE(TLorentzVector s1,TLorentzVector s2,TLorentzVector s3,float QQ);
   TComplex  F(float s1, float s2,float QQ);
-  double VV1(double s1 ,double s2,double  s3, double Q);
-  double VV2(double s1 ,double s2, double s3,double  Q);
-  double V1V2(double s1, double s2, double s3, double Q);
+  double VV1();
+  double VV2();
+  double V1V2();
   double h0(double s1, double s2, double s3, double Q);
   double h(double s1 ,double s2, double s3, double Q);
 
 
   TComplex  BreitWigner(double Q, string type="rho");
   TComplex  BRho(double Q);
-  TComplex F1(double s1, double s2, double Q);
-  TComplex F2(double s1, double s2, double Q);
-  TComplex F4(double s1, double s2, double s3, double Q);
+  TComplex F1();
+  TComplex F2();
+  TComplex F4();
   TComplex   Conjugate(TComplex a);
   double  Widths(double Q, string type="rho");
   double ppi(double QQ);
@@ -113,7 +123,20 @@ class a1Helper {
 
 
   vector<TLorentzVector> TauA1andProd_RF;
+  TLorentzVector _osPionLV;
+  TLorentzVector _ss1pionLV;
+  TLorentzVector _ss2pionLV;
+  TLorentzVector _a1LV;
+  TLorentzVector _tauLV;
+  TLorentzVector _s12;
+  TLorentzVector _s13;
+  TLorentzVector _s23;
 
+
+  double _s1; 
+  double _s2; 
+  double _s3; 
+  double _Q;
 
 
   TLorentzVector Boost_;

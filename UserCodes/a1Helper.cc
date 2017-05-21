@@ -42,6 +42,18 @@ a1Helper::Setup(vector<TLorentzVector> TauA1andProd, TLorentzVector ReferenceFra
      TauA1andProd_RF.push_back(Boost(TauA1andProd.at(i),ReferenceFrame));
    }
 
+   _osPionLV   = TauA1andProd_RF.at(1);
+   _ss1pionLV =TauA1andProd_RF.at(2);
+   _ss2pionLV =TauA1andProd_RF.at(3);
+   _a1LV = _osPionLV+_ss1pionLV+_ss2pionLV;
+   _tauLV = TauA1andProd_RF.at(0);
+   _s12 = _ss1pionLV +_ss2pionLV;
+   _s13 = _ss1pionLV + _osPionLV;
+   _s23 = _ss2pionLV + _osPionLV;
+   _s1  =  _s23.M2(); 
+   _s2  =  _s13.M2();
+   _s3  =  _s12.M2();
+   _Q = _a1LV.M();
 }
 
 void 
@@ -393,23 +405,101 @@ a1Helper::CosPsi(){
 //   return out;
 // }
 
-
 double
-a1Helper::VV1(double s1 ,double  s2, double  s3, double  Q){ //  this is -V1^{2}
-  double QQ = Q*Q;
-  return  s2 - 4*mpi*mpi + pow(s3 - s1,2)/4/QQ;
+a1Helper::temp_cosgamma(){
+  double QQ=_Q*_Q;
+  // double B1 = (pow(_ss1pionLV.E()*_tauLV.E()   - _ss1pionLV.Vect().Dot(_a1LV.Vect()),2 ) - QQ*mpi*mpi)/QQ;
+  // double B2 = (pow(_ss2pionLV.E()*_tauLV.E()   - _ss2pionLV.Vect().Dot(_a1LV.Vect()),2 ) - QQ*mpi*mpi)/QQ;
+  double B3 = (pow(_osPionLV.E()*_tauLV.E()   - _osPionLV.Vect().Dot(_a1LV.Vect()),2 ) - QQ*mpi*mpi)/QQ;
+
+  // double T = 0.5*sqrt(-lambda(B1,B2,B3));
+  // double A1=(_a1LV.E()*_a1LV.Vect().Dot(_ss1pionLV.Vect()) - _ss1pionLV.E()*_a1LV.P()*_a1LV.P())/QQ;
+  // double A2=(_a1LV.E()*_a1LV.Vect().Dot(_ss2pionLV.Vect()) - _ss2pionLV.E()*_a1LV.P()*_a1LV.P())/QQ;
+  double A3=(_a1LV.E()*_a1LV.Vect().Dot(_osPionLV.Vect()) - _osPionLV.E()*_a1LV.P()*_a1LV.P())/QQ;
+  
+  if(B3<=0 || temp_cosbeta() >=1){std::cout<<"Warning! In a1Helper::cosgamma square root <=0! return 0"<<std::endl; return 0;}
+  return A3/_a1LV.P()/sqrt(B3)/sqrt(1 - temp_cosbeta()*temp_cosbeta());
 }
 
 double
-a1Helper::VV2(double s1 ,double s2,double  s3, double Q){ //  this is -V2^{2}
-  double QQ = Q*Q;
-  return  s1 - 4*mpi*mpi + pow(s3 - s2,2)/4/QQ;
+a1Helper::temp_singamma(){
+  double QQ=_Q*_Q;
+  double B1 = (pow(_ss1pionLV.E()*_tauLV.E()   - _ss1pionLV.Vect().Dot(_a1LV.Vect()),2 ) - QQ*mpi*mpi)/QQ;
+  double B2 = (pow(_ss2pionLV.E()*_tauLV.E()   - _ss2pionLV.Vect().Dot(_a1LV.Vect()),2 ) - QQ*mpi*mpi)/QQ;
+  double B3 = (pow(_osPionLV.E()*_tauLV.E()   - _osPionLV.Vect().Dot(_a1LV.Vect()),2 ) - QQ*mpi*mpi)/QQ;
+
+  double T = 0.5*sqrt(-lambda(B1,B2,B3));
+
+  double A1=(_a1LV.E()*_a1LV.Vect().Dot(_ss1pionLV.Vect()) - _ss1pionLV.E()*_a1LV.P()*_a1LV.P())/QQ;
+  //  double A2=(_a1LV.E()*_a1LV.Vect().Dot(_ss2pionLV.Vect()) - _ss2pionLV.E()*_a1LV.P()*_a1LV.P())/QQ;
+  double A3=(_a1LV.E()*_a1LV.Vect().Dot(_osPionLV.Vect()) - _osPionLV.E()*_a1LV.P()*_a1LV.P())/QQ;
+  if(A3==0 || T==0){std::cout<<"Warning! In a1Helper::singamma denominator ==0! return 0"<<std::endl; return 0;}
+  return -temp_cosgamma()*(B3*A1/A3 - 0.5*(B2 - B1 - B3))/T;
+}
+double
+a1Helper::temp_cos2gamma(){
+   return temp_singamma()*temp_singamma()   -     temp_cosgamma()*temp_cosgamma();
 }
 
 double
-a1Helper::V1V2(double s1, double s2, double s3, double Q){  // this is -V1V2
-  double QQ = Q*Q;
-  return  (QQ/2 - s3 - 0.5*mpi*mpi) + (s3 - s1)*(s3 - s2)/4/QQ;
+a1Helper::temp_sin2gamma(){
+  return 2*temp_singamma()*temp_cosgamma();
+}
+double 
+a1Helper::temp_cospsi(){
+  double QQ = _Q*_Q;
+  double x = _a1LV.E()/_tauLV.E();
+  double s = 4*_tauLV.E()*_tauLV.E();
+  if(x*x  - 4*QQ/s <= 0 ){std::cout<<"Warning! In a1Helper::cospsi root square <=0! return 0"<<std::endl; return 0;}
+  return    ( x*(mtau*mtau + QQ)  + 2*QQ  )   /   ( mtau*mtau  - QQ   ) / sqrt(x*x  - 4*QQ/s); 
+}
+
+double 
+a1Helper::temp_ultrarel_cospsi(){
+  double QQ = _Q*_Q;
+  double cos = (temp_costheta()*(mtau*mtau  + QQ)   + (mtau*mtau  - QQ))/(temp_costheta()*(mtau*mtau  - QQ)   + (mtau*mtau  + QQ));
+  return cos;
+}
+
+double 
+a1Helper::temp_costheta(){
+  double QQ = _Q*_Q;
+  double x = _a1LV.E()/_tauLV.E();
+  double s = 4*_tauLV.E()*_tauLV.E();
+  if( 1 - 4*mtau*mtau/s  <= 0 ){std::cout<<"Warning! In a1Helper::costheta root square <=0! return 0"<<std::endl; return 0;}
+  return (2*x*mtau*mtau - mtau*mtau - QQ)/((mtau*mtau - QQ)*sqrt(1 - 4*mtau*mtau/s));
+}
+
+double 
+a1Helper::temp_cosbeta(){
+  double QQ = _Q*_Q;
+  double B1 = (pow(_ss1pionLV.E()*_a1LV.E()   - Scalar(_ss1pionLV,_a1LV),2 ) - QQ*mpi*mpi)/QQ;
+  double B2 = (pow(_ss2pionLV.E()*_a1LV.E()   - Scalar(_ss2pionLV,_a1LV),2 ) - QQ*mpi*mpi)/QQ;
+  double B3 = (pow(_osPionLV.E()*_a1LV.E()   - Scalar(_osPionLV,_a1LV),2 ) - QQ*mpi*mpi)/QQ;
+  TVector3 ss1pionVect = _ss1pionLV.Vect();
+  TVector3 ss2pionVect = _ss2pionLV.Vect();
+  TVector3 ospionVect = _osPionLV.Vect();
+  float T = 0.5*sqrt(-lambda(B1,B2,B3));
+  double cbeta =ospionVect.Dot(ss1pionVect.Cross(ss2pionVect)) /_a1LV.P()/T;
+  return cbeta;
+}
+
+double
+a1Helper::VV1(){ //  this is -V1^{2}
+  double QQ = _Q*_Q;
+  return  _s2 - 4*mpi*mpi + pow(_s3 - _s1,2)/4/QQ;
+}
+
+double
+a1Helper::VV2(){ //  this is -V2^{2}
+  double QQ = _Q*_Q;
+  return  _s1 - 4*mpi*mpi + pow(_s3 - _s2,2)/4/QQ;
+}
+
+double
+a1Helper::V1V2(){  // this is -V1V2
+  double QQ = _Q*_Q;
+  return  (QQ/2 - _s3 - 0.5*mpi*mpi) + (_s3 - _s1)*(_s3 - _s2)/4/QQ;
 }
 
 
@@ -428,27 +518,24 @@ a1Helper::h(double s1, double s2, double s3, double Q){
 
 
 TComplex 
-a1Helper::F1(double s1, double s2, double Q){
-  double QQ = Q*Q;
+a1Helper::F1(){
   TComplex scale(0, -2*sqrt(2)/3/fpi);
-  TComplex res = scale*BreitWigner(Q,"a1")*BRho(s2);
+  TComplex res = scale*BreitWigner(_Q,"a1")*BRho(_s2);
   return res;
 }
 
 
 TComplex 
-a1Helper::F2(double s1, double s2, double Q){
-  double QQ = Q*Q;
+a1Helper::F2(){
   TComplex scale(0, -2*sqrt(2)/3/fpi);
-  TComplex res = scale*BreitWigner(Q,"a1")*BRho(s1);
+  TComplex res = scale*BreitWigner(_Q,"a1")*BRho(_s1);
   return res;
 }
 
 TComplex 
-a1Helper::F4(double s1, double s2, double s3, double Q){
-  double QQ = Q*Q;
+a1Helper::F4(){
   TComplex scale(0, -gpiprimerhopi*grhopipi*fpiprime/2/pow(mrho,4)/pow(mpiprime,3));
-  TComplex res = scale*BreitWigner(Q,"piprime")*(s1*(s2-s3)*BRho(s1) + s2*(s1-s3)*BRho(s2));
+  TComplex res = scale*BreitWigner(_Q,"piprime")*(_s1*(_s2-_s3)*BRho(_s1) + _s2*(_s1-_s3)*BRho(_s2));
   return res;
 }
 
@@ -484,7 +571,6 @@ a1Helper::Widths(double Q, string type){
   if(type == "piprime"){
     Gamma = Gamma0piprime*pow( sqrt(QQ)/mpiprime  ,5)*pow( (1-mrho*mrho/QQ)/(1-mrho*mrho/mpiprime/mpiprime) ,3);
   }
-
   std::cout<< "  type   " << type << " Gamma  " << Gamma <<std::endl;
   return Gamma;
 }
@@ -498,92 +584,15 @@ a1Helper::Mass(string type){
   if(type == "rhoprime") return mrhoprime; 
   if(type == "a1") return ma1;
   if(type == "piprime") return mpiprime;
-
   std::cout<< "  type   " << type << " Mass  " << std::endl;
-
   return m;
 }
-// double a1Helper::ga1(double  Q){
-//   double QQ = Q*Q;
-//   return (QQ > pow(mrho + mpi,2)) ?  QQ*(1.623 + 10.38/QQ - 9.32/QQ/QQ   + 0.65/QQ/QQ/QQ)  : 4.1*pow(QQ - 9*mpi*,mpi,3)*(  1 - 3.3*(QQ - 9*mpi*mpi)  + 5.8*pow(QQ - 9*mpi*mpi,2)  );
-// }
+
 
 double a1Helper::ppi(double QQ){return 0.5*sqrt(QQ - 4*mpi*mpi);}
 
 
-// TComplex 
-// a1Helper::BWa1(float QQ){
-//   TComplex re,im;
-//   re = (m*m*pow(m*m - QQ,2))/(pow(m*m - QQ,2) - m*m*GammaA1(QQ)*GammaA1(QQ));
-//   im = m*m*m*GammaA1(QQ)/(pow(m*m - QQ,2) - m*m*GammaA1(QQ)*GammaA1(QQ));
-//   TComplex out(re,im);
-//   return out;
-// }
 
-
-
-
-// TComplex 
-// a1Helper::BWrho(float QQ){
-//   float m =  0.773;
-//   TComplex re,im;
-//   re = (m*m*pow(m*m - QQ,2))/(pow(m*m - QQ,2) - m*m*GammaRho(QQ)*GammaRho(QQ));
-//   im = m*m*m*GammaRho(QQ)/(pow(m*m - QQ,2) - m*m*GammaRho(QQ)*GammaRho(QQ));
-//   TComplex out(re,im);
-//   return out;
-// }
-
-
-
-
-// TComplex 
-// a1Helper::BWrhoPrime(float QQ){
-//   float m =  1.251;
-//   TComplex re,im;
-//   re = (m*m*pow(m*m - QQ,2))/(pow(m*m - QQ,2) - m*m*GammaRhoPrime(QQ)*GammaRhoPrime(QQ));
-//   im = m*m*m*GammaRhoPrime(QQ)/(pow(m*m - QQ,2) - m*m*GammaRhoPrime(QQ)*GammaRhoPrime(QQ));
-//   TComplex out(re,im);
-//   return out;
-// }
-
-
-// float
-// a1Helper::GammaA1(float QQ){
-//   float ma1 = 1.251;
-//   float ga1 = 0.599;
-//   float out = ga1*gForGammaA1(QQ)/gForGammaA1(ma1*ma1);
-//   return out;
-// }
-
-// float
-// a1Helper::gForGammaA1(float QQ){
-//   float mpi  = 0.139;
-//   float mrho = 0.773;
-//   float out;
-//   if(QQ > pow((mrho + mpi),2)){ out = QQ*(1.623 + 10.38/QQ - 9.34/QQ/QQ + 0.65/QQ/QQ/QQ);}
-//   else out = 4.1*pow((QQ - 9*mpi*mpi),3)*(1- 3.3*(QQ - 9*mpi*mpi) + 5.8*pow(QQ - 9*mpi*mpi,2));
-//   return out;
-// }
-
-
-// float
-// a1Helper::GammaRho(float QQ){
-//   float mpi  = 0.139;
-//   float mrho = 0.773;
-//   float grho = 0.599;
-//   float out  =grho*mrho*pow( sqrt(QQ - 4*mpi*mpi)/sqrt(mrho*mrho - mpi*mpi)   ,3)/sqrt(QQ);
-//   return out;
-// }
-
-
-// float
-// a1Helper::GammaRhoPrime(float QQ){
-
-//   float mrhoPrime = 1.370;
-//   float grhoPrime = 0.510;
-//   float out  =grhoPrime*QQ/mrhoPrime/mrhoPrime;
-//   return out;
-// }
 
 
 

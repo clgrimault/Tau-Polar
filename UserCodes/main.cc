@@ -62,7 +62,7 @@ int main(int argc, const char* argv[]) {
 
   a1Helper Helper(particles,ta1);
    Helper.Configure(os,ss1,ss2,ta1,ta2);
- 
+   Helper.temp_costheta();
    //   PrintLV(ss2);
    //PrintLV(Helper.Boost(ss2,ss2));
 
