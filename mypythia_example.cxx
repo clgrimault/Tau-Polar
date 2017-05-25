@@ -83,10 +83,10 @@ void redMinus(TauolaParticle *minus)
 
 
   for(unsigned int dec=0; dec <23; dec++){
-     double br =0.0;
+     double br =0.0; 
     if(dec==2 || dec == 3) br=0.5;
      Tauola::setTauBr(dec, br);
-   }
+   } 
 
      // Tauola::setTauBr(0, 0.0);     Tauola::setTauBr(1, 0.0);      Tauola::setTauBr(2, 1.0);      Tauola::setTauBr(3, 0.0);      Tauola::setTauBr(4, 0.0);
      // Tauola::setTauBr(5, 0.0);     Tauola::setTauBr(6, 0.0);      Tauola::setTauBr(7, 0.0);      Tauola::setTauBr(8, 0.0);      Tauola::setTauBr(9, 0.0);
@@ -472,7 +472,7 @@ int main(int argc,char **argv){
   pi_minus->Write();
 
   Omegapipi_plus->Write();
-  Omegapipi_minus->Write();
+  Omegapipi_minus->Write(); 
 
   Omegapirho_plus->Write();
   Omegapirho_minus->Write();
