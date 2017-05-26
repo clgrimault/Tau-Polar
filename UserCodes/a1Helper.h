@@ -40,14 +40,16 @@ class a1Helper {
   float CosPsi();
 
   //====================
-  double temp_costheta();
-  double temp_cosbeta();
-  double temp_cospsi();
-  double temp_ultrarel_cospsi();
-  double temp_cosgamma();
-  double temp_singamma();
-  double temp_cos2gamma();
-  double temp_sin2gamma();
+  double temp_costhetaLF();
+  double temp_cosbetaLF();
+  double temp_cospsiLF();
+  double temp_ultrarel_cospsiLF();
+  double temp_cosgammaLF();
+  double temp_singammaLF();
+  double temp_cosalpha();
+  double temp_sinalpha();
+  double temp_cos2gammaLF();
+  double temp_sin2gammaLF();
 
   //====================
 
@@ -59,16 +61,30 @@ class a1Helper {
 
 
   //--------------------------- Hadronic current ---------------------
-  float WA(TLorentzVector s1,TLorentzVector s2,TLorentzVector s3,float QQ);
-  float WC(TLorentzVector s1,TLorentzVector s2,TLorentzVector s3,float QQ);
-  float WD(TLorentzVector s1,TLorentzVector s2,TLorentzVector s3,float QQ);
-  float WE(TLorentzVector s1,TLorentzVector s2,TLorentzVector s3,float QQ);
-  TComplex  F(float s1, float s2,float QQ);
+  //  only 9 structure fucbntions are non-zero in 3pions case
+
+  double WA();
+  double WC();
+  double WD();
+  double WE();
+  double WSA();
+  double WSB();
+  double WSD();
+  double WSC();
+  double  WSE();
+
+
   double VV1();
   double VV2();
   double V1V2();
-  double h0(double s1, double s2, double s3, double Q);
-  double h(double s1 ,double s2, double s3, double Q);
+  double h0();
+  double h();
+
+  TVector3 nL();
+  TVector3 nT();
+  TVector3 nPerp();
+
+
 
 
   TComplex  BreitWigner(double Q, string type="rho");
@@ -138,6 +154,13 @@ class a1Helper {
   double _s3; 
   double _Q;
 
+
+  double LFQ;
+  TLorentzVector   LFosPionLV;
+  TLorentzVector   LFss1pionLV;
+  TLorentzVector   LFss2pionLV;
+  TLorentzVector   LFa1LV;
+  TLorentzVector   LFtauLV;
 
   TLorentzVector Boost_;
 

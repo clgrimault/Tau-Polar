@@ -84,7 +84,7 @@ void redMinus(TauolaParticle *minus)
 
   for(unsigned int dec=0; dec <23; dec++){
      double br =0.0; 
-    if(dec==2 || dec == 3) br=0.5;
+    if(dec==2) br=0.99;
      Tauola::setTauBr(dec, br);
    } 
 
@@ -114,7 +114,7 @@ void redPlus(TauolaParticle *plus)
   // can be called here 
   for(unsigned int dec=0; dec <23; dec++){
      double br =0.0;
-    if(dec==3 || dec ==4) br=0.5;
+    if(dec==3 || dec ==4 || dec ==5) br=0.33;
      Tauola::setTauBr(dec, br);
    }
 
@@ -126,6 +126,66 @@ void redPlus(TauolaParticle *plus)
   // Tauola::setTauBr(20, 0.0);   Tauola::setTauBr(21, 0.0);    Tauola::setTauBr(22, 0.0);
 
 
+}
+void SortPions(    std::vector<HepMC::GenParticle > pionsvec)
+{
+
+  int npim(0),npip(0);
+  int    OSMCPionIndex(0);
+  int    SSMCPion1Index(0);
+  int    SSMCPion2Index(0);
+
+    HepMC::GenParticle os;
+    HepMC::GenParticle ss1;
+    HepMC::GenParticle ss2;
+    for(int i=0; i<pionsvec.size(); i++){
+      if( pionsvec.at(i).pdg_id()== 211) npip++;
+      if( pionsvec.at(i).pdg_id()==-211) npim++;
+    }
+    if(npip == 1 && npim==2){
+      int nss=0;
+      for(int i=0; i<pionsvec.size(); i++){
+	if(pionsvec.at(i).pdg_id()== 211){
+	  OSMCPionIndex=i;
+	}
+	if(pionsvec.at(i).pdg_id()==-211 && nss ==0){
+	  nss++;
+	  SSMCPion1Index=i;
+	}
+	if(pionsvec.at(i).pdg_id()==-211 &&  nss == 1){
+	  SSMCPion2Index=i;
+	}
+      }
+    }
+    if( npip== 2 && npim==1){
+      int nss=0;
+      for(int i=0; i<pionsvec.size(); i++){
+	if(pionsvec.at(i).pdg_id()== -211){
+	  
+	  OSMCPionIndex=i;
+	}
+	if(pionsvec.at(i).pdg_id()==211 && nss ==0){
+	  nss++;
+	  SSMCPion1Index=i;
+	}
+	if(pionsvec.at(i).pdg_id()==211 &&  nss == 1){
+	  SSMCPion2Index=i;
+	}
+      }
+    }
+    os=pionsvec.at(OSMCPionIndex);
+    ss1=pionsvec.at(SSMCPion1Index);
+    ss2=pionsvec.at(SSMCPion2Index);
+    
+    
+    // std::cout<<" os.pdgId()  "<<os.pdg_id() <<std::endl;
+    // std::cout<<" ss.pdgId()  "<<ss1.pdg_id() <<std::endl;
+    // std::cout<<" ss.pdgId()  "<<ss2.pdg_id() <<std::endl;
+    
+    pionsvec.clear();
+    pionsvec.push_back(os);
+    pionsvec.push_back(ss1);
+    pionsvec.push_back(ss2);
 }
 
 int main(int argc,char **argv){
@@ -257,12 +317,14 @@ int main(int argc,char **argv){
       checkMomentumConservationInEvent(HepMCEvt);
     }
 
-    int JAK1(0);
+    int JAK1(0); int SubJAK1(0);
     HepMC::GenParticle *FirstTau;
     std::vector<HepMC::GenParticle > FirstTauProducts;
-    int JAK2(0);
+    int JAK2(0); int SubJAK2(0);
     HepMC::GenParticle *SecondTau;
     std::vector<HepMC::GenParticle > SecondTauProducts;
+    std::vector<HepMC::GenParticle > A1Pions;
+    std::vector<HepMC::GenParticle > SortA1Pions;  //os, ss1, ss2
     for ( HepMC::GenEvent::particle_const_iterator p =HepMCEvt->particles_begin();  p != HepMCEvt->particles_end(); ++p ){  
       if((*p)->pdg_id()==15){
 	FirstTau = *p;
@@ -283,10 +345,26 @@ int main(int argc,char **argv){
 		  }
 		}
 	      }
+		if( abs((*d)->pdg_id())==20213 ){
+		  JAK1 = 5; int npi(0);
+		  for ( HepMC::GenEvent::particle_const_iterator dd =HepMCEvt->particles_begin();  dd != HepMCEvt->particles_end(); ++dd ){  
+		    if( abs((*dd)->pdg_id())!=20213  ){
+		      if((*d)->end_vertex() == (*dd)->production_vertex()){
+		       
+			FirstTauProducts.push_back(**dd);
+			if(abs((*dd)->pdg_id())==  211)   {
+			  A1Pions.push_back(**dd); npi++;
+			}
+		      }
+		    }
+		  }
+		  if(npi==3) SubJAK1=51; else SubJAK1=52;
+		}
 	    }
 	  } 
 	}
       }
+    
       
       if((*p)->pdg_id()==-15){
 	SecondTau = *p;
@@ -309,6 +387,21 @@ int main(int argc,char **argv){
 		    }
 		  }
 		}
+		if( abs((*d)->pdg_id())==20213 ){
+		  JAK2 = 5; int npi(0);
+		  for ( HepMC::GenEvent::particle_const_iterator dd =HepMCEvt->particles_begin();  dd != HepMCEvt->particles_end(); ++dd ){  
+		    if( abs((*dd)->pdg_id())!=20213  ){
+		      if((*d)->end_vertex() == (*dd)->production_vertex()){
+			SecondTauProducts.push_back(**dd);
+			if(abs((*dd)->pdg_id())==  211){
+			  A1Pions.push_back(**dd); npi++;
+			}
+		      }
+		    }
+		  }
+		  if(npi==3) SubJAK2=51; else SubJAK2=52;
+		}
+		
 	      }
 	    } 
 	  }
@@ -328,6 +421,11 @@ int main(int argc,char **argv){
 
     TLorentzVector rhopi2(0,0,0,0);
     TLorentzVector rhopi02(0,0,0,0);
+
+    TLorentzVector a1ospi(0,0,0,0);
+    TLorentzVector a1ss1pi(0,0,0,0);
+    TLorentzVector a1ss2pi(0,0,0,0);
+    TLorentzVector a1(0,0,0,0);
 
     tau1.SetPxPyPzE(FirstTau->momentum().px(), FirstTau->momentum().py(), FirstTau->momentum().pz(), FirstTau->momentum().e());
     tau2.SetPxPyPzE(SecondTau->momentum().px(), SecondTau->momentum().py(), SecondTau->momentum().pz(), SecondTau->momentum().e());
@@ -349,6 +447,7 @@ int main(int argc,char **argv){
 
 
     }
+
     for(std::vector<HepMC::GenParticle>::const_iterator a = SecondTauProducts.begin(); a!=SecondTauProducts.end(); ++a){
       if(JAK2==3){
 	if(abs(a->pdg_id())==16)nutau2.SetPxPyPzE(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e());
@@ -359,9 +458,23 @@ int main(int argc,char **argv){
 	if(abs(a->pdg_id())==111)rhopi02.SetPxPyPzE(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e());
 	if(abs(a->pdg_id())==211)rhopi2.SetPxPyPzE(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e());
       }
-
+      if(JAK2==5){
+	if(abs(a->pdg_id())==20213)a1.SetPxPyPzE(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e());
+      }
     }
-  
+   
+    if(JAK2==5 && SubJAK2==51){
+     SortPions(A1Pions);
+     a1ospi.SetPxPyPzE(A1Pions.at(0).momentum().px(), A1Pions.at(0).momentum().py(), A1Pions.at(0).momentum().pz(), A1Pions.at(0).momentum().e());
+     a1ss1pi.SetPxPyPzE(A1Pions.at(1).momentum().px(), A1Pions.at(1).momentum().py(), A1Pions.at(1).momentum().pz(), A1Pions.at(1).momentum().e());
+     a1ss2pi.SetPxPyPzE(A1Pions.at(2).momentum().px(), A1Pions.at(2).momentum().py(), A1Pions.at(2).momentum().pz(), A1Pions.at(2).momentum().e());
+     std::cout<<"---------"<<std::endl;
+      tau2.Print();
+      a1.Print();
+      a1ospi.Print();
+      a1ss1pi.Print();
+      a1ss2pi.Print();
+    }
 
 
 
@@ -498,5 +611,5 @@ int main(int argc,char **argv){
   // This is an access to old FORTRAN info on generated tau sample. 
   // That is why it refers to old version number (eg. 2.7) for TAUOLA.
   //Tauola::summary();
-} 
+}
 
