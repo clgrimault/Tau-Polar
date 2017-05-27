@@ -32,27 +32,34 @@ class a1Helper {
   void SetFrame(TLorentzVector Vec );
   TLorentzVector Boost(TLorentzVector pB, TLorentzVector frame);
 
-  double costheta();
-  double costheta1();
-  float CosBeta();
-  double CosBeta1();
-  std::vector<float> Sin2Cos2Gamma(TLorentzVector p1,TLorentzVector p2, TLorentzVector p3);
-  float CosPsi();
+  /* double costheta(); */
+  /* double costheta1(); */
+  /* float CosBeta(); */
+  /* double CosBeta1(); */
+  /* std::vector<float> Sin2Cos2Gamma(TLorentzVector p1,TLorentzVector p2, TLorentzVector p3); */
+  /* float CosPsi(); */
 
   //====================
-  double temp_costhetaLF();
-  double temp_cosbetaLF();
-  double temp_cospsiLF();
-  double temp_ultrarel_cospsiLF();
-  double temp_cosgammaLF();
-  double temp_singammaLF();
-  double temp_cosalpha();
-  double temp_sinalpha();
-  double temp_cos2gammaLF();
-  double temp_sin2gammaLF();
+  double costhetaLF(); 
+  double sinthetaLF();
 
+  double cosbetaLF();
+  double cospsiLF();
+  double sinpsiLF();
+  double ultrarel_cospsiLF();
+  double cosgammaLF();
+  double singammaLF();
+  double cosalpha();
+  double sinalpha();
+  double cos2gamma();
+  double sin2gamma();
+  double singamma();
+  double cosgamma();
+  double cosbeta();
+  double sinbeta();
   //====================
-
+  double getg();
+  double getf();
 
 
   double lambda(double x, double y, double z);

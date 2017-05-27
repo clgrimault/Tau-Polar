@@ -98,9 +98,9 @@ int main(int argc, const char* argv[]) {
   // particles.at(2).Print();
   // particles.at(3).Print();
 
-  a1Helper Helper(particles,ta1);
+  a1Helper Helper(particles,a1);
    Helper.Configure(os,ss1,ss2,ta1,ta2);
-   //   Helper.temp_costheta();
+   //   Helper.costheta();
    //   PrintLV(ss2);
    //PrintLV(Helper.Boost(ss2,ss2));
 
@@ -116,11 +116,28 @@ int main(int argc, const char* argv[]) {
   // rho.Print();
   // (pi+pi0).Print();
   // Helper.nL().Print();
-   std::cout<< "Helper.temp_cosbetaLF()  "<< Helper.temp_cosbetaLF() <<std::endl;
-  std::cout<< " cos gamma  "<<Helper.temp_cosgammaLF() <<std::endl;
-  std::cout<< " sin gamma "<<Helper.temp_singammaLF() <<std::endl;
-  std::cout<< " 1 =   "<<sqrt( Helper.temp_cosgammaLF()*Helper.temp_cosgammaLF()+ Helper.temp_singammaLF()*Helper.temp_singammaLF()) <<std::endl;
- 
+   std::cout<< "Helper.cosbetaLF()  "<< Helper.cosbetaLF() <<std::endl;
+  std::cout<< " cosbeta =  "<<Helper.cosbeta()<<std::endl;
+    std::cout<< " cos gamma  "<<Helper.cosgammaLF() <<std::endl;
+    std::cout<< " sin gamma "<<Helper.singammaLF() <<std::endl;
+  // std::cout<< " 1 =   "<<sqrt( Helper.cosgammaLF()*Helper.cosgammaLF()+ Helper.singammaLF()*Helper.singammaLF()) <<std::endl;
+
+
+
+
+    std::cout<< "RF cos gamma  "<<Helper.cosgamma() <<std::endl;
+    std::cout<< "RF sin gamma "<<Helper.singamma() <<std::endl;
+    cout<<"getf  "<<Helper.getf()<<endl;
+    cout<<"getg  "<<Helper.getg()<<endl;
+
+
+    // cout<<"ultrarel_cospsiLF()  "<<Helper.ultrarel_cospsiLF()<<std::endl;
+    // cout<<"cospsiLF()  "<<Helper.cospsiLF()<<std::endl;
+
+    // cout<<"F1  "<<Helper.F1()<<endl;
+    // cout<<"F2  "<<Helper.F2()<<endl;
+    // cout<<"F4  "<<Helper.F4()<<endl;
+
 //  cout<<"rho Mass  "<<Helper.Boost(rho,rho).M()<<endl;
 //   cout<<"rho Mass  "<<Helper.Boost(pi,rho).M()<<endl;
 // cout<<"rho Mass  "<<Helper.Boost(pi0,rho).M()<<endl;
@@ -144,6 +161,19 @@ int main(int argc, const char* argv[]) {
 
    //  ss2.Print();// Helper.Boost(ss2,ss2).Print();
    // particles.at(1).Print();
+
+   cout<<"WA()   "<<      Helper.WA()<<endl;	 
+   cout<<"WC();  "<<	 Helper.WC()<<endl;	 
+   cout<<"WD();  "<<	 Helper.WD()<<endl;	 
+   cout<<"WE();  "<<	 Helper.WE()<<endl;	 
+   cout<<"WSA();  "<<	 Helper.WSA()<<endl; 
+   cout<<"WSB();  "<<	 Helper.WSB()<<endl; 
+   cout<<"WSD();  "<<	 Helper.WSD()<<endl; 
+   cout<<"WSC();  "<<	 Helper.WSC()<<endl; 
+   cout<<"WSE();   "<<	 Helper.WSE()<<endl; 
+
+
+   cout<<     Helper.WA()*Helper.WA()<< "  = "<<Helper.WC()*Helper.WC()+  Helper.WD()*Helper.WD()+ Helper.WE()*Helper.WE()<<endl;	 
 
 
 }

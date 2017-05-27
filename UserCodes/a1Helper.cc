@@ -111,159 +111,6 @@ a1Helper::Initialize(TLorentzVector t, TLorentzVector mu){
   KFitTau_=t;
 }
 
-double 
-a1Helper::costheta(){
-  
-  TLorentzVector p1 = SSPion1ZFrame_;
-  TLorentzVector p2 = SSPion2ZFrame_;
-  TLorentzVector p3 = OSPionZFrame_;
-  TLorentzVector Z=Z_;
-
-  
-  double zmass = Z.M();
-  double mtau = 1.777;
-  TLorentzVector a1 = p1+p2+p3;
-  float QQ = a1.E()*a1.E() - a1.P()*a1.P();
-
-  double x = a1.E()/TauA1_.E();
-  double ctheta = (2*x*mtau*mtau - mtau*mtau - QQ)/((mtau*mtau - QQ)*sqrt(1 - 4*mtau*mtau/zmass/zmass));
-  // std::cout<<"p1 "<< p1.Px() << "  " <<p1.Py() << " "<< p1.Pz() << "  " <<p1.M()<<std::endl;
-  // std::cout<<"p2 "<< p2.Px() << "  "<< p2.Py() << " "<< p2.Pz() << "  " <<p2.M()<<std::endl;
-  // std::cout<<"p3 "<< p3.Px() << "  "<< p3.Py() << " "<< p3.Pz() << "  " <<p3.M()<<std::endl;
-  // std::cout<<"a1 "<< a1.Px() << "  "<< a1.Py() << " "<< a1.Pz() << "  " <<a1.M()<<"  " <<a1.M()*a1.M() <<std::endl;
-  // std::cout<<"QQ "<< QQ << " x "<< x <<" zmass  " <<zmass <<std::endl;
-
-  //  std::cout<<"2*x*mtau*mtau/mtau*mtau - QQ "<< 2*x*mtau*mtau/(mtau*mtau - QQ)<< "  "<< x <<std::endl;
-  return ctheta;
-}
-
-
-double 
-a1Helper::costheta1(){
-  
-  TLorentzVector p1 = SSPion1ZFrame_;
-  TLorentzVector p2 = SSPion2ZFrame_;
-  TLorentzVector p3 = OSPionZFrame_;
-  TLorentzVector Z=Z_;
-
-  double zmass = Z.M();
-  double mt = 1.777;
-  TLorentzVector a1 = p1+p2+p3;
-  double ma  = a1.M();
-  double diffmass = mt*mt - ma*ma;
-  float QQ = a1.E()*a1.E() - a1.P()*a1.P();
-
-  double x = 2*a1.E()/zmass;
-  double ctheta = 4*mt*mt*a1.E()/zmass/diffmass   - (mt*mt + ma*ma)/diffmass;
-  return ctheta;
-
-}
-
-
-float 
-a1Helper::CosBeta(){
-  TLorentzVector p1 = SSPion1ZFrame_;
-  TLorentzVector p2 = SSPion2ZFrame_;
-  TLorentzVector p3 = OSPionZFrame_;
-
-  float mpi  = 0.139;
-//   float E = p1.E() +  p2.E() +  p3.E(); 
-//   float P = p1.P() +  p2.P() +  p3.P(); 
-//   float QQ = E*E - P*P;
-
-
-//   std::cout<<"  cosbeta --------------------- "<<std::endl;
-
-  TLorentzVector a1 = p1+p2+p3;
-  float QQ = a1.E()*a1.E() - a1.P()*a1.P();
-
-  float B1 = (pow(p1.E()*a1.E()   - Scalar(p1,a1),2 ) - QQ*mpi*mpi)/QQ;
-  float B2 = (pow(p2.E()*a1.E()   - Scalar(p2,a1),2 ) - QQ*mpi*mpi)/QQ;
-  float B3 = (pow(p3.E()*a1.E()   - Scalar(p3,a1),2 ) - QQ*mpi*mpi)/QQ;
-
-  float T = 0.5*sqrt(-lambda(B1,B2,B3));
-
-  TLorentzVector p1Timesp2(p1.Py()*p2.Pz() - p1.Pz()*p2.Py(),p1.Pz()*p2.Px() - p1.Px()*p2.Pz(),p1.Px()*p2.Py() - p1.Py()*p2.Px(),1);
-    
-    
-  float cbeta = Scalar(p3,p1Timesp2)/a1.P()/T;
-
-//   std::cout<<"  T  "<< T<<std::endl;
-//   std::cout<<"  B1  "<< B1<<std::endl;
-//   std::cout<<"  B2  "<< B2<<std::endl;
-//   std::cout<<"  B3  "<< B3<<std::endl;
-//   std::cout<<"  QQ  "<< QQ<<std::endl;
-//   std::cout<<"  Scalar(p3,p1Timesp2)  "<< Scalar(p3,p1Timesp2)<<std::endl;
-//   std::cout<<"  cbeta  "<< cbeta  <<std::endl;
-
-
-  return cbeta;
-
-}
-
-
-double 
-a1Helper::CosBeta1(){
-  TLorentzVector p1 = SSPion1ZFrame_;
-  TLorentzVector p2 = SSPion2ZFrame_;
-  TLorentzVector p3 = OSPionZFrame_;
-
-
-  //std::cout<<"  cosbeta1  ================================= "<<std::endl;
-  double mpi  = 0.139;
-//   double E = p1.E() +  p2.E() +  p3.E(); 
-//   double P = p1.P() +  p2.P() +  p3.P(); 
-//   double QQ = E*E - P*P;
-
-  TLorentzVector a1 = p1+p2+p3;
-  //  float P = 
-  TLorentzVector s12 = p1+p2;
-  TLorentzVector s13 = p1+p3;
-  TLorentzVector s23 = p2+p3;
-
-  double QQ = a1.E()*a1.E() - a1.P()*a1.P();
-
-
-  TLorentzVector p1Timesp2(p1.Py()*p2.Pz() - p1.Pz()*p2.Py(),p1.Pz()*p2.Px() - p1.Px()*p2.Pz(),p1.Px()*p2.Py() - p1.Py()*p2.Px(),1);
-  float mm=a1.M()*a1.M();
-  float mm12=s12.M()*s12.M();
-  float mm13=s13.M()*s13.M();
-  float mm23=s23.M()*s23.M();
-  float mmpi=mpi*mpi;
-
-  float l1  = lambda( mm, mm12 , mmpi);
-  float l2  = lambda( mm, mm13 , mmpi);
-  float l3  = lambda( mm, mm23 , mmpi);
-
- 
-  double cbeta = /*8*a1.M()*a1.M()**/Scalar(p3,p1Timesp2)*a1.P()/sqrt(-lambda(l1,l2,l3));
-
-//   std::cout<<"  QQ  "<< QQ<<std::endl;
-//   std::cout<<"  mm12  "<< mm12<<std::endl;
-//   std::cout<<"  mm13  "<< mm13<<std::endl;
-//   std::cout<<"  mm23  "<< mm23<<std::endl;
-//   std::cout<<"  mm  "<< mm<<std::endl;
-
-//   std::cout<<"  lambda1 = "<<l1<<std::endl;
-//   std::cout<<"  lambda2 = "<<l2<<std::endl;
-//   std::cout<<"  lambda3 = "<<l3<<std::endl;
-//   std::cout<<"  lambda  = "<<-lambda(l1,l2,l3)<<std::endl;
-
-  
-//   std::cout<<"  Scalar(p3,p1Timesp2)*a1.P()  "<< Scalar(p3,p1Timesp2)<<std::endl;
-//   std::cout<<"  a1.P()  "<< a1.P() <<std::endl;
-
-//   std::cout<<"  a1.P()  "<< a1.P() << "   *  "<</*8*a1.M()*a1.M()**/Scalar(p3,p1Timesp2)/sqrt(-lambda(l1,l2,l3)) <<std::endl;
-
-
-
-//   std::cout<<"  cbeta  "<< cbeta  <<std::endl;
-
-
-
-  return cbeta;
-
-}
 
 
 
@@ -295,56 +142,6 @@ double
 a1Helper::Scalar(TLorentzVector p1, TLorentzVector p2){
     return p1.Vect()*p2.Vect();
 }
-
-std::vector<float> 
-a1Helper::Sin2Cos2Gamma(TLorentzVector p1,TLorentzVector p2, TLorentzVector p3){
-
-  std::vector<float> sin2cos2;
-  float mpi  = 0.139;
-  TLorentzVector a1 = p1+p2+p3;
-  float QQ = a1.E()*a1.E() - a1.P()*a1.P();
-
-  float B1 = (pow(p1.E()*a1.E()   - Scalar(p1,a1),2 ) - QQ*mpi*mpi)/QQ;
-  float B2 = (pow(p2.E()*a1.E()   - Scalar(p2,a1),2 ) - QQ*mpi*mpi)/QQ;
-  float B3 = (pow(p3.E()*a1.E()   - Scalar(p3,a1),2 ) - QQ*mpi*mpi)/QQ;
-
-  float T = 0.5*sqrt(-lambda(B1,B2,B3));
-
-  float A1=(a1.E()*Scalar(a1,p1) - p1.E()*a1.P()*a1.P())/QQ;
-  float A2=(a1.E()*Scalar(a1,p2) - p2.E()*a1.P()*a1.P())/QQ;
-  float A3=(a1.E()*Scalar(a1,p3) - p3.E()*a1.P()*a1.P())/QQ;
-
-
-  float cosgamma = A3/a1.P()/sqrt(B3)/sqrt(1 - CosBeta()*CosBeta());
-  float singamma = -cosgamma*(B3*A1/A3 - 0.5*(B2 - B1 - B3))/T;
-
-  sin2cos2.push_back(2*singamma*cosgamma);
-  sin2cos2.push_back(2*cosgamma*cosgamma - 1);
-  return sin2cos2;
-
-}
-
-
-
-float 
-a1Helper::CosPsi(){
-
-  TLorentzVector p1 = SSPion1ZFrame_;
-  TLorentzVector p2 = SSPion2ZFrame_;
-  TLorentzVector p3 = OSPionZFrame_;
-  TLorentzVector Z=Z_;
-
-  float mtau =1.777;
-  TLorentzVector a1 = p1+p2+p3;
-  float QQ = a1.E()*a1.E() - a1.P()*a1.P();
-  float cos = (costheta()*(mtau*mtau  + QQ)   + (mtau*mtau  - QQ))/(costheta()*(mtau*mtau  - QQ)   + (mtau*mtau  + QQ));
-  return cos;
-
-}
-
- 
-
-
 
 //---------------------------------------  hadronic current ---------------------------
 double 
@@ -394,7 +191,7 @@ double
  }
 double
  a1Helper::WSB(){
-  double QQ = _Q*_Q;
+  //  double QQ = _Q*_Q;
    double undersqrt1 = VV1()  -h();
    double undersqrt2 = VV2()  -h();
    return  -2*_Q* (sqrt(undersqrt1) * (F1()*Conjugate(F4())).Re() +   sqrt(undersqrt2)*(F2()*Conjugate(F4())).Re()  );
@@ -406,7 +203,7 @@ double
  }
 double
  a1Helper::WSC(){
-  double QQ = _Q*_Q;
+  //  double QQ = _Q*_Q;
    double undersqrt1 = VV1()  -h();
    double undersqrt2 = VV2()  -h();
    return  2*_Q* (sqrt(undersqrt1) * (F1()*Conjugate(F4())).Im() +   sqrt(undersqrt2)*(F2()*Conjugate(F4())).Im()  );
@@ -420,7 +217,7 @@ double
 
 
 double
-a1Helper::temp_cosgammaLF(){
+a1Helper::cosgammaLF(){
   double QQ=LFQ*LFQ;
   // double B1 = (pow(_ss1pionLV.E()*_tauLV.E()   - _ss1pionLV.Vect().Dot(_a1LV.Vect()),2 ) - QQ*mpi*mpi)/QQ;
   // double B2 = (pow(_ss2pionLV.E()*_tauLV.E()   - _ss2pionLV.Vect().Dot(_a1LV.Vect()),2 ) - QQ*mpi*mpi)/QQ;
@@ -438,12 +235,12 @@ a1Helper::temp_cosgammaLF(){
                                          
   std::cout<< "QQ "   << LFQ*LFQ<< "  _Q_Q  "<< _Q*_Q << std::endl;
 
-  if(B3<=0 || temp_cosbetaLF() >=1){std::cout<<"Warning! In a1Helper::cosgamma square root <=0! return 0"<<std::endl; return 0;}
-  return A3/LFa1LV.P()/sqrt(B3)/sqrt(1 - temp_cosbetaLF()*temp_cosbetaLF());
+  if(B3<=0 || cosbetaLF() >=1){std::cout<<"Warning! In a1Helper::cosgamma square root <=0! return 0"<<std::endl; return 0;}
+  return A3/LFa1LV.P()/sqrt(B3)/sqrt(1 - cosbetaLF()*cosbetaLF());
 }
 
 double
-a1Helper::temp_singammaLF(){
+a1Helper::singammaLF(){
   double QQ=LFQ*LFQ;
    double B1 = (pow(LFss1pionLV.E()*LFa1LV.E()   - LFss1pionLV.Vect().Dot(LFa1LV.Vect()),2 ) - QQ*mpi*mpi)/QQ;
   double B2 = (pow(LFss2pionLV.E()*LFa1LV.E()   - LFss2pionLV.Vect().Dot(LFa1LV.Vect()),2 ) - QQ*mpi*mpi)/QQ;
@@ -458,44 +255,54 @@ a1Helper::temp_singammaLF(){
   if(A3==0 || T==0){std::cout<<"Warning! In a1Helper::singamma denominator ==0! return 0"<<std::endl; return 0;}
   double scale = -(B3*A1/A3 - 0.5*(B2 - B1 - B3))/T;
   std::cout<<"scale  " << scale <<std::endl;
-  return temp_cosgammaLF()*scale;
+  return cosgammaLF()*scale;
 }
 double
-a1Helper::temp_cos2gammaLF(){
-   return temp_singammaLF()*temp_singammaLF()   -     temp_cosgammaLF()*temp_cosgammaLF();
+a1Helper::cos2gamma(){
+   return singamma()*singamma()   -     cosgamma()*cosgamma();
 }
 
 double
-a1Helper::temp_sin2gammaLF(){
-  return 2*temp_singammaLF()*temp_cosgammaLF();
+a1Helper::sin2gamma(){
+  return 2*singamma()*cosgamma();
 }
 double 
-a1Helper::temp_cospsiLF(){
+a1Helper::cospsiLF(){
   double QQ = LFQ*LFQ;
-  double x = LFa1LV.E()/LFtauLV.E();
   double s = 4*LFtauLV.E()*LFtauLV.E();
+  double x = 2*LFa1LV.E()/sqrt(s);
   if(x*x  - 4*QQ/s <= 0 ){std::cout<<"Warning! In a1Helper::cospsi root square <=0! return 0"<<std::endl; return 0;}
-  return    ( x*(mtau*mtau + QQ)  + 2*QQ  )   /   ( mtau*mtau  - QQ   ) / sqrt(x*x  - 4*QQ/s); 
+  return    ( x*(mtau*mtau + QQ)  - 2*QQ  )   /   ( mtau*mtau  - QQ   ) / sqrt(x*x  - 4*QQ/s); 
+}
+double 
+a1Helper::sinpsiLF(){
+  if(cospsiLF()*cospsiLF() > 1  )std::cout<<"Warning! In a1Helper::sinpsi root square <=0! return nan"<<std::endl;
+  return    sqrt(1 - cospsiLF()*cospsiLF());
 }
 
 double 
-a1Helper::temp_ultrarel_cospsiLF(){
+a1Helper::ultrarel_cospsiLF(){
   double QQ = LFQ*LFQ;
-  double cos = (temp_costhetaLF()*(mtau*mtau  + QQ)   + (mtau*mtau  - QQ))/(temp_costhetaLF()*(mtau*mtau  - QQ)   + (mtau*mtau  + QQ));
+  double cos = (costhetaLF()*(mtau*mtau  + QQ)   + (mtau*mtau  - QQ))/(costhetaLF()*(mtau*mtau  - QQ)   + (mtau*mtau  + QQ));
   return cos;
 }
 
 double 
-a1Helper::temp_costhetaLF(){
+a1Helper::costhetaLF(){
   double QQ = LFQ*LFQ;
   double x = LFa1LV.E()/LFtauLV.E();
   double s = 4*LFtauLV.E()*LFtauLV.E();
   if( 1 - 4*mtau*mtau/s  <= 0 ){std::cout<<"Warning! In a1Helper::costheta root square <=0! return 0"<<std::endl; return 0;}
   return (2*x*mtau*mtau - mtau*mtau - QQ)/((mtau*mtau - QQ)*sqrt(1 - 4*mtau*mtau/s));
 }
+double 
+a1Helper::sinthetaLF(){
+  if( costhetaLF()*costhetaLF() > 1 ) std::cout<<"Warning! In a1Helper::sin heta root square <=0! return nan"<<std::endl; 
+  return sqrt(1- costhetaLF()*costhetaLF());
+}
 
 double 
-a1Helper::temp_cosbetaLF(){
+a1Helper::cosbetaLF(){
   double QQ = LFQ*LFQ;
   double B1 = (pow(LFss1pionLV.E()*LFa1LV.E()   - Scalar(LFss1pionLV,LFa1LV),2 ) - QQ*mpi*mpi)/QQ;
   double B2 = (pow(LFss2pionLV.E()*LFa1LV.E()   - Scalar(LFss2pionLV,LFa1LV),2 ) - QQ*mpi*mpi)/QQ;
@@ -550,7 +357,8 @@ a1Helper::h(){
 TComplex 
 a1Helper::F1(){
   TComplex scale(0, -2*sqrt(2)/3/fpi);
-  TComplex res = scale*BreitWigner(_Q,"a1")*BRho(_s2);
+  TComplex res = scale*BreitWigner(_Q,"a1")*BRho(sqrt(_s2));
+  //  std::cout<<"  BreitWigner(_Q,a1)  " << BreitWigner(_Q,"a1") << " BRho(_s2)  " << BRho(sqrt(_s2))<< std::endl;
   return res;
 }
 
@@ -558,20 +366,21 @@ a1Helper::F1(){
 TComplex 
 a1Helper::F2(){
   TComplex scale(0, -2*sqrt(2)/3/fpi);
-  TComplex res = scale*BreitWigner(_Q,"a1")*BRho(_s1);
+  TComplex res = scale*BreitWigner(_Q,"a1")*BRho(sqrt(_s1));
   return res;
 }
 
 TComplex 
 a1Helper::F4(){
   TComplex scale(0, -gpiprimerhopi*grhopipi*fpiprime/2/pow(mrho,4)/pow(mpiprime,3));
-  TComplex res = scale*BreitWigner(_Q,"piprime")*(_s1*(_s2-_s3)*BRho(_s1) + _s2*(_s1-_s3)*BRho(_s2));
+  TComplex res = scale*BreitWigner(_Q,"piprime")*(_s1*(_s2-_s3)*BRho(sqrt(_s1)) + _s2*(_s1-_s3)*BRho(sqrt(_s2)));
   return res;
 }
 
 
 TComplex 
 a1Helper::BRho(double Q){
+  //  std::cout<<"BRho:      BreitWigner(Q) " << BreitWigner(Q) << " BreitWigner(Q,rhoprime) " << BreitWigner(Q,"rhoprime")<< std::endl;
   return (BreitWigner(Q) + beta*BreitWigner(Q,"rhoprime"))/(1+beta);
 }
 
@@ -601,7 +410,7 @@ a1Helper::Widths(double Q, string type){
   if(type == "piprime"){
     Gamma = Gamma0piprime*pow( sqrt(QQ)/mpiprime  ,5)*pow( (1-mrho*mrho/QQ)/(1-mrho*mrho/mpiprime/mpiprime) ,3);
   }
-  std::cout<< "  type   " << type << " Gamma  " << Gamma <<std::endl;
+  //  std::cout<< " Widths :   type   " << type << " Gamma  " << Gamma << "  QQ  "<< QQ <<std::endl;
   return Gamma;
 }
 double a1Helper::ga1(double  Q){
@@ -614,15 +423,50 @@ a1Helper::Mass(string type){
   if(type == "rhoprime") return mrhoprime; 
   if(type == "a1") return ma1;
   if(type == "piprime") return mpiprime;
-  std::cout<< "  type   " << type << " Mass  " << std::endl;
+  //std::cout<< "  type   " << type << " Mass  " << std::endl;
   return m;
 }
 
 
-double a1Helper::ppi(double QQ){return 0.5*sqrt(QQ - 4*mpi*mpi);}
+double a1Helper::ppi(double QQ){  if(QQ < 4*mpi*mpi) std::cout<<"Warning! Can not compute ppi(Q); root square <0 ; return nan  "; return 0.5*sqrt(QQ - 4*mpi*mpi);}
 
 
+double a1Helper::getf(){
+  double QQ=_Q*_Q;
+  double l  = 0.5*(mtau*mtau + QQ)/sqrt(QQ);
+  //  double l0= 0.5*(mtau*mtau - QQ)/sqrt(QQ);
+  //------ separate for simple debugging 
+  double line1 =   -2*l   *   ( 2*WA()/3   + 0.5*(3*cospsiLF()*cospsiLF()   -1)  *  ( WA()*(3*cosbeta()*cosbeta() -1 )/6    - 0.5*WC()*sinbeta()*sinbeta()*cos2gamma()   + 0.5*WD()* sinbeta()*sinbeta()* sin2gamma() )   )/sqrt(QQ);
+  double line2 = mtau*mtau*WA()/QQ + mtau*mtau  *  (  WSA() +  cospsiLF()*sinbeta()*(   WSB() *cosgamma()      - WSD() * singamma())     )/QQ + WE()*cosbeta()*cospsiLF();
+  double res = line1+ line2;
 
+  // std::cout<< "f:  line 1   " << line1 <<std::endl;
+  // std::cout<< "f:   line 2   " << line2 <<std::endl;
+
+  return res;
+}
+double a1Helper::getg(){
+  double QQ=_Q*_Q;
+  //  double l  = 0.5*(mtau*mtau + QQ)/sqrt(QQ);
+  double l0= 0.5*(mtau*mtau - QQ)/sqrt(QQ);
+  //------ separate for simple debugging 
+  double line1 =   -2*l0   * costhetaLF()*  ( 2*WA()/3   + 0.5*(3*cospsiLF()*cospsiLF()   -1)  *  ( WA()*(3*cosbeta()*cosbeta() -1 )/6    -  0.5*WC()*sinbeta()*sinbeta()*cos2gamma()   + 0.5*WD()* sinbeta()*sinbeta()* sin2gamma() )   )/sqrt(QQ);
+  double line2 = mtau*mtau*WA()*costhetaLF()/QQ  +    sqrt(mtau*mtau/QQ )  * sinthetaLF()* ( 0.5*WA()*2* sinbeta()*cosbeta()* cosalpha() -  
+                                             WC()*sinbeta()* (sinalpha()* sin2gamma() + cos2gamma()* cosalpha()*    cosbeta() )    -    WD()*sinbeta()*( sinalpha()*cos2gamma() + sin2gamma()* cosalpha()*cosbeta()  )- 2*cospsiLF()*sinpsiLF()  *
+				            (WA()*(3*cosbeta() *cosbeta() -1 )/6   -    0.5*WC()*sinbeta()* sinbeta()* cos2gamma()+ 0.5*WD()*sinbeta()* sinbeta()* cos2gamma() + WD()*sinbeta()* sinbeta()* sin2gamma())/3   );
+
+  double line3  =  sqrt(mtau*mtau/QQ ) *sinthetaLF()* (WE()*(cosbeta()*sinpsiLF() + sinbeta()*cosalpha()) +cosbeta()*sinalpha()*(WSC()*cosgamma() - WSE()*singamma()) + cosalpha()*(WSC()*singamma() + WSE()*cosgamma()));
+  double line4  =  -WE()*costhetaLF()*cosbeta()*cospsiLF() + mtau*mtau*costhetaLF()*(WSA() + cospsiLF()*sinbeta()  * (WSB()*cosgamma() - WSD()* singamma()  ) )/QQ;
+  double line5  =  sqrt(mtau*mtau/QQ)*sinthetaLF() *  ( sinpsiLF()*sinbeta()*( WSB()* cosgamma() - WSD()* singamma()) + cosbeta()*cosalpha()*(WSD()*singamma() - WSB()*cosgamma()  ) + 
+							sinalpha()*(WSD()*cosgamma() + WSB()*singamma())          );
+  double res = line1+ line2 + line3 + line4 + line5;
+  // std::cout<< "g:  line 1   " << line1 <<std::endl;
+  // std::cout<< "g:   line 2   " << line2 <<std::endl;
+  // std::cout<< "g:   line 3   " << line3 <<std::endl;
+  // std::cout<< "g:   line 4   " << line4 <<std::endl;
+  // std::cout<< "g:   line 5   " << line5 <<std::endl;
+  return res;
+}
 
 
 
@@ -668,6 +512,7 @@ double a1Helper::ppi(double QQ){return 0.5*sqrt(QQ - 4*mpi*mpi);}
 // 	return omega;
 // }
 
+
 TVector3
 a1Helper::nPerp(){
   if(_ss1pionLV.Vect().Cross(_ss2pionLV.Vect()).Mag()==0){ std::cout<<"  Can not return nPerp, same sign pions seem to be parallel in a1 rest frame, return 0,0,0  "<<std::endl; return TVector3(0,0,0);}
@@ -685,19 +530,44 @@ a1Helper::nT(){
   return   _tauLV.Vect()*(1/_tauLV.Vect().Mag());
 }
 
-double a1Helper::temp_cosalpha(){
+double a1Helper::cosalpha(){
    TVector3 nLCrossnT  = nL().Cross(nT());
   TVector3 nLCrossnPerp  = nL().Cross(nPerp());
 
   if(nLCrossnPerp.Mag() ==0 || nLCrossnT.Mag() ==0){std::cout<<" Can not compute cos alpha, one denominator is 0, return cos alpha =0  "<< std::endl; return 0;}
   return nLCrossnT.Dot(nLCrossnPerp)/nLCrossnT.Mag()/nLCrossnPerp.Mag();
 }
-double a1Helper::temp_sinalpha(){
+double a1Helper::sinalpha(){
   TVector3 nLCrossnT  = nL().Cross(nT());
   TVector3 nLCrossnPerp  = nL().Cross(nPerp());
   if(nLCrossnPerp.Mag() ==0 || nLCrossnT.Mag() ==0){std::cout<<" Can not compute sin alpha, one denominator is 0, return sin alpha =0  "<< std::endl; return 0;}
   return -nT().Dot(nLCrossnPerp)/nLCrossnT.Mag()/nLCrossnPerp.Mag();
 }
+double a1Helper::cosbeta(){
+  return nL().Dot(nPerp());
+}
+double a1Helper::sinbeta(){
+  if(cosbeta()*cosbeta() > 1 ){std::cout<<"Warning! Can not compute sin beta! return 0"<<std::endl; return 0;}
+  return sqrt(1 - cosbeta()*cosbeta());
+}
+
+double a1Helper::cosgamma(){
+  TVector3 nLCrossnPerp  = nL().Cross(nPerp());
+
+  TVector3 qvect = _osPionLV.Vect()*(1/_osPionLV.Vect().Mag());
+  qvect.Print();
+  if(nLCrossnPerp.Mag()==0) { std::cout<<"Warning! Can not compute cos gamma, denominator =0, return 0  "<< std::endl; return 0; }
+  return -nL()*qvect/nLCrossnPerp.Mag();
+}
+
+double a1Helper::singamma(){
+  TVector3 nLCrossnPerp  = nL().Cross(nPerp());
+  TVector3 qvect = _osPionLV.Vect()*(1/_osPionLV.Vect().Mag());
+
+  if(nLCrossnPerp.Mag()==0) { std::cout<<"Warning! Can not compute cos gamma, denominator =0, return 0  "<< std::endl; return 0; }
+  return qvect*nLCrossnPerp/nLCrossnPerp.Mag();
+}
+
 
 
 TComplex 
@@ -713,3 +583,200 @@ TMatrixT<double> a1Helper::convertToMatrix(TVectorT<double> V){
 //  cosb = nL*nPerp
 // cosgamma = -nL*q3/|nLCrossnPerp|
 // cosgamma = q3*nLCrossnPer/|nLCrossnPerp|
+// double 
+// a1Helper::CosBeta1(){
+//   TLorentzVector p1 = SSPion1ZFrame_;
+//   TLorentzVector p2 = SSPion2ZFrame_;
+//   TLorentzVector p3 = OSPionZFrame_;
+
+
+//   //std::cout<<"  cosbeta1  ================================= "<<std::endl;
+//   double mpi  = 0.139;
+// //   double E = p1.E() +  p2.E() +  p3.E(); 
+// //   double P = p1.P() +  p2.P() +  p3.P(); 
+// //   double QQ = E*E - P*P;
+
+//   TLorentzVector a1 = p1+p2+p3;
+//   //  float P = 
+//   TLorentzVector s12 = p1+p2;
+//   TLorentzVector s13 = p1+p3;
+//   TLorentzVector s23 = p2+p3;
+
+//   double QQ = a1.E()*a1.E() - a1.P()*a1.P();
+
+
+//   TLorentzVector p1Timesp2(p1.Py()*p2.Pz() - p1.Pz()*p2.Py(),p1.Pz()*p2.Px() - p1.Px()*p2.Pz(),p1.Px()*p2.Py() - p1.Py()*p2.Px(),1);
+//   float mm=a1.M()*a1.M();
+//   float mm12=s12.M()*s12.M();
+//   float mm13=s13.M()*s13.M();
+//   float mm23=s23.M()*s23.M();
+//   float mmpi=mpi*mpi;
+
+//   float l1  = lambda( mm, mm12 , mmpi);
+//   float l2  = lambda( mm, mm13 , mmpi);
+//   float l3  = lambda( mm, mm23 , mmpi);
+
+ 
+//   double cbeta = /*8*a1.M()*a1.M()**/Scalar(p3,p1Timesp2)*a1.P()/sqrt(-lambda(l1,l2,l3));
+
+// //   std::cout<<"  QQ  "<< QQ<<std::endl;
+// //   std::cout<<"  mm12  "<< mm12<<std::endl;
+// //   std::cout<<"  mm13  "<< mm13<<std::endl;
+// //   std::cout<<"  mm23  "<< mm23<<std::endl;
+// //   std::cout<<"  mm  "<< mm<<std::endl;
+
+// //   std::cout<<"  lambda1 = "<<l1<<std::endl;
+// //   std::cout<<"  lambda2 = "<<l2<<std::endl;
+// //   std::cout<<"  lambda3 = "<<l3<<std::endl;
+// //   std::cout<<"  lambda  = "<<-lambda(l1,l2,l3)<<std::endl;
+
+  
+// //   std::cout<<"  Scalar(p3,p1Timesp2)*a1.P()  "<< Scalar(p3,p1Timesp2)<<std::endl;
+// //   std::cout<<"  a1.P()  "<< a1.P() <<std::endl;
+
+// //   std::cout<<"  a1.P()  "<< a1.P() << "   *  "<</*8*a1.M()*a1.M()**/Scalar(p3,p1Timesp2)/sqrt(-lambda(l1,l2,l3)) <<std::endl;
+
+
+
+// //   std::cout<<"  cbeta  "<< cbeta  <<std::endl;
+//   return cbeta;
+// }
+
+
+
+// std::vector<float> 
+// a1Helper::Sin2Cos2Gamma(TLorentzVector p1,TLorentzVector p2, TLorentzVector p3){
+
+//   std::vector<float> sin2cos2;
+//   float mpi  = 0.139;
+//   TLorentzVector a1 = p1+p2+p3;
+//   float QQ = a1.E()*a1.E() - a1.P()*a1.P();
+
+//   float B1 = (pow(p1.E()*a1.E()   - Scalar(p1,a1),2 ) - QQ*mpi*mpi)/QQ;
+//   float B2 = (pow(p2.E()*a1.E()   - Scalar(p2,a1),2 ) - QQ*mpi*mpi)/QQ;
+//   float B3 = (pow(p3.E()*a1.E()   - Scalar(p3,a1),2 ) - QQ*mpi*mpi)/QQ;
+
+//   float T = 0.5*sqrt(-lambda(B1,B2,B3));
+
+//   float A1=(a1.E()*Scalar(a1,p1) - p1.E()*a1.P()*a1.P())/QQ;
+//   float A2=(a1.E()*Scalar(a1,p2) - p2.E()*a1.P()*a1.P())/QQ;
+//   float A3=(a1.E()*Scalar(a1,p3) - p3.E()*a1.P()*a1.P())/QQ;
+
+
+//   float cosgamma = A3/a1.P()/sqrt(B3)/sqrt(1 - CosBeta()*CosBeta());
+//   float singamma = -cosgamma*(B3*A1/A3 - 0.5*(B2 - B1 - B3))/T;
+
+//   sin2cos2.push_back(2*singamma*cosgamma);
+//   sin2cos2.push_back(2*cosgamma*cosgamma - 1);
+//   return sin2cos2;
+
+// }
+
+
+
+// float 
+// a1Helper::CosPsi(){
+
+//   TLorentzVector p1 = SSPion1ZFrame_;
+//   TLorentzVector p2 = SSPion2ZFrame_;
+//   TLorentzVector p3 = OSPionZFrame_;
+//   TLorentzVector Z=Z_;
+
+//   float mtau =1.777;
+//   TLorentzVector a1 = p1+p2+p3;
+//   float QQ = a1.E()*a1.E() - a1.P()*a1.P();
+//   float cos = (costheta()*(mtau*mtau  + QQ)   + (mtau*mtau  - QQ))/(costheta()*(mtau*mtau  - QQ)   + (mtau*mtau  + QQ));
+//   return cos;
+
+// }
+
+
+// double 
+// a1Helper::costheta(){
+  
+//   TLorentzVector p1 = SSPion1ZFrame_;
+//   TLorentzVector p2 = SSPion2ZFrame_;
+//   TLorentzVector p3 = OSPionZFrame_;
+//   TLorentzVector Z=Z_;
+
+  
+//   double zmass = Z.M();
+//   double mtau = 1.777;
+//   TLorentzVector a1 = p1+p2+p3;
+//   float QQ = a1.E()*a1.E() - a1.P()*a1.P();
+
+//   double x = a1.E()/TauA1_.E();
+//   double ctheta = (2*x*mtau*mtau - mtau*mtau - QQ)/((mtau*mtau - QQ)*sqrt(1 - 4*mtau*mtau/zmass/zmass));
+//   // std::cout<<"p1 "<< p1.Px() << "  " <<p1.Py() << " "<< p1.Pz() << "  " <<p1.M()<<std::endl;
+//   // std::cout<<"p2 "<< p2.Px() << "  "<< p2.Py() << " "<< p2.Pz() << "  " <<p2.M()<<std::endl;
+//   // std::cout<<"p3 "<< p3.Px() << "  "<< p3.Py() << " "<< p3.Pz() << "  " <<p3.M()<<std::endl;
+//   // std::cout<<"a1 "<< a1.Px() << "  "<< a1.Py() << " "<< a1.Pz() << "  " <<a1.M()<<"  " <<a1.M()*a1.M() <<std::endl;
+//   // std::cout<<"QQ "<< QQ << " x "<< x <<" zmass  " <<zmass <<std::endl;
+
+//   //  std::cout<<"2*x*mtau*mtau/mtau*mtau - QQ "<< 2*x*mtau*mtau/(mtau*mtau - QQ)<< "  "<< x <<std::endl;
+//   return ctheta;
+// }
+
+
+// double 
+// a1Helper::costheta1(){
+  
+//   TLorentzVector p1 = SSPion1ZFrame_;
+//   TLorentzVector p2 = SSPion2ZFrame_;
+//   TLorentzVector p3 = OSPionZFrame_;
+//   TLorentzVector Z=Z_;
+
+//   double zmass = Z.M();
+//   double mt = 1.777;
+//   TLorentzVector a1 = p1+p2+p3;
+//   double ma  = a1.M();
+//   double diffmass = mt*mt - ma*ma;
+//   float QQ = a1.E()*a1.E() - a1.P()*a1.P();
+
+//   double x = 2*a1.E()/zmass;
+//   double ctheta = 4*mt*mt*a1.E()/zmass/diffmass   - (mt*mt + ma*ma)/diffmass;
+//   return ctheta;
+
+// }
+
+
+// float 
+// a1Helper::CosBeta(){
+//   TLorentzVector p1 = SSPion1ZFrame_;
+//   TLorentzVector p2 = SSPion2ZFrame_;
+//   TLorentzVector p3 = OSPionZFrame_;
+
+//   float mpi  = 0.139;
+// //   float E = p1.E() +  p2.E() +  p3.E(); 
+// //   float P = p1.P() +  p2.P() +  p3.P(); 
+// //   float QQ = E*E - P*P;
+
+
+// //   std::cout<<"  cosbeta --------------------- "<<std::endl;
+
+//   TLorentzVector a1 = p1+p2+p3;
+//   float QQ = a1.E()*a1.E() - a1.P()*a1.P();
+
+//   float B1 = (pow(p1.E()*a1.E()   - Scalar(p1,a1),2 ) - QQ*mpi*mpi)/QQ;
+//   float B2 = (pow(p2.E()*a1.E()   - Scalar(p2,a1),2 ) - QQ*mpi*mpi)/QQ;
+//   float B3 = (pow(p3.E()*a1.E()   - Scalar(p3,a1),2 ) - QQ*mpi*mpi)/QQ;
+
+//   float T = 0.5*sqrt(-lambda(B1,B2,B3));
+
+//   TLorentzVector p1Timesp2(p1.Py()*p2.Pz() - p1.Pz()*p2.Py(),p1.Pz()*p2.Px() - p1.Px()*p2.Pz(),p1.Px()*p2.Py() - p1.Py()*p2.Px(),1);
+    
+    
+//   float cbeta = Scalar(p3,p1Timesp2)/a1.P()/T;
+
+// //   std::cout<<"  T  "<< T<<std::endl;
+// //   std::cout<<"  B1  "<< B1<<std::endl;
+// //   std::cout<<"  B2  "<< B2<<std::endl;
+// //   std::cout<<"  B3  "<< B3<<std::endl;
+// //   std::cout<<"  QQ  "<< QQ<<std::endl;
+// //   std::cout<<"  Scalar(p3,p1Timesp2)  "<< Scalar(p3,p1Timesp2)<<std::endl;
+// //   std::cout<<"  cbeta  "<< cbeta  <<std::endl;
+
+
+//   return cbeta;
+
+// }
