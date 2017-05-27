@@ -15,6 +15,7 @@
 #include "TH1F.h"
 #include "TLorentzVector.h"
 #include "UserCodes/MultiplyNumbers.h"
+#include "UserCodes/a1Helper.h"
 
 //pythia header files
 #ifdef PYTHIA8180_OR_LATER
@@ -35,7 +36,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents = 10000; 
+int NumberOfEvents = 1000000; 
 int EventsToCheck=10;
 
 // elementary test of HepMC typically executed before
@@ -224,6 +225,13 @@ int main(int argc,char **argv){
  
  TH1F *ommurho_plus= new TH1F("ommurho_plus","#omega #mu #rho plus",50,-1,1);
  TH1F *ommurho_minus= new TH1F("ommurho_minus","#omega  #mu #rho minus",50,-1,1);
+
+
+ TH1F *omega_a1_plus= new TH1F("omega_a1_plus","#omega a1",50,-1,1);
+ TH1F *omega_a1_minus= new TH1F("omega_a1_minus","#omega a1",50,-1,1);
+
+ TH1F *omegabar_a1_plus= new TH1F("omegabar_a1_plus","#omega a1",50,-7,7);
+ TH1F *omegabar_a1_minus= new TH1F("omegabar_a1_minus","#omega a1",50,-7,7);
  
   // Pythia8 HepMC interface depends on Pythia8 version
 #ifdef PYTHIA8180_OR_LATER
@@ -468,12 +476,29 @@ int main(int argc,char **argv){
      a1ospi.SetPxPyPzE(A1Pions.at(0).momentum().px(), A1Pions.at(0).momentum().py(), A1Pions.at(0).momentum().pz(), A1Pions.at(0).momentum().e());
      a1ss1pi.SetPxPyPzE(A1Pions.at(1).momentum().px(), A1Pions.at(1).momentum().py(), A1Pions.at(1).momentum().pz(), A1Pions.at(1).momentum().e());
      a1ss2pi.SetPxPyPzE(A1Pions.at(2).momentum().px(), A1Pions.at(2).momentum().py(), A1Pions.at(2).momentum().pz(), A1Pions.at(2).momentum().e());
-     std::cout<<"---------"<<std::endl;
-      tau2.Print();
-      a1.Print();
-      a1ospi.Print();
-      a1ss1pi.Print();
-      a1ss2pi.Print();
+     // std::cout<<"---------"<<std::endl;
+     // tau2.Print();
+     // a1.Print();
+     // a1ospi.Print();
+     // a1ss1pi.Print();
+     // a1ss2pi.Print();
+     vector<TLorentzVector> particles;
+     particles.push_back(tau1);
+     particles.push_back(a1ospi);
+     particles.push_back(a1ss1pi);
+     particles.push_back(a1ss2pi);
+
+  // particles.at(0).Print();
+  // particles.at(1).Print();
+  // particles.at(2).Print();
+  // particles.at(3).Print();
+
+     // a1Helper Helper(particles, a1ospi+a1ss1pi+a1ss2pi);
+     // cout<<     Helper.WA()*Helper.WA()<< "  = "<<Helper.WC()*Helper.WC()+  Helper.WD()*Helper.WD()+ Helper.WE()*Helper.WE()<<endl;	 
+     
+
+
+
     }
 
 
@@ -537,7 +562,19 @@ int main(int argc,char **argv){
       if(x1p!=0 && x1pip!=0){ompipi_plus = (x1p+x1pip)/(1+x1p*x1pip);Omegapipi_plus->Fill(ompipi_plus);}
       if(x1pip!=0 && x3p!=0){ompirho_plus = (x1pip+x3p)/(1+x1pip*x3p);Omegapirho_plus->Fill(ompirho_plus);}
 
+      if(JAK2==5 && SubJAK2==51){
+	vector<TLorentzVector> particles;
+	particles.push_back(tau1);
+	particles.push_back(a1ospi);
+	particles.push_back(a1ss1pi);
+	particles.push_back(a1ss2pi);
+	a1Helper Helper(particles, a1ospi+a1ss1pi+a1ss2pi);
+ 	if(Helper.getA1omega()> 0 or Helper.getA1omega() < 0)	omega_a1_plus->Fill(Helper.getA1omega());
+	if(Helper.getg()!=0)omegabar_a1_plus->Fill(Helper.getA1omegaBar());
 
+	//	std::cout<<"HelPlus:   costhetaLF()   "<< Helper.costhetaLF() <<"   get omega   "<< Helper.getA1omega()<<  "  omega bar   " << Helper.getA1omegaBar()<<std::endl;
+      }
+      
     }
 
     //   if(Tauola::getHelPlus() ==-1 ){
@@ -555,7 +592,21 @@ int main(int argc,char **argv){
       if(x1m!=0 && x1pim!=0){ompipi_minus = (x1m+x1pim)/(1+x1m*x1pim);Omegapipi_minus->Fill(ompipi_minus);}
 
       if(x1pim!=0 && x3m!=0){ompirho_minus = (x1pim+x3m)/(1+x1pim*x3m);Omegapirho_minus->Fill(ompirho_minus);}
+      if(JAK2==5 && SubJAK2==51){
+	vector<TLorentzVector> particles;
+	particles.push_back(tau1);
+	particles.push_back(a1ospi);
+	particles.push_back(a1ss1pi);
+	particles.push_back(a1ss2pi);
+	a1Helper Helper(particles, a1ospi+a1ss1pi+a1ss2pi);
 
+ 	if(Helper.getA1omega()> 0 or Helper.getA1omega() < 0)	omega_a1_minus->Fill(Helper.getA1omega());
+	if(Helper.getg()!=0)omegabar_a1_minus->Fill(Helper.getA1omegaBar());
+
+	//	std::cout<<"HelMinus:   costhetaLF()   "<< Helper.costhetaLF() <<"   get omega   "<< Helper.getA1omega()<<  "  omega bar   " << Helper.getA1omegaBar()<<std::endl;
+
+      }
+ 
     }
   
     
@@ -602,7 +653,10 @@ int main(int argc,char **argv){
   om_minus->Write();
   piom_plus->Write();
   piom_minus->Write();
-
+  omega_a1_minus->Write();
+  omega_a1_plus->Write();
+  omegabar_a1_minus->Write();
+  omegabar_a1_plus->Write();
   file->Write();
   file->Close();
   pythia.statistics();

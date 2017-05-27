@@ -60,7 +60,9 @@ class a1Helper {
   //====================
   double getg();
   double getf();
-
+  double getA1omega();
+  double getA1omegaBar();
+ 
 
   double lambda(double x, double y, double z);
   double Scalar(TLorentzVector p1, TLorentzVector p2);

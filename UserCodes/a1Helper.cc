@@ -297,7 +297,7 @@ a1Helper::costhetaLF(){
 }
 double 
 a1Helper::sinthetaLF(){
-  if( costhetaLF()*costhetaLF() > 1 ) std::cout<<"Warning! In a1Helper::sin heta root square <=0! return nan"<<std::endl; 
+  if( costhetaLF()*costhetaLF() > 1 ) std::cout<<"Warning! In a1Helper::sin theta root square <=0! return nan;   costheta = "<< costhetaLF()<<std::endl; 
   return sqrt(1- costhetaLF()*costhetaLF());
 }
 
@@ -467,50 +467,31 @@ double a1Helper::getg(){
   // std::cout<< "g:   line 5   " << line5 <<std::endl;
   return res;
 }
+double a1Helper::getA1omegaBar(){
+  if(getf()==0){ std::cout<<"Warning!  Can not return omega; f(0)=0; return -5;  "<<std::endl; return -5;}
+  return getg()/getf();
+}
 
 
 
-// double
-// a1Helper::GetOmegaA1(){
-//         isValid_ = false;
-//         double omega(-999.);
-// 	TLorentzVector pi1 = SSPion1ZFrame_;
-// 	TLorentzVector pi2 = SSPion2ZFrame_;
-// 	TLorentzVector pi3 = OSPionZFrame_;
-// 	TLorentzVector a = A1ZFrame_;
-// 	float mtau = 1.777;
-// 	float cospsi  = CosPsi();
-// 	float sinpsi  = sqrt(1 - cospsi*cospsi);
-// 	float sin2psi = 2*sinpsi*cospsi;
-	
-// 	float sin2gamma = Sin2Cos2Gamma(pi1,pi2,pi3).at(0);
-// 	float cos2gamma = Sin2Cos2Gamma(pi1,pi2,pi3).at(1);
-	
-	
-// 	float cosbeta=CosBeta();
-// 	float sinbeta = sqrt(1  - cosbeta*cosbeta);
-	
-	  
-// 	float cstheta=costheta();
-// 	float sintheta = sqrt(1 - cstheta*cstheta);
+double
+a1Helper::getA1omega(){
+  double QQ=_Q*_Q;
+  double RR  = mtau*mtau/QQ;
+  float U = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 - RR);
+  float V = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 + RR)*costhetaLF() + 0.5*3*2*cospsiLF()* sinpsiLF()*sinthetaLF()*sqrt(RR);
+  
+  float fa1 = (2  + RR + 0.5*(3*cosbeta()*cosbeta()- 1)*U)*WA()/3 - 0.5*sinbeta()*sinbeta()*cos2gamma()*U*WC() + 0.5*sinbeta()*sinbeta()*sin2gamma()*U*WD() + cospsiLF()*cosbeta()*WE();
+  float ga1 = (costhetaLF()*(RR -2) - 0.5*(3*cosbeta()*cosbeta() - 1)*V)*WA()/3 + 0.5*sinbeta()*sinbeta()*cos2gamma()*V*WC() - 0.5*sinbeta()*sinbeta()*sin2gamma()*V*WD() -cosbeta()*(costhetaLF()*cospsiLF() + sinthetaLF()*sinpsiLF()*sqrt(RR))*WE();
 
-// 	double RR  = mtau*mtau/a.M()/a.M();
-// 	float U = 0.5*(3*cospsi*cospsi - 1)*(1 - RR);
-// 	float V = 0.5*(3*cospsi*cospsi - 1)*(1 + RR)*cstheta + 0.5*3*sin2psi*sintheta*sqrt(RR);
-// 	//	std::cout<< " cospsi  "<< cospsi <<" costheta  "<<costheta <<" sin2psi "<<sin2psi <<" sintheta  "<<sintheta  <<" RR  "<< RR <<std::endl;
-
-// 	float Wa =WA(pi1,pi2,pi3,a.M()*a.M());
-// 	float Wc =WC(pi1,pi2,pi3,a.M()*a.M());
-// 	float Wd =WD(pi1,pi2,pi3,a.M()*a.M());
-// 	float We =WE(pi1,pi2,pi3,a.M()*a.M());
-
-// 	float fa1 = (2  + RR + 0.5*(3*cosbeta*cosbeta - 1)*U)*Wa/3 - 0.5*sinbeta*sinbeta*cos2gamma*U*Wc + 0.5*sinbeta*sinbeta*sin2gamma*U*Wd + cospsi*cosbeta*We;
-// 	float ga1 = (cstheta*(RR -2) - 0.5*(3*cosbeta*cosbeta - 1)*V)*Wa/3 + 0.5*sinbeta*sinbeta*cos2gamma*V*Wc - 0.5*sinbeta*sinbeta*sin2gamma*V*Wd -cosbeta*(cstheta*cospsi + sintheta*sinpsi*sqrt(RR))*We;
-// 	//	std::cout<< " U  "<< U <<" V  "<<V <<" Wa "<<Wa <<" Wc  "<<Wc  <<" Wd  "<< Wd <<" We  "<< We  <<" f "<< fa1 <<" g "<< ga1 <<std::endl;
-// 	omega = ga1/fa1;
-// 	if(omega > 0 or omega < 0) isValid_ = true;
-// 	return omega;
-// }
+  
+  // float fa1 = (2  + RR + 0.5*(3*cosbeta*cosbeta - 1)*U)*Wa/3 - 0.5*sinbeta*sinbeta*cos2gamma*U*Wc + 0.5*sinbeta*sinbeta*sin2gamma*U*Wd + cospsi*cosbeta*We;
+  // float ga1 = (cstheta*(RR -2) - 0.5*(3*cosbeta*cosbeta - 1)*V)*Wa/3 + 0.5*sinbeta*sinbeta*cos2gamma*V*Wc - 0.5*sinbeta*sinbeta*sin2gamma*V*Wd -cosbeta*(cstheta*cospsi + sintheta*sinpsi*sqrt(RR))*We;
+  //	std::cout<< " U  "<< U <<" V  "<<V <<" Wa "<<Wa <<" Wc  "<<Wc  <<" Wd  "<< Wd <<" We  "<< We  <<" f "<< fa1 <<" g "<< ga1 <<std::endl;
+  double omega = ga1/fa1;
+  if(omega > 0 or omega < 0) 	return omega;
+  return -999;
+}
 
 
 TVector3
@@ -555,7 +536,7 @@ double a1Helper::cosgamma(){
   TVector3 nLCrossnPerp  = nL().Cross(nPerp());
 
   TVector3 qvect = _osPionLV.Vect()*(1/_osPionLV.Vect().Mag());
-  qvect.Print();
+  //  qvect.Print();
   if(nLCrossnPerp.Mag()==0) { std::cout<<"Warning! Can not compute cos gamma, denominator =0, return 0  "<< std::endl; return 0; }
   return -nL()*qvect/nLCrossnPerp.Mag();
 }
