@@ -146,18 +146,6 @@ a1Helper::Scalar(TLorentzVector p1, TLorentzVector p2){
 //---------------------------------------  hadronic current ---------------------------
 double 
 a1Helper::WA(){
-
-//   float SS1 = (s2+s3).M()*(s2+s3).M();
-//   float SS2 = (s1+s3).M()*(s1+s3).M();
-//   float SS3 = (s1+s2).M()*(s1+s2).M();
-  // std::cout<<  "WA:   VV1()   " << VV1() <<std::endl; 
-  // std::cout<<  "WA:    F1().Rho2()  " << F1().Rho2()<<std::endl; 
-  // std::cout<<  "WA:   VV2()   " << VV2()<<std::endl; 
-  // std::cout<<  "WA:    F2().Rho2()  " << F2().Rho2()<<std::endl; 
-  // std::cout<<  "WA:    V1V2()  " << V1V2()<<std::endl; 
-  // std::cout<<  "WA:     ( F1()*Conjugate(F2()) ).Re() " << ( F1()*Conjugate(F2()) ).Re()<<std::endl; 
-  // std::cout<<  "WA:  ( Conjugate(F1())*F2() ).Re()    " <<  ( Conjugate(F1())*F2() ).Re()  <<std::endl; 
-
   return  VV1()*F1().Rho2() + VV2()*F2().Rho2()  + 2*V1V2()*( F1()*Conjugate(F2()) ).Re();
  }
 
@@ -431,49 +419,177 @@ a1Helper::Mass(string type){
 double a1Helper::ppi(double QQ){  if(QQ < 4*mpi*mpi) std::cout<<"Warning! Can not compute ppi(Q); root square <0 ; return nan  "; return 0.5*sqrt(QQ - 4*mpi*mpi);}
 
 
-double a1Helper::getf(){
-  double QQ=_Q*_Q;
-  double l  = 0.5*(mtau*mtau + QQ)/sqrt(QQ);
-  //  double l0= 0.5*(mtau*mtau - QQ)/sqrt(QQ);
-  //------ separate for simple debugging 
-  double line1 =   -2*l   *   ( 2*WA()/3   + 0.5*(3*cospsiLF()*cospsiLF()   -1)  *  ( WA()*(3*cosbeta()*cosbeta() -1 )/6    - 0.5*WC()*sinbeta()*sinbeta()*cos2gamma()   + 0.5*WD()* sinbeta()*sinbeta()* sin2gamma() )   )/sqrt(QQ);
-  double line2 = mtau*mtau*WA()/QQ + mtau*mtau  *  (  WSA() +  cospsiLF()*sinbeta()*(   WSB() *cosgamma()      - WSD() * singamma())     )/QQ + WE()*cosbeta()*cospsiLF();
-  double res = line1+ line2;
+ double a1Helper::getf(){
+   double QQ=_Q*_Q;
+   double l  = 0.5*(mtau*mtau + QQ)/sqrt(QQ);
+   //  double l0= 0.5*(mtau*mtau - QQ)/sqrt(QQ);
+   //------ separate for simple debugging 
+   double line1 =   -2*l   *   ( 2*WA()/3   + 0.5*(3*cospsiLF()*cospsiLF()   -1)  *  ( WA()*(3*cosbeta()*cosbeta() -1 )/6    - 0.5*WC()*sinbeta()*sinbeta()*cos2gamma()   + 0.5*WD()* sinbeta()*sinbeta()* sin2gamma() )   )/sqrt(QQ);
+   double line2 = mtau*mtau*WA()/QQ + mtau*mtau  *  (  WSA() +  cospsiLF()*sinbeta()*(   WSB() *cosgamma()      - WSD() * singamma())     )/QQ + WE()*cosbeta()*cospsiLF();
+   double res = line1+ line2;
 
-  // std::cout<< "f:  line 1   " << line1 <<std::endl;
-  // std::cout<< "f:   line 2   " << line2 <<std::endl;
+   // std::cout<< "f:  line 1   " << line1 <<std::endl;
+   // std::cout<< "f:   line 2   " << line2 <<std::endl;
 
-  return res;
+   return res;
+ }
+ double a1Helper::getg(){
+   double QQ=_Q*_Q;
+   //  double l  = 0.5*(mtau*mtau + QQ)/sqrt(QQ);
+   double l0= 0.5*(mtau*mtau - QQ)/sqrt(QQ);
+   //------ separate for simple debugging 
+   double line1 =   -2*l0   * costhetaLF()*  ( 2*WA()/3   + 0.5*(3*cospsiLF()*cospsiLF()   -1)  *  ( WA()*(3*cosbeta()*cosbeta() -1 )/6    -  0.5*WC()*sinbeta()*sinbeta()*cos2gamma()   + 0.5*WD()* sinbeta()*sinbeta()* sin2gamma() )   )/sqrt(QQ);
+   double line2 = mtau*mtau*WA()*costhetaLF()/QQ  +    sqrt(mtau*mtau/QQ )  * sinthetaLF()* ( 0.5*WA()*2* sinbeta()*cosbeta()* cosalpha() -  
+                                              WC()*sinbeta()* (sinalpha()* sin2gamma() + cos2gamma()* cosalpha()*    cosbeta() )    -    WD()*sinbeta()*( sinalpha()*cos2gamma() + sin2gamma()* cosalpha()*cosbeta()  )- 2*cospsiLF()*sinpsiLF()  *
+ 				            (WA()*(3*cosbeta() *cosbeta() -1 )/6   -    0.5*WC()*sinbeta()* sinbeta()* cos2gamma()+ 0.5*WD()*sinbeta()* sinbeta()* cos2gamma() + WD()*sinbeta()* sinbeta()* sin2gamma())/3   );
+
+   double line3  =  sqrt(mtau*mtau/QQ ) *sinthetaLF()* (WE()*(cosbeta()*sinpsiLF() + sinbeta()*cosalpha()) +cosbeta()*sinalpha()*(WSC()*cosgamma() - WSE()*singamma()) + cosalpha()*(WSC()*singamma() + WSE()*cosgamma()));
+   double line4  =  -WE()*costhetaLF()*cosbeta()*cospsiLF() + mtau*mtau*costhetaLF()*(WSA() + cospsiLF()*sinbeta()  * (WSB()*cosgamma() - WSD()* singamma()  ) )/QQ;
+   double line5  =  sqrt(mtau*mtau/QQ)*sinthetaLF() *  ( sinpsiLF()*sinbeta()*( WSB()* cosgamma() - WSD()* singamma()) + cosbeta()*cosalpha()*(WSD()*singamma() - WSB()*cosgamma()  ) + 
+ 							sinalpha()*(WSD()*cosgamma() + WSB()*singamma())          );
+   double res = line1+ line2 + line3 + line4 + line5;
+   // std::cout<< "g:  line 1   " << line1 <<std::endl;
+   // std::cout<< "g:   line 2   " << line2 <<std::endl;
+   // std::cout<< "g:   line 3   " << line3 <<std::endl;
+   // std::cout<< "g:   line 4   " << line4 <<std::endl;
+   // std::cout<< "g:   line 5   " << line5 <<std::endl;
+   return res;
+ }
+
+
+ double a1Helper::vgetf(TString type){
+   double QQ=_Q*_Q;
+   double RR  = mtau*mtau/QQ; double R = sqrt(RR);
+   float U = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 - RR);
+   float V = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 + RR)*costhetaLF() + 0.5*3*2*cospsiLF()* sinpsiLF()*sinthetaLF()*R;
+   double B = 0.5*(3*cosbeta()*cosbeta() - 1);
+
+   double fA =  WA()*(2+RR + B*U)/3;
+   double fC = -WC()*0.5*U*sinbeta()*sinbeta()* cos2gamma();
+   double fD = WD()*0.5*U*sinbeta()*sinbeta()* sin2gamma();
+   double fE =  WE()*cospsiLF()*cosbeta();
+
+   double res = fA+fC+fD+fE;
+
+
+
+
+    std::cout<<"f:  A+C+D+E  "<< fA+fC+fD+fE  <<std::endl;
+   std::cout<<" fA  "<< fA <<std::endl;
+   std::cout<<" fC  "<< fC <<std::endl;
+   std::cout<<" fD "<< fD <<std::endl;
+   std::cout<<" fE  "<< fE <<std::endl;
+   std::cout<<" U  "<< U  <<std::endl;
+   std::cout<<" V  "<< V  <<std::endl;
+   std::cout<<"  QQ    "<<  QQ  <<" RR  " << RR <<" 1-RR  "<< 1-RR  << "   (1+ RR)costheta " <<(1+RR)*costhetaLF()<<  "   Vadd " << 0.5*3*2*cospsiLF()* sinpsiLF()*sinthetaLF()*R<< " sinpsiLF() " <<sinpsiLF()<<std::endl;
+  
+   return res;
+ }
+ double a1Helper::vgetg(TString type){
+   double QQ=_Q*_Q;
+   double RR  = mtau*mtau/QQ; double R = sqrt(RR);
+   float U = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 - RR);
+   float V = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 + RR)*costhetaLF() + 0.5*3*2*cospsiLF()* sinpsiLF()*sinthetaLF()*R;
+   double B = 0.5*(3*cosbeta()*cosbeta() - 1);
+   double fact =0;
+   if(type == "bar") fact =1;
+   double gA =  WA()*(costhetaLF()*(RR - 2)   - B*V)/3                                                               +     fact*WA()*0.5*R*sinthetaLF()*cosalpha()*2*sinbeta()*cosbeta();
+   double gC =  WC()*0.5*V*sinbeta()*sinbeta()* cos2gamma()                                                 -      fact*WC()*R*sinthetaLF()*sinbeta()*(sinalpha()*sin2gamma()  -  cos2gamma()*cosalpha()*cosbeta() ) ;
+   double gD = -WD()*0.5*V*sinbeta()*sinbeta()* sin2gamma()                                                 -      fact*WD()*R*sinthetaLF()*sinbeta()*(sinalpha()*cos2gamma() + sin2gamma()* cosalpha()*cosbeta()  );
+   double gE = - WE()*cosbeta()*( costhetaLF()*cospsiLF() + R*sinthetaLF()*sinpsiLF())             +     fact*WE()*R*sinthetaLF()*sinbeta()*cosalpha();
+
+    std::cout<<"g:  A+C+D+E  "<< gA+gC+gD+gE  <<std::endl;
+    std::cout<<" gA  "<< gA <<std::endl;
+    std::cout<<" gC  "<< gC <<std::endl;
+    std::cout<<" gD "<< gD <<std::endl;
+    std::cout<<" gE  "<< gE <<std::endl;
+ 
+   // std::cout<<" ----------  " <<std::endl;
+   // std::cout<<"WA()  " <<  WA()*(costhetaLF()*(RR - 2)   - B*V)/3     << "   +  " << WA()*0.5*R*sinthetaLF()*cosalpha()*2*sinbeta()*cosbeta()  <<std::endl;
+   // std::cout<<"WC()    " <<WC()*0.5*V*sinbeta()*sinbeta()* cos2gamma()<< "   -  " <<  WC()*R*sinthetaLF()*sinbeta()*(sinalpha()*sin2gamma()  -  cos2gamma()*cosalpha()*cosbeta() )   <<std::endl;
+   // std::cout<<"WD()   " << -WD()*0.5*V*sinbeta()*sinbeta()* sin2gamma()   << "   -  " <<WD()*R*sinthetaLF()*sinbeta()*(sinalpha()*cos2gamma() + sin2gamma()* cosalpha()*cosbeta()  )    <<std::endl;
+   // std::cout<<"WE()    " <<- WE()*cosbeta()*( costhetaLF()*cospsiLF() + R*sinthetaLF()*sinpsiLF()) << "   +  " << WE()*R*sinthetaLF()*sinbeta()*cosalpha()  <<std::endl;
+
+
+   double res = gA+gC+gD+gE;
+   return res;
+ }
+
+ double a1Helper::vgetfscalar(TString type){
+   double QQ=_Q*_Q;
+   double RR  = mtau*mtau/QQ; double R = sqrt(RR);
+   float U = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 - RR);
+   float V = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 + RR)*costhetaLF() + 0.5*3*2*cospsiLF()* sinpsiLF()*sinthetaLF()*R;
+   double B = 0.5*(3*cosbeta()*cosbeta() - 1);
+
+   double fA =  WA()*(2+RR + B*U)/3;
+   double fC = -WC()*0.5*U*sinbeta()*sinbeta()* cos2gamma();
+   double fD = WD()*0.5*U*sinbeta()*sinbeta()* sin2gamma();
+   double fE =  WE()*cospsiLF()*cosbeta();
+   double fSA = WSA()*RR;
+   double fSB = WSB()*RR*cospsiLF()*sinbeta()*cosgamma();
+   double fSC = 0;
+   double fSD = -WSD()*RR*cospsiLF()*sinbeta()*singamma();
+   double fSE =0;
+
+   double res = fA+fC+fD+fE  + fSA + fSB + fSC  + fSD + fSE;
+
+   // std::cout<<"f:  A+C+D+E  "<< fA+fC+fD+fE  <<"  SA+SB+SC+SD+SE  " << fSA + fSB + fSC  + fSD + fSE <<std::endl;
+   // std::cout<<" fA  "<< fA <<std::endl;
+   // std::cout<<" fC  "<< fC <<std::endl;
+   // std::cout<<" fD "<< fD <<std::endl;
+   // std::cout<<" fE  "<< fE <<std::endl;
+   // std::cout<<" fSA  "<< fSA <<std::endl;
+   // std::cout<<" fSB  "<< fSB <<std::endl;
+   // std::cout<<" fSC  "<< fSC <<std::endl;
+   // std::cout<<" fSD  "<< fSD <<std::endl;
+   // std::cout<<" fSE  "<<  fSE<<std::endl;
+   return res;
+ }
+ double a1Helper::vgetgscalar(TString type){
+   double QQ=_Q*_Q;
+   double RR  = mtau*mtau/QQ; double R = sqrt(RR);
+   float U = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 - RR);
+   float V = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 + RR)*costhetaLF() + 0.5*3*2*cospsiLF()* sinpsiLF()*sinthetaLF()*R;
+   double B = 0.5*(3*cosbeta()*cosbeta() - 1);
+   double fact =0;
+   if(type == "bar") fact =1;
+
+  
+   double gA =  WA()*(costhetaLF()*(RR - 2)   - B*V)/3                                                               +     fact*WA()*0.5*R*sinthetaLF()*cosalpha()*2*sinbeta()*cosbeta();
+   double gC =  WC()*0.5*V*sinbeta()*sinbeta()* cos2gamma()                                                 -      fact*WC()*R*sinthetaLF()*sinbeta()*(sinalpha()*sin2gamma()  -  cos2gamma()*cosalpha()*cosbeta() ) ;
+   double gD = -WD()*0.5*V*sinbeta()*sinbeta()* sin2gamma()                                                 -      fact*WD()*R*sinthetaLF()*sinbeta()*(sinalpha()*cos2gamma() + sin2gamma()* cosalpha()*cosbeta()  );
+   double gE = - WE()*cosbeta()*( costhetaLF()*cospsiLF() + R*sinthetaLF()*sinpsiLF())             +     fact*WE()*R*sinthetaLF()*sinbeta()*cosalpha();
+   double gSA =WSA()*RR*costhetaLF();
+   double gSB =WSB()*R*(R*cospsiLF()*costhetaLF()*sinbeta()*cosgammaLF() + sinthetaLF()* ( sinpsiLF()*sinbeta()*cosgamma()  -  cosbeta()* cosalpha()* cosgamma() + sinalpha()*singamma())   );
+   double gSC = WSC()*R*sinthetaLF()*(cosbeta()*sinalpha()*cosgamma() + cosalpha()*singamma());
+   double gSD = WSD()*R*(sinthetaLF()*(cosbeta()*cosalpha()*singamma() + sinalpha()*cosgamma() - sinpsiLF()*sinbeta()*singamma()  )      - R*costhetaLF()*cospsiLF()*sinbeta()*singamma() );
+   double gSE = -WSE()*R*sinthetaLF()*(cosbeta()*sinalpha()*singamma() -  cosalpha()*cosgamma());
+   double res = gA+gC+gD+gE;
+   // std::cout<<"g:  A+C+D+E  "<< gA+gC+gD+gE  <<"  SA+SB+SC+SD+SE  " << gSA + gSB + gSC  + gSD + gSE <<std::endl;
+   // std::cout<<" gA  "<< gA <<std::endl;
+   // std::cout<<" gC  "<< gC <<std::endl;
+   // std::cout<<" gD "<< gD <<std::endl;
+   // std::cout<<" gE  "<< gE <<std::endl;
+   // std::cout<<" gSA  "<< gSA <<std::endl;
+   // std::cout<<" gSB  "<< gSB <<std::endl;
+   // std::cout<<" gSC  "<< gSC <<std::endl;
+   // std::cout<<" gSD  "<< gSD <<std::endl;
+   // std::cout<<" gSE  "<<  gSE<<std::endl;
+   return res;
+ }
+double a1Helper::vgetA1omegascalar(TString type){
+  if(vgetfscalar(type)==0){ std::cout<<"Warning!  Can not return vomegascalar; f(0)=0; return -5;  "<<std::endl; return -5;}
+  return vgetgscalar(type)/vgetfscalar(type);
 }
-double a1Helper::getg(){
-  double QQ=_Q*_Q;
-  //  double l  = 0.5*(mtau*mtau + QQ)/sqrt(QQ);
-  double l0= 0.5*(mtau*mtau - QQ)/sqrt(QQ);
-  //------ separate for simple debugging 
-  double line1 =   -2*l0   * costhetaLF()*  ( 2*WA()/3   + 0.5*(3*cospsiLF()*cospsiLF()   -1)  *  ( WA()*(3*cosbeta()*cosbeta() -1 )/6    -  0.5*WC()*sinbeta()*sinbeta()*cos2gamma()   + 0.5*WD()* sinbeta()*sinbeta()* sin2gamma() )   )/sqrt(QQ);
-  double line2 = mtau*mtau*WA()*costhetaLF()/QQ  +    sqrt(mtau*mtau/QQ )  * sinthetaLF()* ( 0.5*WA()*2* sinbeta()*cosbeta()* cosalpha() -  
-                                             WC()*sinbeta()* (sinalpha()* sin2gamma() + cos2gamma()* cosalpha()*    cosbeta() )    -    WD()*sinbeta()*( sinalpha()*cos2gamma() + sin2gamma()* cosalpha()*cosbeta()  )- 2*cospsiLF()*sinpsiLF()  *
-				            (WA()*(3*cosbeta() *cosbeta() -1 )/6   -    0.5*WC()*sinbeta()* sinbeta()* cos2gamma()+ 0.5*WD()*sinbeta()* sinbeta()* cos2gamma() + WD()*sinbeta()* sinbeta()* sin2gamma())/3   );
-
-  double line3  =  sqrt(mtau*mtau/QQ ) *sinthetaLF()* (WE()*(cosbeta()*sinpsiLF() + sinbeta()*cosalpha()) +cosbeta()*sinalpha()*(WSC()*cosgamma() - WSE()*singamma()) + cosalpha()*(WSC()*singamma() + WSE()*cosgamma()));
-  double line4  =  -WE()*costhetaLF()*cosbeta()*cospsiLF() + mtau*mtau*costhetaLF()*(WSA() + cospsiLF()*sinbeta()  * (WSB()*cosgamma() - WSD()* singamma()  ) )/QQ;
-  double line5  =  sqrt(mtau*mtau/QQ)*sinthetaLF() *  ( sinpsiLF()*sinbeta()*( WSB()* cosgamma() - WSD()* singamma()) + cosbeta()*cosalpha()*(WSD()*singamma() - WSB()*cosgamma()  ) + 
-							sinalpha()*(WSD()*cosgamma() + WSB()*singamma())          );
-  double res = line1+ line2 + line3 + line4 + line5;
-  // std::cout<< "g:  line 1   " << line1 <<std::endl;
-  // std::cout<< "g:   line 2   " << line2 <<std::endl;
-  // std::cout<< "g:   line 3   " << line3 <<std::endl;
-  // std::cout<< "g:   line 4   " << line4 <<std::endl;
-  // std::cout<< "g:   line 5   " << line5 <<std::endl;
-  return res;
+double a1Helper::vgetA1omega(TString type){
+  if(vgetf(type)==0){ std::cout<<"Warning!  Can not return vomega; f(0)=0; return -5;  "<<std::endl; return -5;}
+  return vgetg(type)/vgetf(type);
 }
 double a1Helper::getA1omegaBar(){
   if(getf()==0){ std::cout<<"Warning!  Can not return omega; f(0)=0; return -5;  "<<std::endl; return -5;}
   return getg()/getf();
 }
-
-
-
 double
 a1Helper::getA1omega(){
   double QQ=_Q*_Q;
@@ -483,8 +599,12 @@ a1Helper::getA1omega(){
   
   float fa1 = (2  + RR + 0.5*(3*cosbeta()*cosbeta()- 1)*U)*WA()/3 - 0.5*sinbeta()*sinbeta()*cos2gamma()*U*WC() + 0.5*sinbeta()*sinbeta()*sin2gamma()*U*WD() + cospsiLF()*cosbeta()*WE();
   float ga1 = (costhetaLF()*(RR -2) - 0.5*(3*cosbeta()*cosbeta() - 1)*V)*WA()/3 + 0.5*sinbeta()*sinbeta()*cos2gamma()*V*WC() - 0.5*sinbeta()*sinbeta()*sin2gamma()*V*WD() -cosbeta()*(costhetaLF()*cospsiLF() + sinthetaLF()*sinpsiLF()*sqrt(RR))*WE();
+	if(WA()*WA()  <  WC()*WC() + WD()*WD() + WE()*WE() ){
 
-  
+	  std::cout<<" 	  _s1 - _s2 " << _s1- _s2<< std::endl;
+
+	  }
+
   // float fa1 = (2  + RR + 0.5*(3*cosbeta*cosbeta - 1)*U)*Wa/3 - 0.5*sinbeta*sinbeta*cos2gamma*U*Wc + 0.5*sinbeta*sinbeta*sin2gamma*U*Wd + cospsi*cosbeta*We;
   // float ga1 = (cstheta*(RR -2) - 0.5*(3*cosbeta*cosbeta - 1)*V)*Wa/3 + 0.5*sinbeta*sinbeta*cos2gamma*V*Wc - 0.5*sinbeta*sinbeta*sin2gamma*V*Wd -cosbeta*(cstheta*cospsi + sintheta*sinpsi*sqrt(RR))*We;
   //	std::cout<< " U  "<< U <<" V  "<<V <<" Wa "<<Wa <<" Wc  "<<Wc  <<" Wd  "<< Wd <<" We  "<< We  <<" f "<< fa1 <<" g "<< ga1 <<std::endl;
@@ -492,7 +612,6 @@ a1Helper::getA1omega(){
   if(omega > 0 or omega < 0) 	return omega;
   return -999;
 }
-
 
 TVector3
 a1Helper::nPerp(){

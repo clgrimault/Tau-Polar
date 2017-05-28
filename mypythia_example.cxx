@@ -36,7 +36,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents = 1000000; 
+int NumberOfEvents = 30000; 
 int EventsToCheck=10;
 
 // elementary test of HepMC typically executed before
@@ -227,11 +227,11 @@ int main(int argc,char **argv){
  TH1F *ommurho_minus= new TH1F("ommurho_minus","#omega  #mu #rho minus",50,-1,1);
 
 
- TH1F *omega_a1_plus= new TH1F("omega_a1_plus","#omega a1",50,-1,1);
- TH1F *omega_a1_minus= new TH1F("omega_a1_minus","#omega a1",50,-1,1);
+ TH1F *omega_a1_plus= new TH1F("omega_a1_plus","#omega a1",50,-4,4);
+ TH1F *omega_a1_minus= new TH1F("omega_a1_minus","#omega a1",50,-4,4);
 
- TH1F *omegabar_a1_plus= new TH1F("omegabar_a1_plus","#omega a1",50,-7,7);
- TH1F *omegabar_a1_minus= new TH1F("omegabar_a1_minus","#omega a1",50,-7,7);
+ TH1F *omegabar_a1_plus= new TH1F("omegabar_a1_plus","#omega a1",50,-4,4);
+ TH1F *omegabar_a1_minus= new TH1F("omegabar_a1_minus","#omega a1",50,-4,4);
  
   // Pythia8 HepMC interface depends on Pythia8 version
 #ifdef PYTHIA8180_OR_LATER
@@ -570,9 +570,23 @@ int main(int argc,char **argv){
 	particles.push_back(a1ss2pi);
 	a1Helper Helper(particles, a1ospi+a1ss1pi+a1ss2pi);
  	if(Helper.getA1omega()> 0 or Helper.getA1omega() < 0)	omega_a1_plus->Fill(Helper.getA1omega());
-	if(Helper.getg()!=0)omegabar_a1_plus->Fill(Helper.getA1omegaBar());
 
+
+	if(Helper.getg()!=0)omegabar_a1_plus->Fill(Helper.vgetA1omega());
+	// std::cout<<" Plus:   scalar:     "<< Helper.vgetfscalar() << std::endl;
+	// std::cout<<"  Mminus:   scalar  g:     "<< Helper.vgetgscalar() << std::endl;
 	//	std::cout<<"HelPlus:   costhetaLF()   "<< Helper.costhetaLF() <<"   get omega   "<< Helper.getA1omega()<<  "  omega bar   " << Helper.getA1omegaBar()<<std::endl;
+	//	std::cout<<"HelPlus:   costhetaLF()   "<< Helper.costhetaLF() <<"   get omega   "<< Helper.getA1omega()<<  "  omega v   " << Helper.vgetA1omega(1)<<std::endl;
+	std::cout<<"Plus:   --------------   " << "    costheta    " << Helper.costhetaLF()  <<"   get omega   "<< Helper.getA1omega()<<  "  omega bar   " << Helper.vgetA1omega("bar")<<  "    omega bar scalar    " << Helper.vgetA1omegascalar("bar")<<std::endl;
+	std::cout<<Helper.WA()*Helper.WA() << "   =====    "<<   Helper.WC()*Helper.WC() + Helper.WD()*Helper.WD() + Helper.WE()*Helper.WE() <<std::endl;
+	if(Helper.WA()*Helper.WA()  <  Helper.WC()*Helper.WC() + Helper.WD()*Helper.WD() + Helper.WE()*Helper.WE() ){
+
+	  std::cout<<"  WA   "<<Helper.WA()<< std::endl;
+	  std::cout<<"  WC   "<<Helper.WC()<< std::endl;
+	  std::cout<<"  WD   "<<Helper.WD()<< std::endl;
+	  std::cout<<"  WE   "<<Helper.WE()<< std::endl;
+
+	  }
       }
       
     }
@@ -601,10 +615,16 @@ int main(int argc,char **argv){
 	a1Helper Helper(particles, a1ospi+a1ss1pi+a1ss2pi);
 
  	if(Helper.getA1omega()> 0 or Helper.getA1omega() < 0)	omega_a1_minus->Fill(Helper.getA1omega());
-	if(Helper.getg()!=0)omegabar_a1_minus->Fill(Helper.getA1omegaBar());
 
-	//	std::cout<<"HelMinus:   costhetaLF()   "<< Helper.costhetaLF() <<"   get omega   "<< Helper.getA1omega()<<  "  omega bar   " << Helper.getA1omegaBar()<<std::endl;
 
+	if(Helper.getg()!=0)omegabar_a1_minus->Fill(Helper.vgetA1omega());
+	// std::cout<<"  Mminus:   scalar  f:     "<< Helper.vgetfscalar() << std::endl;
+	// std::cout<<"  Mminus:   scalar  g:     "<< Helper.vgetgscalar() << std::endl;
+	std::cout<<"Minus:   --------------   " << "    costheta    " << Helper.costhetaLF()  <<"   get omega   "<< Helper.getA1omega()<<  "  omega bar   " << Helper.vgetA1omega("bar")<<  "    omega bar scalar    " << Helper.vgetA1omegascalar("bar")<<std::endl;
+
+	std::cout<<Helper.WA()*Helper.WA() << "   =====    "<<   Helper.WC()*Helper.WC() + Helper.WD()*Helper.WD() + Helper.WE()*Helper.WE() <<std::endl;
+	//	std::cout<<"HelMinus:   costhetaLF()    "<< Helper.costhetaLF() <<"   get omega   "<< Helper.getA1omega()<<  "  omega v   " << Helper.vgetA1omega(1)<<std::endl;
+	
       }
  
     }

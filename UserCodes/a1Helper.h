@@ -60,8 +60,20 @@ class a1Helper {
   //====================
   double getg();
   double getf();
+
+ double vgetg(TString type="");
+ double vgetf(TString type="");
+ double vgetgscalar(TString type="");
+ double vgetfscalar(TString type="");
+
+ double vgetA1omega(TString type="");
+ double vgetA1omegascalar(TString type="");
+
   double getA1omega();
   double getA1omegaBar();
+
+
+
  
 
   double lambda(double x, double y, double z);
