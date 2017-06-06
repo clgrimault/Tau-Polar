@@ -37,7 +37,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents = 1000000; 
+int NumberOfEvents = 200000; 
 int EventsToCheck=10;
 
 // elementary test of HepMC typically executed before
@@ -86,7 +86,7 @@ void redMinus(TauolaParticle *minus)
 
   for(unsigned int dec=0; dec <23; dec++){
      double br =0.0; 
-    if(dec==2) br=0.99;
+    if(dec==2 || dec == 3) br=0.5;
      Tauola::setTauBr(dec, br);
    } 
 
@@ -116,8 +116,8 @@ void redPlus(TauolaParticle *plus)
   // can be called here 
   for(unsigned int dec=0; dec <23; dec++){
      double br =0.0;
-     //    if(dec==3 || dec ==4 || dec ==5) br=0.33;
-    if(dec ==5) br=0.99;
+         if(dec==3 || dec ==4 || dec ==5) br=0.33;
+     // if(dec ==5) br=0.99;
      Tauola::setTauBr(dec, br);
    }
 
@@ -229,15 +229,17 @@ int main(int argc,char **argv){
  TH1F *ommurho_minus= new TH1F("ommurho_minus","#omega  #mu #rho minus",50,-1,1);
 
 
- TH1F *omega_a1_plus= new TH1F("omega_a1_plus","#omega a1",50,-2,2);
- TH1F *omega_a1_minus= new TH1F("omega_a1_minus","#omega a1",50,-2,2);
+ TH1F *omega_a1_plus= new TH1F("omega_a1_plus","#omega a1",50,-1.1,1.1);
+ TH1F *omega_a1_minus= new TH1F("omega_a1_minus","#omega a1",50,-1.1,1.1);
 
- TH1F *omegabar_a1_plus= new TH1F("omegabar_a1_plus","#omega a1",50,-2,2);
- TH1F *omegabar_a1_minus= new TH1F("omegabar_a1_minus","#omega a1",50,-2,2);
+ TH1F *omegabar_a1_plus= new TH1F("omegabar_a1_plus","#omega a1",50,-1.1,1.1);
+ TH1F *omegabar_a1_minus= new TH1F("omegabar_a1_minus","#omega a1",50,-1.1,1.1);
  
+ TH1F *TRFomegabar_a1_plus= new TH1F("TRFomegabar_a1_plus","#omega a1",50,-1.1,1.1);
+ TH1F *TRFomegabar_a1_minus= new TH1F("TRFomegabar_a1_minus","#omega a1",50,-1.1,1.1);
 
- TH1F *TRFomegabar_a1_plus= new TH1F("TRFomegabar_a1_plus","#omega a1",50,-2,2);
- TH1F *TRFomegabar_a1_minus= new TH1F("TRFomegabar_a1_minus","#omega a1",50,-2,2);
+  TH1F *TRFomegabar_a1scalar_plus= new TH1F("TRFomegabar_a1scalar_plus","#omega a1",50,-1.1,1.1);
+  TH1F *TRFomegabar_a1scalar_minus= new TH1F("TRFomegabar_a1scalar_minus","#omega a1",50,-1.1,1.1);
  
 
 
@@ -246,6 +248,16 @@ int main(int argc,char **argv){
 
  TH2F *TRFcosbetacostheta_plus= new TH2F("TRFcosbetacostheta_plus","cos#beta  cos#theta",50,-1,1,50,-1,1);
  TH2F *TRFcosbetacostheta_minus= new TH2F("TRFcosbetacostheta_minus","cos#beta  cos#theta",50,-1,1,50,-1,1);
+
+ TH1F *omega_a1pi_plus= new TH1F("omega_a1pi_plus","#omega a1",50,-1.1,1.1);
+ TH1F *omega_a1pi_minus= new TH1F("omega_a1pi_minus","#omega a1",50,-1.1,1.1);
+
+ TH1F *omega_a1mu_plus= new TH1F("omega_a1mu_plus","#omega a1",50,-1.1,1.1);
+ TH1F *omega_a1mu_minus= new TH1F("omega_a1mu_minus","#omega a1",50,-1.1,1.1);
+
+
+
+
 
 
   // Pythia8 HepMC interface depends on Pythia8 version
@@ -560,6 +572,9 @@ int main(int argc,char **argv){
     double omp(0),omm(0),OmegaPMuPi(0), OmegaMMuPi(0),OmegaPMuRho(0), OmegaMMuRho(0);
     double ompipi_plus(0), ompipi_minus(0);
     double ompirho_plus(0), ompirho_minus(0);
+    double omega_a1_P(0),omega_a1_M(0);
+    double omega_a1pi_P(0),omega_a1pi_M(0);
+    double omega_a1mu_P(0),omega_a1mu_M(0);
     double x1pim(0), x1pip(0);
     //   if(Tauola::getHelPlus() ==1){
     if(HelPlus){
@@ -577,6 +592,8 @@ int main(int argc,char **argv){
       if(x1p!=0 && x1pip!=0){ompipi_plus = (x1p+x1pip)/(1+x1p*x1pip);Omegapipi_plus->Fill(ompipi_plus);}
       if(x1pip!=0 && x3p!=0){ompirho_plus = (x1pip+x3p)/(1+x1pip*x3p);Omegapirho_plus->Fill(ompirho_plus);}
 
+
+
       if(JAK2==5 && SubJAK2==51){
 	vector<TLorentzVector> particles;
 	particles.push_back(tau1);
@@ -588,38 +605,20 @@ int main(int argc,char **argv){
 
 
 	if(Helper.getg()!=0)omegabar_a1_plus->Fill(Helper.vgetA1omega("bar"));
-	if(Helper.TRF_vgetA1omega()>0 or Helper.TRF_vgetA1omega()<=0)TRFomegabar_a1_plus->Fill(Helper.TRF_vgetA1omega());
-	// std::cout<<" Plus:   scalar:     "<< Helper.vgetfscalar() << std::endl;
-	// std::cout<<"  Mminus:   scalar  g:     "<< Helper.vgetgscalar() << std::endl;
-	 // std::cout<<"Plus  :   scalar  bar  f:     "<< Helper.vgetfscalar("bar"); 	std::cout<<" Plus :   scalar    f:     "<< Helper.vgetfscalar() << std::endl;
-	 // std::cout<<"Plus  :   scalar  bar g:     "<< Helper.vgetgscalar("bar");	 std::cout<<"Plus  :   scalar   g:     "<< Helper.vgetgscalar()<<std::endl;
+	if(Helper.TRF_vgetA1omega()>0 or Helper.TRF_vgetA1omega()<=0){TRFomegabar_a1_plus->Fill(Helper.TRF_vgetA1omega()); omega_a1_P=Helper.TRF_vgetA1omega(); }
+	if(Helper.TRF_vgetA1omega("scalar")>0 or Helper.TRF_vgetA1omega("scalar")<=0)TRFomegabar_a1scalar_plus->Fill(Helper.TRF_vgetA1omega("scalar"));
 
 
-	//	std::cout<<"HelPlus:   costhetaLF()   "<< Helper.costhetaLF() <<"   get omega   "<< Helper.getA1omega()<<  "  omega bar   " << Helper.getA1omegaBar()<<std::endl;
-	//	std::cout<<"HelPlus:   costhetaLF()   "<< Helper.costhetaLF() <<"   get omega   "<< Helper.getA1omega()<<  "  omega v   " << Helper.vgetA1omega(1)<<std::endl;
-	 std::cout<<"Plus:   --------------   " << "    costheta    " << Helper.costhetaLF()  <<"   get omega   "<< Helper.getA1omega()<<  "  omega bar   " << Helper.vgetA1omega("bar")<<  "    omega bar scalar    " << Helper.vgetA1omegascalar("bar")<<"   TRF  Omega   " <<  Helper.TRF_vgetA1omega()<<std::endl;
-	// std::cout<<Helper.WA()*Helper.WA() << "   =====    "<<   Helper.WC()*Helper.WC() + Helper.WD()*Helper.WD() + Helper.WE()*Helper.WE() <<std::endl;
+	cosbetacostheta_plus->Fill(Helper.cosbeta(),Helper.costhetaLF());
+	TRFcosbetacostheta_plus->Fill(Helper.TRF_cosbeta(),Helper.costhetaLF());
 
-	 if(Helper.TRF_vgetg() > Helper.TRF_vgetf() ){
-	   std::cout<<"   g > f !!!!!!!!!!!";  std::cout<<Helper.WA()*Helper.WA() << "      equaolyt    "<<   Helper.WC()*Helper.WC() + Helper.WD()*Helper.WD() + Helper.WE()*Helper.WE() <<std::endl;
+	if(x1pip!=0 && omega_a1_P!=0)	omega_a1pi_plus->Fill(  (x1pip+ omega_a1_P)/(1  + omega_a1_P*x1pip)      );
+	if(x2p!=0 && omega_a1_P!=0)	omega_a1mu_plus->Fill( (x2p+ omega_a1_P)/(1  + omega_a1_P*x2p)  );
 
-	   std::cout<<" TRF_vgetg()  "<<  Helper.TRF_vgetg() << " TRF_vgetf()   " << Helper.TRF_vgetf() <<std::endl; 
-	   std::cout<<"  vgetg (bar) "<< Helper.vgetg("bar")  << "  vgetf(bar)   " << Helper.vgetg("bar")<< std::endl; 
-	   std::cout<<"  vgetg () "<< Helper.vgetg()  << "  vgetf()   " << Helper.vgetg()<< std::endl; 
-
-	 }
-	 if(Helper.WA()*Helper.WA()  <  Helper.WC()*Helper.WC() + Helper.WD()*Helper.WD() + Helper.WE()*Helper.WE() ){
-
-	   std::cout<<"  WA   "<<Helper.WA()<< std::endl;
-	   std::cout<<"  WC   "<<Helper.WC()<< std::endl;
-          std::cout<<"  WD   "<<Helper.WD()<< std::endl;
-	   std::cout<<"  WE   "<<Helper.WE()<< std::endl;
-
- 
-	 }
-       cosbetacostheta_plus->Fill(Helper.cosbeta(),Helper.costhetaLF());
-       TRFcosbetacostheta_plus->Fill(Helper.TRF_cosbeta(),Helper.costhetaLF());
       }
+
+
+
     }
 
     //   if(Tauola::getHelPlus() ==-1 ){
@@ -637,6 +636,9 @@ int main(int argc,char **argv){
       if(x1m!=0 && x1pim!=0){ompipi_minus = (x1m+x1pim)/(1+x1m*x1pim);Omegapipi_minus->Fill(ompipi_minus);}
 
       if(x1pim!=0 && x3m!=0){ompirho_minus = (x1pim+x3m)/(1+x1pim*x3m);Omegapirho_minus->Fill(ompirho_minus);}
+
+
+
       if(JAK2==5 && SubJAK2==51){
 	vector<TLorentzVector> particles;
 	particles.push_back(tau1);
@@ -646,32 +648,21 @@ int main(int argc,char **argv){
 	a1Helper Helper(particles, a1ospi+a1ss1pi+a1ss2pi);
 
  	if(Helper.getA1omega()> 0 or Helper.getA1omega() < 0)	omega_a1_minus->Fill(Helper.getA1omega());
-	if(Helper.TRF_vgetA1omega()>0 or Helper.TRF_vgetA1omega()<=0)TRFomegabar_a1_minus->Fill(Helper.TRF_vgetA1omega());
-
+	if(Helper.TRF_vgetA1omega()>0 or Helper.TRF_vgetA1omega()<=0){TRFomegabar_a1_minus->Fill(Helper.TRF_vgetA1omega());  omega_a1_M=Helper.TRF_vgetA1omega(); }
+	if(Helper.TRF_vgetA1omega("scalar")>0 or Helper.TRF_vgetA1omega("scalar")<=0)TRFomegabar_a1scalar_minus->Fill(Helper.TRF_vgetA1omega("scalar"));
+	
 	if(Helper.getg()!=0)omegabar_a1_minus->Fill(Helper.vgetA1omega("bar"));
-	 // std::cout<<"  Mminus:   scalar  bar  f:     "<< Helper.vgetfscalar("bar"); 	std::cout<<"  Mminus:   scalar    f:     "<< Helper.vgetfscalar() << std::endl;
-	 // std::cout<<"  Mminus:   scalar  bar g:     "<< Helper.vgetgscalar("bar");	 std::cout<<"  Mminus:   scalar   g:     "<< Helper.vgetgscalar()<<std::endl;
-	std::cout<<"Minus:   --------------   " << "    costheta    " << Helper.costhetaLF()  <<"   get omega   "<< Helper.getA1omega()<<  "  omega bar   " << Helper.vgetA1omega("bar")<<  "    omega bar scalar    " << Helper.vgetA1omegascalar("bar")<<"   TRF  Omega   " <<  Helper.TRF_vgetA1omega()<<std::endl;
-	 if(Helper.TRF_vgetg() > Helper.TRF_vgetf() ){
-	   std::cout<<"   g > f !!!!!!!!!!!";  std::cout<<Helper.WA()*Helper.WA() << "      equaolyt    "<<   Helper.WC()*Helper.WC() + Helper.WD()*Helper.WD() + Helper.WE()*Helper.WE() <<std::endl;
-
-	   //	   Helper.debug();
-	   // std::cout<<" TRF_vgetg()  "<<  Helper.TRF_vgetg() << " TRF_vgetf()   " << Helper.TRF_vgetf() <<std::endl; 
-	   // std::cout<<"  vgetg (bar) "<< Helper.vgetg("bar")  << "  vgetf(bar)   " << Helper.vgetg("bar")<< std::endl; 
-	   // std::cout<<"  vgetg () "<< Helper.vgetg()  << "  vgetf()   " << Helper.vgetg()<< std::endl; 
-
-	 }
-
-	//	std::cout<<Helper.WA()*Helper.WA() << "   =====    "<<   Helper.WC()*Helper.WC() + Helper.WD()*Helper.WD() + Helper.WE()*Helper.WE() <<std::endl;
-	//	std::cout<<"HelMinus:   costhetaLF()    "<< Helper.costhetaLF() <<"   get omega   "<< Helper.getA1omega()<<  "  omega v   " << Helper.vgetA1omega(1)<<std::endl;
 	cosbetacostheta_minus->Fill(Helper.cosbeta(),Helper.costhetaLF());
 	TRFcosbetacostheta_minus->Fill(Helper.TRF_cosbeta(),Helper.costhetaLF());
+
+	if(x1pim!=0 && omega_a1_M!=0)	omega_a1pi_minus->Fill(  (x1pim+ omega_a1_M)/(1  + omega_a1_M*x1pim)      );
+	if(x2m!=0 && omega_a1_M!=0)	omega_a1mu_minus->Fill( (x2m+ omega_a1_M)/(1  + omega_a1_M*x2m)  );
+
+
+
       }
- //  double TRF_vgetf(TString type="");
- // double TRF_vgetg(TString type="");
- // double TRF_vgetA1omega(TString type="");
- // double TRF_cosbeta();      double  TRF_cosalpha();   double  TRF_cosgamma();  
- // double TRF_sinbeta();        double TRF_sinalpha();    double  TRF_singamma();  
+
+
 
     
     }
@@ -724,9 +715,20 @@ int main(int argc,char **argv){
   omega_a1_minus->Write();
   omega_a1_plus->Write();
   omegabar_a1_minus->Write();
-omegabar_a1_plus->Write();
-cosbetacostheta_minus->Write();
-cosbetacostheta_plus->Write();
+  omegabar_a1_plus->Write();
+  cosbetacostheta_minus->Write();
+  cosbetacostheta_plus->Write();
+
+  TRFomegabar_a1_plus->Write();
+  TRFomegabar_a1_minus->Write();
+  TRFomegabar_a1scalar_plus->Write();
+  TRFomegabar_a1scalar_minus->Write();
+  omega_a1pi_plus->Write();
+  omega_a1pi_minus->Write();
+
+  omega_a1mu_plus->Write();
+  omega_a1mu_minus->Write();
+
   file->Write();
   file->Close();
   pythia.statistics();

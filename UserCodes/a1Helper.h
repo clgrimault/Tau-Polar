@@ -79,7 +79,7 @@ class a1Helper {
  double TRF_cosbeta();      double  TRF_cosalpha();   double  TRF_cosgamma();  
  double TRF_sinbeta();        double TRF_sinalpha();    double  TRF_singamma();  
 //========== TRF  =======
-  void debug();
+  void debugger();
   double lambda(double x, double y, double z);
   double Scalar(TLorentzVector p1, TLorentzVector p2);
 
@@ -162,7 +162,7 @@ class a1Helper {
   const TLorentzVector a1pss1;
   const TLorentzVector a1pss2;
 
-
+  bool debug;
 
   vector<TLorentzVector> TauA1andProd_RF;
   TLorentzVector _osPionLV;
