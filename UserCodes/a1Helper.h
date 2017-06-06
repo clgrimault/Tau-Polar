@@ -69,13 +69,17 @@ class a1Helper {
  double vgetA1omega(TString type="");
  double vgetA1omegascalar(TString type="");
 
-  double getA1omega();
-  double getA1omegaBar();
+ double getA1omega();
+ double getA1omegaBar();
 
-
-
- 
-
+//========== TRF  =======
+ double TRF_vgetf(TString type="");
+ double TRF_vgetg(TString type="");
+ double TRF_vgetA1omega(TString type="");
+ double TRF_cosbeta();      double  TRF_cosalpha();   double  TRF_cosgamma();  
+ double TRF_sinbeta();        double TRF_sinalpha();    double  TRF_singamma();  
+//========== TRF  =======
+  void debug();
   double lambda(double x, double y, double z);
   double Scalar(TLorentzVector p1, TLorentzVector p2);
 
@@ -104,7 +108,8 @@ class a1Helper {
   TVector3 nL();
   TVector3 nT();
   TVector3 nPerp();
-
+  TVector3 ns();
+  TLorentzVector sLV();
 
 
 
