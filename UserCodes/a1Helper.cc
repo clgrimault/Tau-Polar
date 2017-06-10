@@ -79,15 +79,14 @@ a1Helper::Configure(vector<TLorentzVector> TauA1andProd){
 void 
 a1Helper::Configure(vector<TLorentzVector> TauA1andProd, TLorentzVector RefernceFrame){
   if(TauA1andProd.size()!=4){
-
-    std::cout<<" a1 helper:  Warning!! Size of input vector != 4 !!   size = "<< TauA1andProd.size()<<std::endl;
+    std::cout<<" a1 helper:  Warning!! Size of input vector != 4!   Size = "<< TauA1andProd.size()<<std::endl;
   }
   Setup(TauA1andProd,RefernceFrame);
 
 }
 bool
 a1Helper::isConfigured(){
-  if(TauA1andProd_RF.size()!=4) return false; return true;
+  if(TauA1andProd_RF.size()!=4){ std::cout<<"Error:   a1Helper is not Configured! Check  the size of input vector!  Size =  "<< TauA1andProd_RF.size() <<std::endl; return false;} return true;
 }
 
 
