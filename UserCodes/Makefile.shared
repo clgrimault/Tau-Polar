@@ -29,12 +29,15 @@ SF_HDRS    = $(SF_SRCS:.cc=.h)
 
 HDRS          = MultiplyNumbers.h \
 		AddNumbers.h \
-	        a1Helper
+		TauDecaysHelper.h \
+	        a1Helper 
+	         
 
 
 SRCS          = MultiplyNumbers.cc \
 		a1Helper.cc \
 		AddNumbers.cc \
+		TauDecaysHelper.cc \
 		main.cc
 
 OBJS1          = $(SRCS:.cc=.o) 
