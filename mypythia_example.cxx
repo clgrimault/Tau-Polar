@@ -15,8 +15,8 @@
 #include "TH1F.h"
 #include "TH2F.h"
 #include "TLorentzVector.h"
-#include "UserCodes/MultiplyNumbers.h"
 #include "UserCodes/a1Helper.h"
+#include "UserCodes/TauDecaysHelper.h"
 
 //pythia header files
 #ifdef PYTHIA8180_OR_LATER
@@ -37,7 +37,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents = 200000; 
+int NumberOfEvents = 1000000; 
 int EventsToCheck=10;
 
 // elementary test of HepMC typically executed before
@@ -198,50 +198,44 @@ int main(int argc,char **argv){
   // Initialization of pythia
   Pythia pythia;
   Event& event = pythia.event;
-  TFile *file = new TFile("output.root","RECREATE");
-
-  TH1F *pi_plus= new TH1F("pi_plus","#pi  plus",50,0,1);
-  TH1F *pi_minus= new TH1F("pi_minus","#pi minus",50,0,1);
-
-  TH1F *rho_plus= new TH1F("rho_plus","#rho  plus",50,-1,1);
-  TH1F *rho_minus= new TH1F("rho_minus","#rho minus",50,-1,1);
+  TFile *file = new TFile("HelicityVals.root","RECREATE");
 
 
-  TH1F *piom_plus= new TH1F("piom_plus","#pi  plus",50,-1,1);
-  TH1F *piom_minus= new TH1F("piom_minus","#pi minus",50,-1,1);
+  TH1F *rho_plus= new TH1F("rho_plus","#rho^{+}",50,-1,1);
+  TH1F *rho_minus= new TH1F("rho_minus","#rho^{-}",50,-1,1);
 
+  TH1F *pi_plus= new TH1F("pi_plus","#pi^{+}",50,-1,1);
+  TH1F *pi_minus= new TH1F("pi_minus","#pi^{-} ",50,-1,1);
 
-  TH1F *mu_plus= new TH1F("mu_plus","#mu plus",50,0,1);
-  TH1F *mu_minus= new TH1F("mu_minus","#mu  minus",50,0,1);
+  TH1F *mu_plus= new TH1F("mu_plus","#mu^{+}",50,1,1);
+  TH1F *mu_minus= new TH1F("mu_minus","#mu^{-}",50,-1,1);
   
-  TH1F *om_plus= new TH1F("om_plus","#omega #pi #mu  plus",50,-1,1);
-  TH1F *om_minus= new TH1F("om_minus","#omega  #pi #mu  minus",50,-1,1);
+  TH1F *OmegaMuPi_plus= new TH1F("OmegaMuPi_plus","#omega_{#pi#mu}^{+}",50,-1,1);
+  TH1F *OmegaMuPi_minus= new TH1F("OmegaMuPi_minus","#omega_{#pi#mu}^{-}",50,-1,1);
  
-  TH1F *Omegapipi_plus= new TH1F("Omegapipi_plus","#omega #pi#pi plus",50,-1,1);
-  TH1F *Omegapipi_minus= new TH1F("Omegapipi_minus","#omega #pi#pi  minus",50,-1,1);
+  TH1F *Omegapipi_plus= new TH1F("Omegapipi_plus","#omega_{#pi#pi}^{+}",50,-1,1);
+  TH1F *Omegapipi_minus= new TH1F("Omegapipi_minus","#omega_{#pi#pi}^{-}",50,-1,1);
   
-  TH1F *Omegapirho_plus= new TH1F("Omegapirho_plus","#omega #pi#rho plus",50,-1,1);
-  TH1F *Omegapirho_minus= new TH1F("Omegapirho_minus","#omega #pi#rho  minus",50,-1,1);
+  TH1F *Omegapirho_plus= new TH1F("Omegapirho_plus","#omega_{#pi#rho}^{+}",50,-1,1);
+  TH1F *Omegapirho_minus= new TH1F("Omegapirho_minus","#omega_{#pi#rho}^{-}",50,-1,1);
   
-
  
- TH1F *ommurho_plus= new TH1F("ommurho_plus","#omega #mu #rho plus",50,-1,1);
- TH1F *ommurho_minus= new TH1F("ommurho_minus","#omega  #mu #rho minus",50,-1,1);
+ TH1F *Omegamurho_plus= new TH1F("Omegamurho_plus","#omega_{#mu#rho}^{+}",50,-1,1);
+ TH1F *Omegamurho_minus= new TH1F("Omegamurho_minus","#omega_{#mu#rho}^{-}",50,-1,1);
 
 
- TH1F *omega_a1_plus= new TH1F("omega_a1_plus","#omega a1",50,-1.1,1.1);
- TH1F *omega_a1_minus= new TH1F("omega_a1_minus","#omega a1",50,-1.1,1.1);
+ TH1F *omega_a1_plus= new TH1F("omega_a1_plus","#omega_{a1}^{+}",50,-1.1,1.1);
+ TH1F *omega_a1_minus= new TH1F("omega_a1_minus","#omega_{a1}^{-}",50,-1.1,1.1);
 
- TH1F *omegabar_a1_plus= new TH1F("omegabar_a1_plus","#omega a1",50,-1.1,1.1);
- TH1F *omegabar_a1_minus= new TH1F("omegabar_a1_minus","#omega a1",50,-1.1,1.1);
+ TH1F *omegabar_a1_plus= new TH1F("omegabar_a1_plus","#bar{#omega}_{a1}^{+}",50,-1.1,1.1);
+ TH1F *omegabar_a1_minus= new TH1F("omegabar_a1_minus","#bar{#omega}_{a1}^{-}",50,-1.1,1.1);
  
- TH1F *TRFomegabar_a1_plus= new TH1F("TRFomegabar_a1_plus","#omega a1",50,-1.1,1.1);
- TH1F *TRFomegabar_a1_minus= new TH1F("TRFomegabar_a1_minus","#omega a1",50,-1.1,1.1);
+ TH1F *TRFomegabar_a1_plus= new TH1F("TRFomegabar_a1_plus","TRF #omega_{a1}^{+}",50,-1.1,1.1);
+ TH1F *TRFomegabar_a1_minus= new TH1F("TRFomegabar_a1_minus","TRF #omega_{a1}^{-}",50,-1.1,1.1);
 
-  TH1F *TRFomegabar_a1scalar_plus= new TH1F("TRFomegabar_a1scalar_plus","#omega a1",50,-1.1,1.1);
-  TH1F *TRFomegabar_a1scalar_minus= new TH1F("TRFomegabar_a1scalar_minus","#omega a1",50,-1.1,1.1);
+  TH1F *TRFomegabar_a1scalar_plus= new TH1F("TRFomegabar_a1scalar_plus","TRF scalar #omega a1",50,-1.1,1.1);
+  TH1F *TRFomegabar_a1scalar_minus= new TH1F("TRFomegabar_a1scalar_minus","TRF scalar  #omega a1",50,-1.1,1.1);
  
-
 
  TH2F *cosbetacostheta_plus= new TH2F("cosbetacostheta_plus","cos#beta  cos#theta",50,-1,1,50,-1,1);
  TH2F *cosbetacostheta_minus= new TH2F("cosbetacostheta_minus","cos#beta  cos#theta",50,-1,1,50,-1,1);
@@ -249,11 +243,11 @@ int main(int argc,char **argv){
  TH2F *TRFcosbetacostheta_plus= new TH2F("TRFcosbetacostheta_plus","cos#beta  cos#theta",50,-1,1,50,-1,1);
  TH2F *TRFcosbetacostheta_minus= new TH2F("TRFcosbetacostheta_minus","cos#beta  cos#theta",50,-1,1,50,-1,1);
 
- TH1F *omega_a1pi_plus= new TH1F("omega_a1pi_plus","#omega a1",50,-1.1,1.1);
- TH1F *omega_a1pi_minus= new TH1F("omega_a1pi_minus","#omega a1",50,-1.1,1.1);
+ TH1F *omega_a1pi_plus= new TH1F("omega_a1pi_plus","#omega_{a1#pi}^{+}",50,-1.1,1.1);
+ TH1F *omega_a1pi_minus= new TH1F("omega_a1pi_minus","#omega_{a1#pi}^{-}",50,-1.1,1.1);
 
- TH1F *omega_a1mu_plus= new TH1F("omega_a1mu_plus","#omega a1",50,-1.1,1.1);
- TH1F *omega_a1mu_minus= new TH1F("omega_a1mu_minus","#omega a1",50,-1.1,1.1);
+ TH1F *omega_a1mu_plus= new TH1F("omega_a1mu_plus","#omega_{a1#mu}^{+}",50,-1.1,1.1);
+ TH1F *omega_a1mu_minus= new TH1F("omega_a1mu_minus","#omega_{a1#mu}^{-}",50,-1.1,1.1);
 
 
 
@@ -443,8 +437,18 @@ int main(int argc,char **argv){
       }
     }
   
-    //    cout<<" JAK1 " << JAK1 << "  JAK2  "<< JAK2 <<endl;
- 
+    Log::Debug(5)<<"helicites =  "<<Tauola::getHelPlus()<<" "<<Tauola::getHelMinus()
+                 <<" electroweak wt= "<<Tauola::getEWwt()<<endl;
+
+    bool HelPlus=false;
+    bool HelMinus=false;
+    if(Tauola::getHelPlus() ==1 )HelPlus=true;;
+    if(Tauola::getHelPlus() ==-1)HelMinus=true;;
+    int HelWeightPlus = HelPlus;
+    int HelWeightMinus = HelMinus;
+
+
+   
     TLorentzVector tau1(0,0,0,0);
     TLorentzVector mu1(0,0,0,0);
     TLorentzVector numu1(0,0,0,0);
@@ -462,214 +466,136 @@ int main(int argc,char **argv){
     TLorentzVector a1ss2pi(0,0,0,0);
     TLorentzVector a1(0,0,0,0);
 
+    TauDecaysHelper Mu1;
+    TauDecaysHelper Pi1;
+    TauDecaysHelper Pi2;
+    TauDecaysHelper Rho2;
+    a1Helper a1h;
+
+
     tau1.SetPxPyPzE(FirstTau->momentum().px(), FirstTau->momentum().py(), FirstTau->momentum().pz(), FirstTau->momentum().e());
     tau2.SetPxPyPzE(SecondTau->momentum().px(), SecondTau->momentum().py(), SecondTau->momentum().pz(), SecondTau->momentum().e());
     
-    for(std::vector<HepMC::GenParticle>::const_iterator a = FirstTauProducts.begin(); a!=FirstTauProducts.end(); ++a){
-      if(JAK1==2){
-	if(abs(a->pdg_id())==13)mu1.SetPxPyPzE(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e());
-	if(abs(a->pdg_id())==14)numu1.SetPxPyPzE(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e());
-	if(abs(a->pdg_id())==16)nutau1.SetPxPyPzE(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e());
-      }
-
-      if(JAK1==3){
-	//	if(abs(a->pdg_id())==16)nutau1.SetPxPyPzE(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e());
-	if(abs(a->pdg_id())==211)pi1.SetPxPyPzE(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e());
-     }
+    if(JAK1==2){
+      vector<TLorentzVector> tauandprod;
+      tauandprod.push_back(TLorentzVector(FirstTau->momentum().px(), FirstTau->momentum().py(), FirstTau->momentum().pz(), FirstTau->momentum().e()));
+      for(std::vector<HepMC::GenParticle>::const_iterator a = FirstTauProducts.begin(); a!=FirstTauProducts.end(); ++a){
+	if(abs(a->pdg_id())==13){tauandprod.push_back(TLorentzVector(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e()  ) );} }
+      Mu1.Configure(tauandprod,"muon");
 
 
-
-
-
+      mu_plus->Fill(Mu1.getOmega(),HelWeightPlus);
+      mu_minus->Fill(Mu1.getOmega(),HelWeightMinus);
     }
 
-    for(std::vector<HepMC::GenParticle>::const_iterator a = SecondTauProducts.begin(); a!=SecondTauProducts.end(); ++a){
-      if(JAK2==3){
-	if(abs(a->pdg_id())==16)nutau2.SetPxPyPzE(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e());
-	if(abs(a->pdg_id())==211)pi2.SetPxPyPzE(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e());
-      }
-    
-      if(JAK2==4){
-	if(abs(a->pdg_id())==111)rhopi02.SetPxPyPzE(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e());
-	if(abs(a->pdg_id())==211)rhopi2.SetPxPyPzE(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e());
-      }
-      if(JAK2==5){
-	if(abs(a->pdg_id())==20213)a1.SetPxPyPzE(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e());
-      }
+
+    if(JAK1==3){
+      vector<TLorentzVector> tauandprod;
+      tauandprod.push_back(TLorentzVector(FirstTau->momentum().px(), FirstTau->momentum().py(), FirstTau->momentum().pz(), FirstTau->momentum().e()));
+      for(std::vector<HepMC::GenParticle>::const_iterator a = FirstTauProducts.begin(); a!=FirstTauProducts.end(); ++a){
+	if(abs(a->pdg_id())==211){tauandprod.push_back(TLorentzVector(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e()  ) );} }
+      Pi1.Configure(tauandprod,"pion");
+
+      pi_plus->Fill(Pi1.getOmega(),HelWeightPlus);
+      pi_minus->Fill(Pi1.getOmega(),HelWeightMinus);
     }
-   
+
+    if(JAK2==3){
+      vector<TLorentzVector> tauandprod;
+      tauandprod.push_back(TLorentzVector(SecondTau->momentum().px(), SecondTau->momentum().py(), SecondTau->momentum().pz(), SecondTau->momentum().e()));
+      for(std::vector<HepMC::GenParticle>::const_iterator a = SecondTauProducts.begin(); a!=SecondTauProducts.end(); ++a){
+	if(abs(a->pdg_id())==211){tauandprod.push_back(TLorentzVector(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e()  ) );} }
+      Pi2.Configure(tauandprod,"pion");
+    }
+  
+    if(JAK2==4){
+      vector<TLorentzVector> tauandprod;
+      tauandprod.push_back(TLorentzVector(SecondTau->momentum().px(), SecondTau->momentum().py(), SecondTau->momentum().pz(), SecondTau->momentum().e()));
+      for(std::vector<HepMC::GenParticle>::const_iterator a = SecondTauProducts.begin(); a!=SecondTauProducts.end(); ++a){
+	if(abs(a->pdg_id())==211){tauandprod.push_back(TLorentzVector(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e()  ) );}
+	if(abs(a->pdg_id())==111){tauandprod.push_back(TLorentzVector(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e()  ) );}
+      }
+     Rho2.Configure(tauandprod,"rho");
+     rho_plus->Fill(Rho2.getOmega(),HelWeightPlus);
+     rho_minus->Fill(Rho2.getOmega(),HelWeightMinus);
+    }
+
     if(JAK2==5 && SubJAK2==51){
-     SortPions(A1Pions);
-     a1ospi.SetPxPyPzE(A1Pions.at(0).momentum().px(), A1Pions.at(0).momentum().py(), A1Pions.at(0).momentum().pz(), A1Pions.at(0).momentum().e());
-     a1ss1pi.SetPxPyPzE(A1Pions.at(1).momentum().px(), A1Pions.at(1).momentum().py(), A1Pions.at(1).momentum().pz(), A1Pions.at(1).momentum().e());
-     a1ss2pi.SetPxPyPzE(A1Pions.at(2).momentum().px(), A1Pions.at(2).momentum().py(), A1Pions.at(2).momentum().pz(), A1Pions.at(2).momentum().e());
-     // std::cout<<"---------"<<std::endl;
-     // tau2.Print();
-     // a1.Print();
-     // a1ospi.Print();
-     // a1ss1pi.Print();
-     // a1ss2pi.Print();
-     vector<TLorentzVector> particles;
-     particles.push_back(tau1);
-     particles.push_back(a1ospi);
-     particles.push_back(a1ss1pi);
-     particles.push_back(a1ss2pi);
+      vector<TLorentzVector> particles;
+      SortPions(A1Pions);
+      a1ospi.SetPxPyPzE(A1Pions.at(0).momentum().px(), A1Pions.at(0).momentum().py(), A1Pions.at(0).momentum().pz(), A1Pions.at(0).momentum().e());
+      a1ss1pi.SetPxPyPzE(A1Pions.at(1).momentum().px(), A1Pions.at(1).momentum().py(), A1Pions.at(1).momentum().pz(), A1Pions.at(1).momentum().e());
+      a1ss2pi.SetPxPyPzE(A1Pions.at(2).momentum().px(), A1Pions.at(2).momentum().py(), A1Pions.at(2).momentum().pz(), A1Pions.at(2).momentum().e());
+      particles.push_back(tau1);
+      particles.push_back(a1ospi);
+      particles.push_back(a1ss1pi);
+      particles.push_back(a1ss2pi);
+      a1h.Configure(particles, a1ospi+a1ss1pi+a1ss2pi);
 
-  // particles.at(0).Print();
-  // particles.at(1).Print();
-  // particles.at(2).Print();
-  // particles.at(3).Print();
-
-     // a1Helper Helper(particles, a1ospi+a1ss1pi+a1ss2pi);
-     //     cout<<     Helper.WA()*Helper.WA()<< "  = "<<Helper.WC()*Helper.WC()+  Helper.WD()*Helper.WD()+ Helper.WE()*Helper.WE()<<endl;	 
-     
-
+      omega_a1_minus->Fill(a1h.getA1omega(),HelWeightMinus);                                                          omega_a1_plus->Fill(a1h.getA1omega(),HelWeightPlus);
+      TRFomegabar_a1_minus->Fill(a1h.TRF_vgetA1omega(),HelWeightMinus);                                      TRFomegabar_a1_plus->Fill(a1h.TRF_vgetA1omega(),HelWeightPlus);
+      TRFomegabar_a1scalar_minus->Fill(a1h.TRF_vgetA1omega("scalar"),HelWeightMinus);                  TRFomegabar_a1scalar_plus->Fill(a1h.TRF_vgetA1omega("scalar"),HelWeightPlus);
+      cosbetacostheta_minus->Fill(a1h.cosbeta(),a1h.costhetaLF(),HelWeightMinus);                              cosbetacostheta_plus->Fill(a1h.cosbeta(),a1h.costhetaLF(),HelWeightPlus);
+      TRFcosbetacostheta_minus->Fill(a1h.TRF_cosbeta(),a1h.costhetaLF(),HelWeightMinus);                  TRFcosbetacostheta_plus->Fill(a1h.TRF_cosbeta(),a1h.costhetaLF(),HelWeightPlus);
+      omegabar_a1_minus->Fill(a1h.vgetA1omega("bar")  ,HelWeightMinus);                                          omegabar_a1_plus->Fill(a1h.vgetA1omega("bar"),HelWeightPlus);
 
 
     }
+ 
 
 
+    if(JAK1 ==3 && JAK2 == 3){
+      if(Pi1.isConfigured() && Pi2.isConfigured()){
+      double OmPiPi=  (Pi1.getOmega() +Pi2.getOmega() )/(1 + Pi1.getOmega()*Pi2.getOmega());
+      Omegapipi_plus->Fill(OmPiPi,HelWeightPlus);
+      Omegapipi_minus->Fill(OmPiPi,HelWeightMinus);       
+      }
+    }
 
-    // int barcodetau1vertex(0),barcodetau2vertex(0);
-    // for ( HepMC::GenEvent::particle_const_iterator p =HepMCEvt->particles_begin();  p != HepMCEvt->particles_end(); ++p )
-    //   {
+    if(JAK1 ==2 && JAK2 == 3){
+      if(Mu1.isConfigured() && Pi2.isConfigured()){
+      double OmMuPi=  (Mu1.getOmega() +Pi2.getOmega() )/(1 + Mu1.getOmega()*Pi2.getOmega());
+      OmegaMuPi_plus->Fill(OmMuPi,HelWeightPlus);
+      OmegaMuPi_minus->Fill(OmMuPi,HelWeightMinus);       
+      }
+    }
 
-    // 	if((*p)->pdg_id()==15){
-    // 	  HepMC::GenVertex * tau1endvertex =(*p)->end_vertex(); 
-    // 	  barcodetau1vertex = tau1endvertex->barcode();  
-    // 	  tau1.SetPxPyPzE((*p)->momentum().px(), (*p)->momentum().py(), (*p)->momentum().pz(), (*p)->momentum().e());
-    // 	}
-    // 	if((*p)->pdg_id()==-15){
-    // 	  HepMC::GenVertex * tau2endvertex =(*p)->end_vertex(); 
-    // 	  tau2.SetPxPyPzE((*p)->momentum().px(), (*p)->momentum().py(), (*p)->momentum().pz(), (*p)->momentum().e());
-    // 	  barcodetau2vertex = tau2endvertex->barcode();  
-    // 	}
-    // 	if( (*p)->status() == 1 )
-    // 	  {
-    // 	    HepMC::FourVector m = (*p)->momentum();
-    // 	    HepMC::GenVertex *productProductionvertex = (*p)->production_vertex();
-    // 	    if(productProductionvertex->barcode()==barcodetau1vertex ){
-    // 	      if(abs((*p)->pdg_id())==13)mu1.SetPxPyPzE((*p)->momentum().px(), (*p)->momentum().py(), (*p)->momentum().pz(), (*p)->momentum().e());
-    // 	      if(abs((*p)->pdg_id())==14)numu1.SetPxPyPzE((*p)->momentum().px(), (*p)->momentum().py(), (*p)->momentum().pz(), (*p)->momentum().e());
-    // 	      if(abs((*p)->pdg_id())==16)nutau1.SetPxPyPzE((*p)->momentum().px(), (*p)->momentum().py(), (*p)->momentum().pz(), (*p)->momentum().e());
-    // 	    }
-    // 	    if(productProductionvertex->barcode()==barcodetau2vertex ){
-    // 	      if(abs((*p)->pdg_id())==16)nutau2.SetPxPyPzE((*p)->momentum().px(), (*p)->momentum().py(), (*p)->momentum().pz(), (*p)->momentum().e());
-    // 	      if(abs((*p)->pdg_id())==211)pi2.SetPxPyPzE((*p)->momentum().px(), (*p)->momentum().py(), (*p)->momentum().pz(), (*p)->momentum().e());
-    // 	    }
-    // 	  }
-    //   }
-    Log::Debug(5)<<"helicites =  "<<Tauola::getHelPlus()<<" "<<Tauola::getHelMinus()
-                 <<" electroweak wt= "<<Tauola::getEWwt()<<endl;
-
-    bool HelPlus=false;
-    bool HelMinus=false;
-    if(Tauola::getHelPlus() ==1 )HelPlus=true;;
-    if(Tauola::getHelPlus() ==-1)HelMinus=true;;
-
-    double x1p(0),x2p(0),x3p(0);
-    double x1m(0),x2m(0),x3m(0);
-    double omp(0),omm(0),OmegaPMuPi(0), OmegaMMuPi(0),OmegaPMuRho(0), OmegaMMuRho(0);
-    double ompipi_plus(0), ompipi_minus(0);
-    double ompirho_plus(0), ompirho_minus(0);
-    double omega_a1_P(0),omega_a1_M(0);
-    double omega_a1pi_P(0),omega_a1pi_M(0);
-    double omega_a1mu_P(0),omega_a1mu_M(0);
-    double x1pim(0), x1pip(0);
-    //   if(Tauola::getHelPlus() ==1){
-    if(HelPlus){
-      if(tau2.E()!=0 && pi2.E()!=0) {x1p=2*pi2.E()/tau2.E() - 1; pi_plus->Fill(pi2.E()/tau2.E()); piom_plus->Fill(x1p);}
-      if(tau1.E()!=0 && mu1.E()!=0){x2p =2*mu1.E()/tau1.E()-1;  mu_plus->Fill(mu1.E()/tau1.E());}
-
-      if(tau1.E()!=0 && pi1.E()!=0){x1pip =2*pi1.E()/tau1.E()-1;}
-    
-
-      if(rhopi2.E()!=0 && rhopi02.E()!=0){x3p = (rhopi2.E() -   rhopi02.E())/(rhopi2.E() +   rhopi02.E());  rho_plus->Fill(x3p); }
-
-      if(x1p!=0 && x2p!=0){OmegaPMuPi = (x1p+x2p)/(1+x1p*x2p);om_plus->Fill(OmegaPMuPi);}
-      if(x2p!=0 && x3p!=0){OmegaPMuRho = (x2p+x3p)/(1+x2p*x3p);ommurho_plus->Fill(OmegaPMuRho);}
-     
-      if(x1p!=0 && x1pip!=0){ompipi_plus = (x1p+x1pip)/(1+x1p*x1pip);Omegapipi_plus->Fill(ompipi_plus);}
-      if(x1pip!=0 && x3p!=0){ompirho_plus = (x1pip+x3p)/(1+x1pip*x3p);Omegapirho_plus->Fill(ompirho_plus);}
+    if(JAK1 ==2 && JAK2 == 4){
+      if(Mu1.isConfigured() && Rho2.isConfigured()){
+      double OmMuRho=  (Mu1.getOmega() +Rho2.getOmega() )/(1 + Mu1.getOmega()*Rho2.getOmega());
+      Omegamurho_plus->Fill(OmMuRho,HelWeightPlus);
+      Omegamurho_minus->Fill(OmMuRho,HelWeightMinus);       
+      }
+    }
+    if(JAK1 ==3 && JAK2 == 4){
+      if(Pi1.isConfigured() && Rho2.isConfigured()){
+      double OmPiRho=  (Pi1.getOmega() +Rho2.getOmega() )/(1 + Pi1.getOmega()*Rho2.getOmega());
+      Omegapirho_plus->Fill(OmPiRho,HelWeightPlus);
+      Omegapirho_minus->Fill(OmPiRho,HelWeightMinus);       
+      }
+    }
 
 
-
-      if(JAK2==5 && SubJAK2==51){
-	vector<TLorentzVector> particles;
-	particles.push_back(tau1);
-	particles.push_back(a1ospi);
-	particles.push_back(a1ss1pi);
-	particles.push_back(a1ss2pi);
-	a1Helper Helper(particles, a1ospi+a1ss1pi+a1ss2pi);
- 	if(Helper.getA1omega()> 0 or Helper.getA1omega() < 0)	omega_a1_plus->Fill(Helper.getA1omega());
+    if(JAK1 ==3 && JAK2 == 5 &&   SubJAK2==51){
+      if(Pi1.isConfigured() && a1h.isConfigured()){
+      double OmPiA1=  (Pi1.getOmega() +a1h.TRF_vgetA1omega() )/(1 + Pi1.getOmega()*a1h.TRF_vgetA1omega());
+      omega_a1pi_plus->Fill(OmPiA1,HelWeightPlus);
+      omega_a1pi_minus->Fill(OmPiA1,HelWeightMinus);       
+      }
+    }
 
 
-	if(Helper.getg()!=0)omegabar_a1_plus->Fill(Helper.vgetA1omega("bar"));
-	if(Helper.TRF_vgetA1omega()>0 or Helper.TRF_vgetA1omega()<=0){TRFomegabar_a1_plus->Fill(Helper.TRF_vgetA1omega()); omega_a1_P=Helper.TRF_vgetA1omega(); }
-	if(Helper.TRF_vgetA1omega("scalar")>0 or Helper.TRF_vgetA1omega("scalar")<=0)TRFomegabar_a1scalar_plus->Fill(Helper.TRF_vgetA1omega("scalar"));
-
-
-	cosbetacostheta_plus->Fill(Helper.cosbeta(),Helper.costhetaLF());
-	TRFcosbetacostheta_plus->Fill(Helper.TRF_cosbeta(),Helper.costhetaLF());
-
-	if(x1pip!=0 && omega_a1_P!=0)	omega_a1pi_plus->Fill(  (x1pip+ omega_a1_P)/(1  + omega_a1_P*x1pip)      );
-	if(x2p!=0 && omega_a1_P!=0)	omega_a1mu_plus->Fill( (x2p+ omega_a1_P)/(1  + omega_a1_P*x2p)  );
-
+      if(JAK1 ==2 && JAK2 == 5 &&   SubJAK2==51){
+	if(Mu1.isConfigured() && a1h.isConfigured()){
+	  double OmMuA1=  (Mu1.getOmega() +a1h.TRF_vgetA1omega() )/(1 + Mu1.getOmega()*a1h.TRF_vgetA1omega());
+	  omega_a1mu_plus->Fill(OmMuA1,HelWeightPlus);
+	  omega_a1mu_minus->Fill(OmMuA1,HelWeightMinus);       
+	}
       }
 
-
-
-    }
-
-    //   if(Tauola::getHelPlus() ==-1 ){
-    if(HelMinus ){
-      if(tau2.E()!=0 && pi2.E()!=0) { x1m = 2*pi2.E()/tau2.E()-1; pi_minus->Fill(pi2.E()/tau2.E()); piom_minus->Fill(x1m);}
-      if(tau1.E()!=0 && mu1.E()!=0) {x2m = 2*mu1.E()/tau1.E()-1; mu_minus->Fill(mu1.E()/tau1.E());}
-
-      if(tau1.E()!=0 && pi1.E()!=0){x1pim =2*pi1.E()/tau1.E()-1;}
-      if(rhopi2.E()!=0 && rhopi02.E()!=0){x3m = (rhopi2.E() -   rhopi02.E())/(rhopi2.E() +   rhopi02.E());  rho_minus->Fill(x3m); }
-
-      if(x1m!=0 && x2m!=0){OmegaMMuPi = (x1m+x2m)/(1+x1m*x2m); om_minus->Fill(OmegaMMuPi);}
-      if(x2m!=0 && x3m!=0){OmegaMMuRho = (x2m+x3m)/(1+x2m*x3m); ommurho_minus->Fill(OmegaMMuRho);}
-
-
-      if(x1m!=0 && x1pim!=0){ompipi_minus = (x1m+x1pim)/(1+x1m*x1pim);Omegapipi_minus->Fill(ompipi_minus);}
-
-      if(x1pim!=0 && x3m!=0){ompirho_minus = (x1pim+x3m)/(1+x1pim*x3m);Omegapirho_minus->Fill(ompirho_minus);}
-
-
-
-      if(JAK2==5 && SubJAK2==51){
-	vector<TLorentzVector> particles;
-	particles.push_back(tau1);
-	particles.push_back(a1ospi);
-	particles.push_back(a1ss1pi);
-	particles.push_back(a1ss2pi);
-	a1Helper Helper(particles, a1ospi+a1ss1pi+a1ss2pi);
-
- 	if(Helper.getA1omega()> 0 or Helper.getA1omega() < 0)	omega_a1_minus->Fill(Helper.getA1omega());
-	if(Helper.TRF_vgetA1omega()>0 or Helper.TRF_vgetA1omega()<=0){TRFomegabar_a1_minus->Fill(Helper.TRF_vgetA1omega());  omega_a1_M=Helper.TRF_vgetA1omega(); }
-	if(Helper.TRF_vgetA1omega("scalar")>0 or Helper.TRF_vgetA1omega("scalar")<=0)TRFomegabar_a1scalar_minus->Fill(Helper.TRF_vgetA1omega("scalar"));
-	
-	if(Helper.getg()!=0)omegabar_a1_minus->Fill(Helper.vgetA1omega("bar"));
-	cosbetacostheta_minus->Fill(Helper.cosbeta(),Helper.costhetaLF());
-	TRFcosbetacostheta_minus->Fill(Helper.TRF_cosbeta(),Helper.costhetaLF());
-
-	if(x1pim!=0 && omega_a1_M!=0)	omega_a1pi_minus->Fill(  (x1pim+ omega_a1_M)/(1  + omega_a1_M*x1pim)      );
-	if(x2m!=0 && omega_a1_M!=0)	omega_a1mu_minus->Fill( (x2m+ omega_a1_M)/(1  + omega_a1_M*x2m)  );
-
-
-
-      }
-
-
-
-    
-    }
     
   
-    
-  
+
     // Run MC-TESTER on the event
     HepMCEvent temp_event(*HepMCEvt,false);
     MC_Analyze(&temp_event);
@@ -683,51 +609,42 @@ int main(int argc,char **argv){
     // Clean up HepMC event
     delete HepMCEvt;  
   }
- int a, b;
- a = 5;//atoi(argv[1]);
- b =4;// atoi(argv[2]);
- MultiplyNumbers ab;
-  ab.setA(a);
-  ab.setB(b);
-  printf(" test  %d + %d = %d\n", ab.getA(), ab.getB(), ab.getProduct());
- 
-  pi_plus->Write();
-  pi_minus->Write();
 
-  Omegapipi_plus->Write();
-  Omegapipi_minus->Write(); 
 
-  Omegapirho_plus->Write();
-  Omegapirho_minus->Write();
+  // Omegapipi_plus->Write();
+  // Omegapipi_minus->Write(); 
+
+  // Omegapirho_plus->Write();
+  // Omegapirho_minus->Write();
 
 
 
-  rho_plus->Write();
-  rho_minus->Write();
-  ommurho_minus->Write();
-  ommurho_plus->Write();
-  mu_plus->Write();
-  mu_minus->Write();
-  om_plus->Write();
-  om_minus->Write();
-  piom_plus->Write();
-  piom_minus->Write();
-  omega_a1_minus->Write();
-  omega_a1_plus->Write();
-  omegabar_a1_minus->Write();
-  omegabar_a1_plus->Write();
-  cosbetacostheta_minus->Write();
-  cosbetacostheta_plus->Write();
+  // rho_plus->Write();
+  // rho_minus->Write();
+  // Omegamurho_minus->Write();
+  // Omegamurho_plus->Write();
+  // mu_plus->Write();
+  // mu_minus->Write();
+  // OmegaMuPi_plus->Write();
+  // OmegaMuPi_minus->Write();
+  // pi_plus->Write();
+  // pi_minus->Write();
+  // omega_a1_minus->Write();
+  // omega_a1_plus->Write();
+  // omegabar_a1_minus->Write();
+  // omegabar_a1_plus->Write();
+  // cosbetacostheta_minus->Write();
+  // cosbetacostheta_plus->Write();
 
-  TRFomegabar_a1_plus->Write();
-  TRFomegabar_a1_minus->Write();
-  TRFomegabar_a1scalar_plus->Write();
-  TRFomegabar_a1scalar_minus->Write();
-  omega_a1pi_plus->Write();
-  omega_a1pi_minus->Write();
+  // TRFomegabar_a1_plus->Write();
+  // TRFomegabar_a1_minus->Write();
+  // TRFomegabar_a1scalar_plus->Write();
+  // TRFomegabar_a1scalar_minus->Write();
+  // omega_a1pi_plus->Write();
+  // omega_a1pi_minus->Write();
 
-  omega_a1mu_plus->Write();
-  omega_a1mu_minus->Write();
+  // omega_a1mu_plus->Write();
+  // omega_a1mu_minus->Write();
 
   file->Write();
   file->Close();

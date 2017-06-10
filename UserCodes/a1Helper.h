@@ -17,10 +17,13 @@ using namespace std;
 class a1Helper {
 
  public:
+  a1Helper();
   a1Helper(vector<TLorentzVector> TauA1andProd);
   a1Helper(vector<TLorentzVector> TauA1andProd, TLorentzVector RefernceFrame);
   ~a1Helper();
-  void Configure(TLorentzVector OSPion, TLorentzVector SSPion1, TLorentzVector SSPion2,TLorentzVector TauA1, TLorentzVector TauMu );
+  void Configure(vector<TLorentzVector> TauA1andProd);
+  void Configure(vector<TLorentzVector> TauA1andProd, TLorentzVector RefernceFrame);
+  bool isConfigured();
   void Setup(vector<TLorentzVector> TauA1andProd, TLorentzVector ReferenceFrame );
 
   void Initialize(TLorentzVector t, TLorentzVector mu);

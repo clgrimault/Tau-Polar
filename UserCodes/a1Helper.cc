@@ -1,6 +1,9 @@
 #include "a1Helper.h"
 #include <iostream>
 
+a1Helper::a1Helper(){
+}
+
 a1Helper::a1Helper(vector<TLorentzVector> TauA1andProd){
   if(TauA1andProd.size()!=4){
     std::cout<<" Warning!! Size of input vector != 4 !! "<<std::endl;
@@ -63,29 +66,29 @@ a1Helper::Setup(vector<TLorentzVector> TauA1andProd, TLorentzVector ReferenceFra
 }
 
 void 
-a1Helper::Configure(TLorentzVector OSPion, TLorentzVector SSPion1, TLorentzVector SSPion2,TLorentzVector TauA1, TLorentzVector TauMu  ){
+a1Helper::Configure(vector<TLorentzVector> TauA1andProd){
 
-
-  Z_ =TauA1 + TauMu;
-  TLorentzVector A1LabFrame = OSPion + SSPion1 + SSPion2;
-
-   // OSPionZFrame_ = Boost(OSPion,Z_);
-   // SSPion1ZFrame_= Boost(SSPion1,Z_);
-   // SSPion2ZFrame_= Boost(SSPion2,Z_);
-   // A1ZFrame_     = Boost(A1LabFrame,Z_);
-
-   OSPionZFrame_ = OSPion;
-   SSPion1ZFrame_= SSPion1;
-   SSPion2ZFrame_= SSPion2;
-   A1ZFrame_     = A1LabFrame;
-
-   TauA1_ = TauA1;
-  // std::cout<<"A1 Lab Frame  "<< A1LabFrame.Px() << "  " <<A1LabFrame.Py() << " "<< A1LabFrame.Pz() << "  " <<A1LabFrame.E()<<std::endl;
-  // std::cout<<"A1 Z frame    "<< A1ZFrame_.Px() << "  "<< A1ZFrame_.Py() << " "<< A1ZFrame_.Pz() << "  " <<A1ZFrame_.E()<<std::endl;
-  // std::cout<<"Z   "<< Z_.Px() << "  "<< Z_.Py() << " "<< Z_.Pz() << "  " <<Z_.E()<<std::endl;
+  if(TauA1andProd.size()!=4){
+    std::cout<<" Warning!! Size of input vector != 4 !! "<<std::endl;
+  }
+  TLorentzVector fakeboost(0,0,0,0);
+  Setup(TauA1andProd,fakeboost);
 
 }
 
+void 
+a1Helper::Configure(vector<TLorentzVector> TauA1andProd, TLorentzVector RefernceFrame){
+  if(TauA1andProd.size()!=4){
+
+    std::cout<<" a1 helper:  Warning!! Size of input vector != 4 !!   size = "<< TauA1andProd.size()<<std::endl;
+  }
+  Setup(TauA1andProd,RefernceFrame);
+
+}
+bool
+a1Helper::isConfigured(){
+  if(TauA1andProd_RF.size()!=4) return false; return true;
+}
 
 
 
@@ -454,7 +457,6 @@ double a1Helper::ppi(double QQ){  if(QQ < 4*mpi*mpi) std::cout<<"Warning! Can no
    double QQ=_Q*_Q;
    double RR  = mtau*mtau/QQ; double R = sqrt(RR);
    float U = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 - RR);
-   float V = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 + RR)*costhetaLF() + 0.5*3*2*cospsiLF()* sinpsiLF()*sinthetaLF()*R;
    double B = 0.5*(3*cosbeta()*cosbeta() - 1);
 
    double fA =  WA()*(2+RR + B*U)/3;
@@ -624,10 +626,6 @@ void a1Helper::debugger(){
 
    std::cout<<"  TRF_g"<<std::endl; 
    std::cout<<" ga + gc + gd + ge   "<< gA+gC+gD+gE<<std::endl;
-
-
-
-
 }
 
 double a1Helper::TRF_vgetA1omega(TString type){

@@ -1,5 +1,3 @@
-#include "MultiplyNumbers.h"
-#include "AddNumbers.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -14,31 +12,11 @@ void PrintLV(TLorentzVector a){
 
 int main(int argc, const char* argv[]) {
 
-  int a, b;
-  a = atoi(argv[1]);
-  b = atoi(argv[2]);
-  AddNumbers ab;
-  ab.setA(a);
-  ab.setB(b);
-  printf("%d + %d = %d\n", ab.getA(), ab.getB(), ab.getSum());
-
-
-  MultiplyNumbers atimesb;
-  atimesb.setA(a);
-  atimesb.setB(b);
-  printf("%d * %d = %d\n", atimesb.getA(), atimesb.getB(), atimesb.getProduct());
-
-  TLorentzVector vec(2,0,0,5);
-  std::cout<<" vec.M()    "<< vec.M() << "  vec.Px()   "<< vec.Px() <<std::endl;
-
   TLorentzVector os(-3.664335,0.233661,-5.183266,6.353556);
   TLorentzVector ss1(-7.876100,0.720873,-12.047975,14.412696);
   TLorentzVector ss2(-3.472285,0.243649,-4.660688,5.818730);
   TLorentzVector ta1(-26.788939,2.687771,-37.247365,45.993420);
   TLorentzVector a1(-15.012722,1.198184,-21.891933,26.584986);
-  TLorentzVector rf(4,1,3,175);
-  TLorentzVector ta2(2,-4,6,55);
-  TLorentzVector zer(0,0,0,0);
 
 
   TLorentzVector rho(-13.491274,-4.967516,1.272212,14.454947);
@@ -93,87 +71,6 @@ int main(int argc, const char* argv[]) {
   particles.push_back(ss1);
   particles.push_back(ss2);
 
-  // particles.at(0).Print();
-  // particles.at(1).Print();
-  // particles.at(2).Print();
-  // particles.at(3).Print();
-
   a1Helper Helper(particles,a1);
-   Helper.Configure(os,ss1,ss2,ta1,ta2);
-   //   Helper.costheta();
-   //   PrintLV(ss2);
-   //PrintLV(Helper.Boost(ss2,ss2));
-
-// Helper.getBoosted().at(0).Print();
-// Helper.getBoosted().at(1).Print();
-// Helper.getBoosted().at(2).Print();
-// Helper.getBoosted().at(3).Print();
-
-
-  // cout<<"rho Mass  "<<rho.M()<<endl;
-  // cout<<"pi0 Mass  "<<pi.M()<<endl;
-  // cout<<"pi Mass  "<<pi0.M()<<endl;
-  // rho.Print();
-  // (pi+pi0).Print();
-  // Helper.nL().Print();
-   std::cout<< "Helper.cosbetaLF()  "<< Helper.cosbetaLF() <<std::endl;
-  std::cout<< " cosbeta =  "<<Helper.cosbeta()<<std::endl;
-    std::cout<< " cos gamma  "<<Helper.cosgammaLF() <<std::endl;
-    std::cout<< " sin gamma "<<Helper.singammaLF() <<std::endl;
-  // std::cout<< " 1 =   "<<sqrt( Helper.cosgammaLF()*Helper.cosgammaLF()+ Helper.singammaLF()*Helper.singammaLF()) <<std::endl;
-
-
-
-
-    std::cout<< "RF cos gamma  "<<Helper.cosgamma() <<std::endl;
-    std::cout<< "RF sin gamma "<<Helper.singamma() <<std::endl;
-    cout<<"getf  "<<Helper.getf()<<endl;
-    cout<<"getg  "<<Helper.getg()<<endl;
-
-
-    // cout<<"ultrarel_cospsiLF()  "<<Helper.ultrarel_cospsiLF()<<std::endl;
-    // cout<<"cospsiLF()  "<<Helper.cospsiLF()<<std::endl;
-
-    // cout<<"F1  "<<Helper.F1()<<endl;
-    // cout<<"F2  "<<Helper.F2()<<endl;
-    // cout<<"F4  "<<Helper.F4()<<endl;
-
-//  cout<<"rho Mass  "<<Helper.Boost(rho,rho).M()<<endl;
-//   cout<<"rho Mass  "<<Helper.Boost(pi,rho).M()<<endl;
-// cout<<"rho Mass  "<<Helper.Boost(pi0,rho).M()<<endl;
-// cout<<" ---------  "<<endl;
-
- // Helper.Boost(rho,pi).Print();
- // Helper.Boost(pi + pi0,pi).Print();
- // Helper.Boost(pi,pi).Print();
- // Helper.Boost(pi0,pi).Print();
-
-
-   // std::cout<< "scalar  "<< Helper.Scalar(ss1,ss2) <<std::endl;
-   // std::cout<< "mass   "<< Helper.Mass() <<std::endl;
-   // std::cout<< "mass   "<< Helper.Mass("a1") <<std::endl;
-
-   // std::cout<< "width    "<< Helper.Widths(4,"rho") <<std::endl;
-   // std::cout<<  " width    "<< Helper.Widths(4) <<std::endl;
-
- 
-
-
-   //  ss2.Print();// Helper.Boost(ss2,ss2).Print();
-   // particles.at(1).Print();
-
-   cout<<"WA()   "<<      Helper.WA()<<endl;	 
-   cout<<"WC();  "<<	 Helper.WC()<<endl;	 
-   cout<<"WD();  "<<	 Helper.WD()<<endl;	 
-   cout<<"WE();  "<<	 Helper.WE()<<endl;	 
-   cout<<"WSA();  "<<	 Helper.WSA()<<endl; 
-   cout<<"WSB();  "<<	 Helper.WSB()<<endl; 
-   cout<<"WSD();  "<<	 Helper.WSD()<<endl; 
-   cout<<"WSC();  "<<	 Helper.WSC()<<endl; 
-   cout<<"WSE();   "<<	 Helper.WSE()<<endl; 
-
-
-   cout<<     Helper.WA()*Helper.WA()<< "  = "<<Helper.WC()*Helper.WC()+  Helper.WD()*Helper.WD()+ Helper.WE()*Helper.WE()<<endl;	 
-
 
 }
