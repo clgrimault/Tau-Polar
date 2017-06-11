@@ -144,6 +144,44 @@ double
 a1Helper::Scalar(TLorentzVector p1, TLorentzVector p2){
     return p1.Vect()*p2.Vect();
 }
+double 
+a1Helper::wa(double Q){
+  int cells(100);
+  double s = Q*Q;
+  double intx(0);
+  double m1 = mpi;
+  double m2 = mpi;
+  double m3 = mpi;
+
+  double m13(0);
+  double integral(0);
+
+  double da1(0), db1(0);
+  double  stepx  = (pow(sqrt(s)-m2,2) - pow( m1+m3,2) ) / cells;
+  for(unsigned int i=1;i<cells + 1;i++){ 
+    da1 = pow(m1+m3,2) + stepx*(i-1);
+    db1 = pow(m1+m3,2) + stepx*i;
+    m13 = 0.5*(da1 + db1);
+    double  E3s = (m13 - m1*m1 + m3*m3)/(2*sqrt(m13));  
+    double  E2s = (s   - m13  -m2*m2)/(2*sqrt(m13));  
+    double  m23max =pow (E2s+E3s,2) - pow( sqrt(E2s*E2s - m2*m2) - sqrt(E3s*E3s - m3*m3),2);
+    double  m23min =  pow(E2s+E3s,2) - pow( sqrt(E2s*E2s - m2*m2) + sqrt(E3s*E3s - m3*m3),2);
+    double  stepy = (m23max - m23min)/cells;
+    double da2(0), db2(0);
+    double inty(0);
+    double m23(0);
+    for(unsigned int j=1;j<cells + 1;j++){ 
+      da2 = m23min + stepy*(j-1);
+      db2 = m23min + stepy*j;
+      m23 = 0.5*(da2 + db2);
+      inty+=stepx*stepy*WA();
+    }
+    intx+=inty;
+  }
+  integral = intx;
+  return integral;
+}
+
 
 //---------------------------------------  hadronic current ---------------------------
 double 

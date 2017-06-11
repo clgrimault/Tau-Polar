@@ -86,7 +86,7 @@ class a1Helper {
   double lambda(double x, double y, double z);
   double Scalar(TLorentzVector p1, TLorentzVector p2);
 
-
+  double wa(double Q);
 
   //--------------------------- Hadronic current ---------------------
   //  only 9 structure fucbntions are non-zero in 3pions case

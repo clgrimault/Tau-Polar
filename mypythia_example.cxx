@@ -37,7 +37,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents = 1000000; 
+int NumberOfEvents = 50000; 
 int EventsToCheck=10;
 
 // elementary test of HepMC typically executed before
@@ -249,6 +249,7 @@ int main(int argc,char **argv){
  TH1F *omega_a1mu_plus= new TH1F("omega_a1mu_plus","#omega_{a1#mu}^{+}",50,-1.1,1.1);
  TH1F *omega_a1mu_minus= new TH1F("omega_a1mu_minus","#omega_{a1#mu}^{-}",50,-1.1,1.1);
 
+ TH2F *s1s2= new TH2F("s1s2","s1s2",20,0,2,20,0,2);
 
 
 
@@ -539,7 +540,7 @@ int main(int argc,char **argv){
       TRFcosbetacostheta_minus->Fill(a1h.TRF_cosbeta(),a1h.costhetaLF(),HelWeightMinus);                  TRFcosbetacostheta_plus->Fill(a1h.TRF_cosbeta(),a1h.costhetaLF(),HelWeightPlus);
       omegabar_a1_minus->Fill(a1h.vgetA1omega("bar")  ,HelWeightMinus);                                          omegabar_a1_plus->Fill(a1h.vgetA1omega("bar"),HelWeightPlus);
 
-
+      s1s2->Fill((a1ospi+a1ss2pi).M2(),(a1ospi+a1ss1pi).M2());
     }
  
 
