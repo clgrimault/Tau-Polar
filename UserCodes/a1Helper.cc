@@ -66,6 +66,16 @@ a1Helper::Setup(vector<TLorentzVector> TauA1andProd, TLorentzVector ReferenceFra
 }
 
 void 
+a1Helper::subSetup(double s1, double s2, double s3, double Q){
+   _s1  =   s1;
+   _s2  =   s2;
+   _s3  =   s3;
+   _Q = Q;
+}
+
+
+
+void 
 a1Helper::Configure(vector<TLorentzVector> TauA1andProd){
 
   if(TauA1andProd.size()!=4){
@@ -157,6 +167,16 @@ a1Helper::wa(double Q){
   double integral(0);
 
   double da1(0), db1(0);
+  vector<double> set;
+  set.push_back(_s1);
+  set.push_back(_s2);
+  set.push_back(_s3);
+  set.push_back(_Q);
+  std::cout<<"  s1_"<< _s1 <<std::endl;
+  subSetup(1,2,3,4); 
+  std::cout<<"  s1_"<< _s1 <<std::endl;
+  subSetup(set.at(0),set.at(1),set.at(2),set.at(3));
+   std::cout<<"  s1_"<< _s1 <<std::endl;
   double  stepx  = (pow(sqrt(s)-m2,2) - pow( m1+m3,2) ) / cells;
   for(unsigned int i=1;i<cells + 1;i++){ 
     da1 = pow(m1+m3,2) + stepx*(i-1);

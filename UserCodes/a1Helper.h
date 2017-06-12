@@ -15,7 +15,7 @@ using namespace std;
 
 
 class a1Helper {
-
+ 
  public:
   a1Helper();
   a1Helper(vector<TLorentzVector> TauA1andProd);
@@ -25,6 +25,7 @@ class a1Helper {
   void Configure(vector<TLorentzVector> TauA1andProd, TLorentzVector RefernceFrame);
   bool isConfigured();
   void Setup(vector<TLorentzVector> TauA1andProd, TLorentzVector ReferenceFrame );
+  void subSetup(double s1, double s2, double s3, double Q);
 
   void Initialize(TLorentzVector t, TLorentzVector mu);
   bool OmegaIsValid(){return isValid_;}
