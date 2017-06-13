@@ -101,10 +101,20 @@ for($l=0;$l<$numArgs; $l++){
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/$tauoladir/tauola++/1.1.5/lhapdf-5.9.1/workdir/lib"));
 	system(sprintf("mkdir $PWD/$tauoladir/tauola++/1.1.5/workdir; "));
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/;   ./configure --prefix=$PWD/$tauoladir/tauola++/1.1.5/workdir  --with-hepmc=$PWD/$tauoladir/tauola++/1.1.5/HepMC-2.06.05/workdir  --with-pythia8=$PWD/$tauoladir/tauola++/1.1.5/pythia8/176/  --with-lhapdf=$PWD/$tauoladir/tauola++/1.1.5/lhapdf-5.9.1/workdir/ --with-mc-tester=$PWD/$tauoladir/tauola++/1.1.5/MC-TESTER/   --with-tau-spinner; "));
-	system(sprintf("cp Makefile  $PWD/$tauoladir/tauola++/1.1.5/examples;"));
-	system(sprintf("cp mypythia_example.cxx  $PWD/$tauoladir/tauola++/1.1.5/examples;"));
-	system(sprintf("echo \"\#dummy\">> $PWD/$tauoladir/tauola++/1.1.5/examples/.deps/mypythia_example.Po"));
+	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/; make;"));
+	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/; make all;"));
+	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/; make install;"));
+	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/examples; make"));
+
+	printf("\n___________________Tauola is compiled _____________________\n");
+	printf("|                                                                                               |\n");
+	printf("|                                                                                               |\n");
+	printf("|                                                                                               |\n");
+	printf("|                                                                                               |\n");
+	printf("\n ___________________User Codes_______ _____________________\n\n\n");
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/examples;  mkdir UserCodes;"));
+
+
 	system(sprintf("cp UserCodes/Makefile.shared $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
 	system(sprintf("cp UserCodes/MultiplyNumbers.h $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
 	system(sprintf("cp UserCodes/MultiplyNumbers.cc $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
@@ -113,13 +123,14 @@ for($l=0;$l<$numArgs; $l++){
 	system(sprintf("cp UserCodes/main.cc $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
 	system(sprintf("cp UserCodes/a1Helper.cc $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
 	system(sprintf("cp UserCodes/a1Helper.h $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
-	system(sprintf("cp UserCodes/*.h $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
-	system(sprintf("cp UserCodes/*.cc $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
+	system(sprintf("cp UserCodes/TauDecaysHelper.h $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
+	system(sprintf("cp UserCodes/TauDecaysHelper.cc $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes/; make all -f Makefile.shared;"));
-	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/; make;"));
-	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/; make all;"));
-	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/; make install;"));
+	system(sprintf("cp Makefile  $PWD/$tauoladir/tauola++/1.1.5/examples;"));
+	system(sprintf("cp poltaumain_pythia_tauola.cxx  $PWD/$tauoladir/tauola++/1.1.5/examples;"));
+	system(sprintf("echo \"\#dummy\">> $PWD/$tauoladir/tauola++/1.1.5/examples/.deps/poltaumain_pythia_tauola.Po"));
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/examples; make"));
+
 
        # Setting up qsub submitter
         system(sprintf("cp submit $PWD/$tauoladir/tauola++/1.1.5/examples/; "));
@@ -128,7 +139,7 @@ for($l=0;$l<$numArgs; $l++){
 	system(sprintf("echo \"export workdir=$s1_par     \">> qsub_submit.sh"));
 	system(sprintf("echo \"cd $PWD/$tauoladir/tauola++/1.1.5/examples/;    \">> qsub_submit.sh"));
 	system(sprintf("echo \"source $PWD/Install_TauolaEnvironment_$time   \">> qsub_submit.sh"));
-	system(sprintf("echo \"$PWD/$tauoladir/tauola++/1.1.5/examples/mypythia_example.exe   \">> qsub_submit.sh"));
+	system(sprintf("echo \"$PWD/$tauoladir/tauola++/1.1.5/examples/poltaumain_pythia_tauola.exe   \">> qsub_submit.sh"));
 	system(sprintf("echo \"echo 'Completed Job'    \">> qsub_submit.sh"));
 	system(sprintf("mv qsub_submit.sh $PWD/$tauoladir/tauola++/1.1.5/examples/; "));
 
