@@ -125,7 +125,7 @@ for($l=0;$l<$numArgs; $l++){
 	system(sprintf("cp UserCodes/a1Helper.h $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
 	system(sprintf("cp UserCodes/TauDecaysHelper.h $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
 	system(sprintf("cp UserCodes/TauDecaysHelper.cc $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
-	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes/; make all -f Makefile.shared;"));
+	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes/; make  -f Makefile.shared;"));
 	system(sprintf("cp Makefile  $PWD/$tauoladir/tauola++/1.1.5/examples;"));
 	system(sprintf("cp poltaumain_pythia_tauola.cxx  $PWD/$tauoladir/tauola++/1.1.5/examples;"));
 	system(sprintf("echo \"\#dummy\">> $PWD/$tauoladir/tauola++/1.1.5/examples/.deps/poltaumain_pythia_tauola.Po"));
@@ -145,7 +145,7 @@ for($l=0;$l<$numArgs; $l++){
 
 
 	printf("\nInstruction:   \n    ");
-	printf(" cd $PWD/$tauoladir/tauola++/1.1.5/examples/; ./mypythia_example | tee log.out;   \n\n\n");
+	printf(" cd $PWD/$tauoladir/tauola++/1.1.5/examples/; ./poltaumain_pythia_tauola.exe | tee log.out;   \n\n\n");
     }
 
     

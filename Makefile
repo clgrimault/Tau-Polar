@@ -55,7 +55,7 @@ am__append_10 = single_tau_gun_example.exe taummk_pythia_example.exe
 am__append_11 = -R $(MCTESTER_DIR)/lib
 am__append_12 = -I$(PYTHIA8_DIR)/include -I$(MCTESTER_DIR)/include -I$(ROOTINC) -I$(USERINC)  
 am__append_13 = -L$(MCTESTER_DIR)/lib -lHEPEvent -lHepMCEvent -lMCTester $(ROOTLIBS) $(USERLIBS)
-am__append_14 = taumain_pythia_example.exe poltaumain_pythia_tauola.exe
+am__append_14 = poltaumain_pythia_tauola.exe
 subdir = examples
 DIST_COMMON = README $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -70,8 +70,7 @@ am__EXEEXT_1 =  \
 	taumain_stand_alone_example.exe$(EXEEXT)
 am__EXEEXT_2 = single_tau_gun_example.exe$(EXEEXT) \
 	taummk_pythia_example.exe$(EXEEXT)
-am__EXEEXT_3 = taumain_pythia_example.exe$(EXEEXT) \
-	poltaumain_pythia_tauola.exe$(EXEEXT)
+am__EXEEXT_3 = poltaumain_pythia_tauola.exe$(EXEEXT)
 am__installdirs = "$(DESTDIR)$(exampledir)"
 PROGRAMS = $(example_PROGRAMS)
 am__single_tau_gun_example_exe_SOURCES_DIST =  \
@@ -93,17 +92,6 @@ taumain_hepevt_example_exe_OBJECTS =  \
 	$(am_taumain_hepevt_example_exe_OBJECTS)
 taumain_hepevt_example_exe_LDADD = $(LDADD)
 taumain_hepevt_example_exe_DEPENDENCIES =  \
-	$(prefix)/lib/libTauolaCxxInterface.so \
-	$(prefix)/lib/libTauolaFortran.so $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_2)
-am__taumain_pythia_example_exe_SOURCES_DIST =  \
-	taumain_pythia_example.cxx
-am_taumain_pythia_example_exe_OBJECTS = taumain_pythia_example.$(OBJEXT)
-taumain_pythia_example_exe_OBJECTS =  \
-	$(am_taumain_pythia_example_exe_OBJECTS)
-taumain_pythia_example_exe_LDADD = $(LDADD)
-taumain_pythia_example_exe_DEPENDENCIES =  \
 	$(prefix)/lib/libTauolaCxxInterface.so \
 	$(prefix)/lib/libTauolaFortran.so $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
@@ -157,30 +145,28 @@ CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = $(single_tau_gun_example_exe_SOURCES) \
 	$(taumain_hepevt_example_exe_SOURCES) \
-	$(taumain_pythia_example_exe_SOURCES) \
 	$(poltaumain_pythia_tauola_exe_SOURCES) \
 	$(taumain_stand_alone_example_exe_SOURCES) \
 	$(taummk_pythia_example_exe_SOURCES)
 DIST_SOURCES = $(am__single_tau_gun_example_exe_SOURCES_DIST) \
 	$(taumain_hepevt_example_exe_SOURCES) \
-	$(am__taumain_pythia_example_exe_SOURCES_DIST) \
 	$(am__poltaumain_pythia_tauola_exe_SOURCES_DIST) \
 	$(am__taumain_stand_alone_example_exe_SOURCES_DIST) \
 	$(am__taummk_pythia_example_exe_SOURCES_DIST)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/install/tauola++/1.1.5/config/missing --run aclocal-1.11
-AMTAR = ${SHELL} /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/install/tauola++/1.1.5/config/missing --run tar
+ACLOCAL = ${SHELL} /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/TestDir/Tau-Polar/install/tauola++/1.1.5/config/missing --run aclocal-1.11
+AMTAR = ${SHELL} /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/TestDir/Tau-Polar/install/tauola++/1.1.5/config/missing --run tar
 AR = ar
-AUTOCONF = ${SHELL} /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/install/tauola++/1.1.5/config/missing --run autoconf
-AUTOHEADER = ${SHELL} /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/install/tauola++/1.1.5/config/missing --run autoheader
-AUTOMAKE = ${SHELL} /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/install/tauola++/1.1.5/config/missing --run automake-1.11
+AUTOCONF = ${SHELL} /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/TestDir/Tau-Polar/install/tauola++/1.1.5/config/missing --run autoconf
+AUTOHEADER = ${SHELL} /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/TestDir/Tau-Polar/install/tauola++/1.1.5/config/missing --run autoheader
+AUTOMAKE = ${SHELL} /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/TestDir/Tau-Polar/install/tauola++/1.1.5/config/missing --run automake-1.11
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -g -O2
-CPPFLAGS = -I/grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/install//tauola++/1.1.5/pythia8/176//include -I/grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/install//tauola++/1.1.5/lhapdf-5.9.1/workdir//include -I/grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/install//tauola++/1.1.5/HepMC-2.06.05/workdir/include  $(am__append_8)
+CPPFLAGS = -I/grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/TestDir/Tau-Polar/install//tauola++/1.1.5/pythia8/176//include -I/grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/TestDir/Tau-Polar/install//tauola++/1.1.5/lhapdf-5.9.1/workdir//include -I/grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/TestDir/Tau-Polar/install//tauola++/1.1.5/HepMC-2.06.05/workdir/include  $(am__append_8)
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
@@ -200,7 +186,7 @@ FFLAGS = -O2
 FGREP = /bin/grep -F
 GREP = /bin/grep
 HAS_ROOT_CONFIG = yes
-HEPMC_DIR = /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/install//tauola++/1.1.5/HepMC-2.06.05/workdir
+HEPMC_DIR = /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/TestDir/Tau-Polar/install//tauola++/1.1.5/HepMC-2.06.05/workdir
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
@@ -214,8 +200,8 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LIPO = 
 LN_S = ln -s
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/install/tauola++/1.1.5/config/missing --run makeinfo
-MCTESTER_DIR = /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/install//tauola++/1.1.5/MC-TESTER/
+MAKEINFO = ${SHELL} /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/TestDir/Tau-Polar/install/tauola++/1.1.5/config/missing --run makeinfo
+MCTESTER_DIR = /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/TestDir/Tau-Polar/install//tauola++/1.1.5/MC-TESTER/
 MKDIR_P = /bin/mkdir -p
 NM = /usr/bin/nm -B
 NMEDIT = 
@@ -230,7 +216,7 @@ PACKAGE_STRING = Tauola C++ Interface 1.0.6
 PACKAGE_TARNAME = tauola-c---interface
 PACKAGE_VERSION = 1.0.6
 PATH_SEPARATOR = :
-PYTHIA8_DIR = /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/install//tauola++/1.1.5/pythia8/176/
+PYTHIA8_DIR = /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/TestDir/Tau-Polar/install//tauola++/1.1.5/pythia8/176/
 RANLIB = ranlib
 ROOTINC = /libcern/root/5.34.18/sl6.3-x86_64/include
 ROOTLIBS = -L/libcern/root/5.34.18/sl6.3-x86_64/lib -lGui -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lThread -pthread -lm -ldl -rdynamic
@@ -241,10 +227,10 @@ SET_MAKE =
 SHELL = /bin/sh
 STRIP = strip
 VERSION = 1.0.6
-abs_builddir = /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/install/tauola++/1.1.5/examples
-abs_srcdir = /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/install/tauola++/1.1.5/examples
-abs_top_builddir = /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/install/tauola++/1.1.5
-abs_top_srcdir = /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/install/tauola++/1.1.5
+abs_builddir = /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/TestDir/Tau-Polar/install/tauola++/1.1.5/examples
+abs_srcdir = /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/TestDir/Tau-Polar/install/tauola++/1.1.5/examples
+abs_top_builddir = /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/TestDir/Tau-Polar/install/tauola++/1.1.5
+abs_top_srcdir = /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/TestDir/Tau-Polar/install/tauola++/1.1.5
 ac_ct_CC = gcc
 ac_ct_CXX = g++
 ac_ct_DUMPBIN = 
@@ -274,7 +260,7 @@ host_vendor = unknown
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/install/tauola++/1.1.5/config/install-sh
+install_sh = ${SHELL} /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/TestDir/Tau-Polar/install/tauola++/1.1.5/config/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -284,7 +270,7 @@ mandir = ${datarootdir}/man
 mkdir_p = /bin/mkdir -p
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/install//tauola++/1.1.5/workdir
+prefix = /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/TestDir/Tau-Polar/install//tauola++/1.1.5/workdir
 program_transform_name = s,x,x,
 psdir = ${docdir}
 sbindir = ${exec_prefix}/sbin
@@ -295,7 +281,7 @@ target_alias =
 top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
-with_lhapdf = /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/install//tauola++/1.1.5/lhapdf-5.9.1/workdir/
+with_lhapdf = /grid_mnt/home-pbs/vcherepa/taua1/Tau-Polar/TestDir/Tau-Polar/install//tauola++/1.1.5/lhapdf-5.9.1/workdir/
 exampledir = $(top_srcdir)/examples
 taumain_hepevt_example_exe_SOURCES = taumain_hepevt_example.cxx
 INCLUDES = -I$(prefix)/include $(am__append_2) $(am__append_6) \
@@ -308,7 +294,6 @@ LDADD = $(FLIBS) $(prefix)/lib/libTauolaCxxInterface.so \
 taumain_stand_alone_example_exe_SOURCES = taumain_stand_alone_example.cxx
 single_tau_gun_example_exe_SOURCES = single_tau_gun_example.cxx
 taummk_pythia_example_exe_SOURCES = taummk_pythia_example.cxx
-taumain_pythia_example_exe_SOURCES = taumain_pythia_example.cxx
 poltaumain_pythia_tauola_exe_SOURCES = poltaumain_pythia_tauola.cxx
 all: all-am
 
@@ -393,9 +378,6 @@ single_tau_gun_example.exe$(EXEEXT): $(single_tau_gun_example_exe_OBJECTS) $(sin
 taumain_hepevt_example.exe$(EXEEXT): $(taumain_hepevt_example_exe_OBJECTS) $(taumain_hepevt_example_exe_DEPENDENCIES) 
 	@rm -f taumain_hepevt_example.exe$(EXEEXT)
 	$(CXXLINK) $(taumain_hepevt_example_exe_OBJECTS) $(taumain_hepevt_example_exe_LDADD) $(LIBS)
-taumain_pythia_example.exe$(EXEEXT): $(taumain_pythia_example_exe_OBJECTS) $(taumain_pythia_example_exe_DEPENDENCIES) 
-	@rm -f taumain_pythia_example.exe$(EXEEXT)
-	$(CXXLINK) $(taumain_pythia_example_exe_OBJECTS) $(taumain_pythia_example_exe_LDADD) $(LIBS)
 poltaumain_pythia_tauola.exe$(EXEEXT): $(poltaumain_pythia_tauola_exe_OBJECTS) $(poltaumain_pythia_tauola_exe_DEPENDENCIES) 
 	@rm -f poltaumain_pythia_tauola.exe$(EXEEXT)
 	$(CXXLINK) $(poltaumain_pythia_tauola_exe_OBJECTS) $(poltaumain_pythia_tauola_exe_LDADD) $(LIBS)
@@ -414,7 +396,6 @@ distclean-compile:
 
 include ./$(DEPDIR)/single_tau_gun_example.Po
 include ./$(DEPDIR)/taumain_hepevt_example.Po
-include ./$(DEPDIR)/taumain_pythia_example.Po
 include ./$(DEPDIR)/poltaumain_pythia_tauola.Po
 include ./$(DEPDIR)/taumain_stand_alone_example.Po
 include ./$(DEPDIR)/taummk_pythia_example.Po
