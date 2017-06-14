@@ -39,7 +39,7 @@ $time= strftime("%h_%d_%Y",localtime);
 
 for($l=0;$l<$numArgs; $l++){
     
-    if($ARGV[$l] eq "--settings"){
+    if($ARGV[$l] eq "--setup"){
 	$setdir=$ARGV[l+1];
 
 	system(sprintf("rm Install_TauolaEnvironment_*"));	
@@ -56,8 +56,9 @@ for($l=0;$l<$numArgs; $l++){
 	system(sprintf("./subs '{DIR}'  $PWD/$setdir/  Makefile; "));
 
 	printf("\n\nInstructions:");
-	printf("\nTo complete this step do source Install_TauolaEnvironment_$time \n\n");
-	printf("\n./todo.pl --tauola $setdir \n\n");
+	printf("\nTo complete this step do:  \n\n");
+	printf("\n    1)   Install_TauolaEnvironment_$time \n");
+	printf("\n    2)  ./todo.pl --tauola $setdir \n\n");
     }
     if($ARGV[$l] eq "--tauola"){
 	$tauoladir=$ARGV[l+1];
