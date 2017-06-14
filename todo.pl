@@ -52,7 +52,7 @@ for($l=0;$l<$numArgs; $l++){
 	system(sprintf("echo \"export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:$PWD/$setdir/tauola++/1.1.5/examples/UserCodes\">> Install_TauolaEnvironment_$time"));
 	system(sprintf("echo \"cernlib-use --version 5.34.18 root \n\">> Install_TauolaEnvironment_$time"));
 
-	system(sprintf("cp Makefile_template Makefile; "));
+	system(sprintf("cp Makefile.template Makefile; "));
 	system(sprintf("./subs '{DIR}'  $PWD/$setdir/  Makefile; "));
 
 	printf("\n\nInstructions:");
