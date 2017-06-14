@@ -155,7 +155,7 @@ a1Helper::Scalar(TLorentzVector p1, TLorentzVector p2){
     return p1.Vect()*p2.Vect();
 }
 double 
-a1Helper::wa(double Q){
+a1Helper::MomentSFunction(double Q, string type){
   int cells(100);
   double s = Q*Q;
   double intx(0);
@@ -172,11 +172,6 @@ a1Helper::wa(double Q){
   set.push_back(_s2);
   set.push_back(_s3);
   set.push_back(_Q);
-  std::cout<<"  s1_"<< _s1 <<std::endl;
-  subSetup(1,2,3,4); 
-  std::cout<<"  s1_"<< _s1 <<std::endl;
-  subSetup(set.at(0),set.at(1),set.at(2),set.at(3));
-   std::cout<<"  s1_"<< _s1 <<std::endl;
   double  stepx  = (pow(sqrt(s)-m2,2) - pow( m1+m3,2) ) / cells;
   for(unsigned int i=1;i<cells + 1;i++){ 
     da1 = pow(m1+m3,2) + stepx*(i-1);
@@ -190,15 +185,36 @@ a1Helper::wa(double Q){
     double da2(0), db2(0);
     double inty(0);
     double m23(0);
+    double m12(0);
     for(unsigned int j=1;j<cells + 1;j++){ 
       da2 = m23min + stepy*(j-1);
       db2 = m23min + stepy*j;
       m23 = 0.5*(da2 + db2);
-      inty+=stepx*stepy*WA();
+      m12 = s +m1*m1 + m2*m2 + m3*m3 - m12*m12 - m23*m23;
+      subSetup(m23,m13,m12,Q); 
+      double SFunction(0);
+      if(type=="WA")SFunction=WA();
+      if(type=="WC")SFunction=WC();
+      if(type=="WSA")SFunction=WSA();
+      if(type=="WSB")SFunction=WSB();
+      if(type=="WD"  ){
+	if(m23 > m13)SFunction=WD();
+	else SFunction=-WD();
+      }
+      if(type=="WE"){
+	if(m23 > m13)SFunction=WE();
+	else SFunction=-WE();
+      }
+      if(type=="WSD"){
+	if(m23 > m13)SFunction=WSD();
+	else SFunction=-WSD();
+      }
+      inty+=stepx*stepy*SFunction;
     }
     intx+=inty;
   }
   integral = intx;
+  subSetup(set.at(0),set.at(1),set.at(2),set.at(3));
   return integral;
 }
 
