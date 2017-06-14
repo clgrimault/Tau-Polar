@@ -155,9 +155,9 @@ a1Helper::Scalar(TLorentzVector p1, TLorentzVector p2){
     return p1.Vect()*p2.Vect();
 }
 double 
-a1Helper::MomentSFunction(double Q, string type){
-  int cells(100);
-  double s = Q*Q;
+a1Helper::MomentSFunction(double s, string type){
+  int cells(50);
+  //  double s = Q*Q;
   double intx(0);
   double m1 = mpi;
   double m2 = mpi;
@@ -190,8 +190,10 @@ a1Helper::MomentSFunction(double Q, string type){
       da2 = m23min + stepy*(j-1);
       db2 = m23min + stepy*j;
       m23 = 0.5*(da2 + db2);
-      m12 = s +m1*m1 + m2*m2 + m3*m3 - m12*m12 - m23*m23;
-      subSetup(m23,m13,m12,Q); 
+      m12 = s +m1*m1 + m2*m2 + m3*m3 - m13 - m23;
+      subSetup(m23,m13,m12,sqrt(s)); 
+      // if(s >1.88 && s < 1.90)    std::cout<<"  WD=    "<< WD() << "        m23 = "<< m23 << "       m13= " << m13 <<    "     m12=   "<< m12 << "    sqrts=  " << sqrt(s) <<std::endl;
+      // if(s >1.88 && s < 1.90)    std::cout<<"  F1  "<< F1() << "  F2 "<< F2() << " h0 " << h0()<<    "  VV1()-h()=   "<< VV1()-h() << " VV2() -h()=  " <<VV2()-h() <<std::endl;
       double SFunction(0);
       if(type=="WA")SFunction=WA();
       if(type=="WC")SFunction=WC();
@@ -209,20 +211,26 @@ a1Helper::MomentSFunction(double Q, string type){
 	if(m23 > m13)SFunction=WSD();
 	else SFunction=-WSD();
       }
+      //      std::cout<<"SFunction  "<< SFunction<< std::endl;
       inty+=stepx*stepy*SFunction;
     }
     intx+=inty;
   }
   integral = intx;
+  std::cout<<"check return value  "<< s << "   integral=  " << integral << "  type  "<<   type  << "  :  "<<  WD()<< std::endl;
   subSetup(set.at(0),set.at(1),set.at(2),set.at(3));
+
+
+
   return integral;
 }
-
+ 
 
 //---------------------------------------  hadronic current ---------------------------
 double 
 a1Helper::WA(){
-  return  VV1()*F1().Rho2() + VV2()*F2().Rho2()  + 2*V1V2()*( F1()*Conjugate(F2()) ).Re();
+   return  VV1()*F1().Rho2() + VV2()*F2().Rho2()  + 2*V1V2()*( F1()*Conjugate(F2()) ).Re();
+
  }
 
  double 
@@ -240,6 +248,7 @@ a1Helper::WC(){
 //   if(undersqrt2 < 0) undersqrt2 =0;
 
 //   std::cout<<" WD(1)  "<< - 2 * sqrt(undersqrt1) * F1().Rho2()*sqrt(h())  << "  WD(2)   "<<sqrt(h())*2*sqrt(undersqrt2)*F2().Rho2()  << "   WD(3)   "<<  -sqrt(h())* (QQ - mpi*mpi + _s3)*(_s1 - _s2 )*( F1()*Conjugate(F2()) ).Re()/QQ/sqrt(h0() ) <<endl;
+  
 
    return  -sqrt(h()) * ( 2 * sqrt(undersqrt1) * F1().Rho2() - 2*sqrt(undersqrt2)*F2().Rho2()  
 			  + (QQ - mpi*mpi + _s3)*(_s1 - _s2 )*( F1()*Conjugate(F2()) ).Re()/QQ/sqrt(h0() ) );
@@ -473,7 +482,7 @@ a1Helper::Widths(double Q, string type){
     Gamma=Gamma0rhoprime*QQ/mrhoprime/mrhoprime;
  }
   if(type == "a1"){
-    Gamma=Gamma0a1*ga1(Q)/ga1(ma1);
+    Gamma=Gamma0a1;//*ga1(Q)/ga1(ma1);
  }
   if(type == "piprime"){
     Gamma = Gamma0piprime*pow( sqrt(QQ)/mpiprime  ,5)*pow( (1-mrho*mrho/QQ)/(1-mrho*mrho/mpiprime/mpiprime) ,3);

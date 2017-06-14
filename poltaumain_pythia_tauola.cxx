@@ -14,6 +14,7 @@
 #include "TFile.h"
 #include "TH1F.h"
 #include "TH2F.h"
+#include "TF1.h"
 #include "TLorentzVector.h"
 #include "UserCodes/a1Helper.h"
 #include "UserCodes/TauDecaysHelper.h"
@@ -37,13 +38,16 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents = 50000; 
+int NumberOfEvents = 50; 
 int EventsToCheck=10;
 
 // elementary test of HepMC typically executed before
 // detector simulation based on http://home.fnal.gov/~mrenna/HCPSS/HCPSShepmc.html
 // similar test was performed in Fortran
 // we perform it before and after Tauola (for the first several events)
+
+
+
 void checkMomentumConservationInEvent(HepMC::GenEvent *evt)
 {
  	cout<<"List of stable particles: "<<endl;
@@ -250,7 +254,6 @@ int main(int argc,char **argv){
  TH1F *omega_a1mu_minus= new TH1F("omega_a1mu_minus","#omega_{a1#mu}^{-}",50,-1.1,1.1);
 
  TH2F *s1s2= new TH2F("s1s2","s1s2",20,0,2,20,0,2);
-
 
 
 
@@ -539,7 +542,7 @@ int main(int argc,char **argv){
       cosbetacostheta_minus->Fill(a1h.cosbeta(),a1h.costhetaLF(),HelWeightMinus);                              cosbetacostheta_plus->Fill(a1h.cosbeta(),a1h.costhetaLF(),HelWeightPlus);
       TRFcosbetacostheta_minus->Fill(a1h.TRF_cosbeta(),a1h.costhetaLF(),HelWeightMinus);                  TRFcosbetacostheta_plus->Fill(a1h.TRF_cosbeta(),a1h.costhetaLF(),HelWeightPlus);
       omegabar_a1_minus->Fill(a1h.vgetA1omega("bar")  ,HelWeightMinus);                                          omegabar_a1_plus->Fill(a1h.vgetA1omega("bar"),HelWeightPlus);
-      std::cout<<"MomentSFunction "<< a1h.MomentSFunction(0.89,"WA") <<std::endl;
+      //      std::cout<<"MomentSFunction "<< a1h.MomentSFunction(0.89,"WA") <<std::endl;
       s1s2->Fill((a1ospi+a1ss2pi).M2(),(a1ospi+a1ss1pi).M2());
     }
  
@@ -612,46 +615,43 @@ int main(int argc,char **argv){
   }
 
 
-  // Omegapipi_plus->Write();
-  // Omegapipi_minus->Write(); 
+// Omegapipi_plus->Write();
+// Omegapipi_minus->Write(); 
+// Omegapirho_plus->Write();
+// Omegapirho_minus->Write();
+// rho_plus->Write();
+// rho_minus->Write();
+// Omegamurho_minus->Write();
+// Omegamurho_plus->Write();
+// mu_plus->Write();
+// mu_minus->Write();
+// OmegaMuPi_plus->Write();
+// OmegaMuPi_minus->Write();
+// pi_plus->Write();
+// pi_minus->Write();
+// omega_a1_minus->Write();
+// omega_a1_plus->Write();
+// omegabar_a1_minus->Write();
+// omegabar_a1_plus->Write();
+// cosbetacostheta_minus->Write();
+// cosbetacostheta_plus->Write();
+// TRFomegabar_a1_plus->Write();
+// TRFomegabar_a1_minus->Write();
+// TRFomegabar_a1scalar_plus->Write();
+// TRFomegabar_a1scalar_minus->Write();
+// omega_a1pi_plus->Write();
+// omega_a1pi_minus->Write();
+// omega_a1mu_plus->Write();
+// omega_a1mu_minus->Write();
 
-  // Omegapirho_plus->Write();
-  // Omegapirho_minus->Write();
 
-
-
-  // rho_plus->Write();
-  // rho_minus->Write();
-  // Omegamurho_minus->Write();
-  // Omegamurho_plus->Write();
-  // mu_plus->Write();
-  // mu_minus->Write();
-  // OmegaMuPi_plus->Write();
-  // OmegaMuPi_minus->Write();
-  // pi_plus->Write();
-  // pi_minus->Write();
-  // omega_a1_minus->Write();
-  // omega_a1_plus->Write();
-  // omegabar_a1_minus->Write();
-  // omegabar_a1_plus->Write();
-  // cosbetacostheta_minus->Write();
-  // cosbetacostheta_plus->Write();
-
-  // TRFomegabar_a1_plus->Write();
-  // TRFomegabar_a1_minus->Write();
-  // TRFomegabar_a1scalar_plus->Write();
-  // TRFomegabar_a1scalar_minus->Write();
-  // omega_a1pi_plus->Write();
-  // omega_a1pi_minus->Write();
-
-  // omega_a1mu_plus->Write();
-  // omega_a1mu_minus->Write();
 
   file->Write();
   file->Close();
+
   pythia.statistics();
   MC_Finalize();
-
+ 
   // This is an access to old FORTRAN info on generated tau sample. 
   // That is why it refers to old version number (eg. 2.7) for TAUOLA.
   //Tauola::summary();
