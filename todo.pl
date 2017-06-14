@@ -52,7 +52,8 @@ for($l=0;$l<$numArgs; $l++){
 	system(sprintf("echo \"export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:$PWD/$setdir/tauola++/1.1.5/examples/UserCodes\">> Install_TauolaEnvironment_$time"));
 	system(sprintf("echo \"cernlib-use --version 5.34.18 root \n\">> Install_TauolaEnvironment_$time"));
 
-  
+	system(sprintf("cp Makefile_template Makefile; "));
+	system(sprintf("./subs '{DIR}'  $PWD/$setdir/  Makefile; "));
 
 	printf("\n\nInstructions:");
 	printf("\nTo complete this step do source Install_TauolaEnvironment_$time \n\n");
@@ -146,8 +147,13 @@ for($l=0;$l<$numArgs; $l++){
 
 	system(sprintf("cp Makefile  $PWD/$tauoladir/tauola++/1.1.5/examples;"));
 	system(sprintf("cp poltaumain_pythia_tauola.cxx  $PWD/$tauoladir/tauola++/1.1.5/examples;"));
-#	system(sprintf("cp poltaumain_pythia_tauola.Po  $PWD/$tauoladir/tauola++/1.1.5/examples/.deps/;"));
-	system(sprintf("echo \"\#dummy\">> $PWD/$tauoladir/tauola++/1.1.5/examples/.deps/poltaumain_pythia_tauola.Po"));
+	system(sprintf("cp poltaumain_pythia_tauola.Po  $PWD/$tauoladir/tauola++/1.1.5/examples/.deps/;"));
+
+
+#	system(sprintf("echo \"\#dummy\">> $PWD/$tauoladir/tauola++/1.1.5/examples/.deps/poltaumain_pythia_tauola.Po"));
+
+
+
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/examples; make"));
 
 
