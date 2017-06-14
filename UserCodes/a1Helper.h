@@ -1,3 +1,15 @@
+// -*- C++ -*-
+//
+// 
+/**\class a1Helper.h a1Helper.cc
+ Description: 
+*/
+//
+// Original Author:  Vladimir Cherepanov 
+//         Created:  Mon May 1 13:49:02 CET 2017
+//
+//
+
 #ifndef a1Helper_h
 #define a1Helper_h
 
