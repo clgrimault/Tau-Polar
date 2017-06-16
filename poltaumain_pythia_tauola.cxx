@@ -7,7 +7,7 @@
  * @author Vladimir Cherepanov
  * @date  01 MAY 2017
  */ 
-  
+    
 #include "Tauola/Log.h"
 #include "Tauola/Tauola.h"
 #include "Tauola/TauolaHepMCEvent.h"
@@ -38,7 +38,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents = 50; 
+int NumberOfEvents = 100000; 
 int EventsToCheck=10;
 
 // elementary test of HepMC typically executed before
@@ -84,13 +84,15 @@ void redMinus(TauolaParticle *minus)
   //
   // Any combination of methods
   // Tauola::setTauBr(int mode, double br);
-  // Tauola::setTaukle(double bra1, double brk0, double brk0b,double brks);
+  //   Tauola::setTaukle(double bra1, double brk0, double brk0b,double brks);
+  Tauola::setTaukle(1, 0,0,0);
   // can be called here 
 
 
   for(unsigned int dec=0; dec <23; dec++){
      double br =0.0; 
-    if(dec==2 || dec == 3) br=0.5;
+     //    if(dec==2 || dec == 3) br=0.5;
+    if(dec == 3) br=0.99;
      Tauola::setTauBr(dec, br);
    } 
 
@@ -120,8 +122,8 @@ void redPlus(TauolaParticle *plus)
   // can be called here 
   for(unsigned int dec=0; dec <23; dec++){
      double br =0.0;
-         if(dec==3 || dec ==4 || dec ==5) br=0.33;
-     // if(dec ==5) br=0.99;
+     //         if(dec==3 || dec ==4 || dec ==5) br=0.33;
+      if(dec ==5) br=0.99;
      Tauola::setTauBr(dec, br);
    }
 

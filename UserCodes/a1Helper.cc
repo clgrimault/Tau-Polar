@@ -482,7 +482,7 @@ a1Helper::Widths(double Q, string type){
     Gamma=Gamma0rhoprime*QQ/mrhoprime/mrhoprime;
  }
   if(type == "a1"){
-    Gamma=Gamma0a1;//*ga1(Q)/ga1(ma1);
+    Gamma=Gamma0a1*ga1(Q)/ga1(ma1);
  }
   if(type == "piprime"){
     Gamma = Gamma0piprime*pow( sqrt(QQ)/mpiprime  ,5)*pow( (1-mrho*mrho/QQ)/(1-mrho*mrho/mpiprime/mpiprime) ,3);
