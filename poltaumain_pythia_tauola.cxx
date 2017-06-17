@@ -38,7 +38,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents = 100000; 
+int NumberOfEvents = 1000000; 
 int EventsToCheck=10;
 
 // elementary test of HepMC typically executed before

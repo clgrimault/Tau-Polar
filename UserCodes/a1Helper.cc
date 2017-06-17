@@ -467,8 +467,12 @@ a1Helper::BreitWigner(double Q, string type){
   double re,im;
   double m = Mass(type);
   double g  = Widths(Q,type);
-  re = (m*m*pow(m*m - QQ,2))/(pow(m*m - QQ,2) + m*m*g*g);
-  im = m*m*m*g/(pow(m*m - QQ,2) + m*m*g*g);
+  // re = (m*m*pow(m*m - QQ,2))/(pow(m*m - QQ,2) + m*m*g*g); // 
+  // im = m*m*m*g/(pow(m*m - QQ,2) + m*m*g*g);
+  re = (m*m*(m*m - QQ))/(pow(m*m - QQ,2) + Q*Q*g*g);
+  im = Q*g/(pow(m*m - QQ,2) + Q*Q*g*g);
+
+
   TComplex out(re,im);
   return out;
 }

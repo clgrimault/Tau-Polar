@@ -31,7 +31,10 @@ a1Helper Helper(particles,a1);
 
 
  Float_t xx =x[0];
- Double_t f = par[0]*Helper.BreitWigner(xx).Rho2();
+ // Double_t f = par[0]*Helper.BreitWigner(xx).Rho2();
+ Double_t f = par[0]*Helper.BRho(xx).Rho2();
+
+
  return f;
 }
 
@@ -171,40 +174,40 @@ int main(int argc, const char* argv[]) {
 
   // std::cout<<" Helper.MomentSFunction(xx; " << Helper.MomentSFunction(0.45,"WA") << std::endl;
 
-    TF1 *f1brwga1 = new TF1("myfuncBRWGA1",myfunctionBRWGA1,0.45,9,1);
+    TF1 *f1brwga1 = new TF1("myfuncBRWGA1",myfunctionBRWGA1,0.45,5,1);
     f1brwga1->SetParameter(0,1);
     TH1 * f1hbrwga1 = f1brwga1->GetHistogram();
     f1hbrwga1->SetName("brwga1");
-    f1hbrwga1->Write();
-    TF1 *f1brwgrho = new TF1("myfuncBRWGRho",myfunctionBRWGRho,0.45,9,1);
+    //   f1hbrwga1->Write();
+    TF1 *f1brwgrho = new TF1("myfuncBRWGRho",myfunctionBRWGRho,0.45,5,1);
     f1brwgrho->SetParameter(0,1);
     TH1 * f1hbrwgrho = f1brwgrho->GetHistogram();
     f1hbrwgrho->SetName("brwgrho");
-    f1hbrwgrho->Write();
+    //  f1hbrwgrho->Write();
 
 
 
-    TF1 *f1wa = new TF1("myfuncWA",myfunctionWA,0.45,20,1);
-    f1wa->SetParameter(0,1);
+    TF1 *f1wa = new TF1("myfuncWA",myfunctionWA,0.45,3,1);
+     f1wa->SetParameter(0,1);
     TH1 * f1hwa = f1wa->GetHistogram();
     f1hwa->SetName("wa");
-    f1hwa->Write();
+    //  f1hwa->Write();
 
 
 
-    TF1 *f1wcwa = new TF1("myfuncWCWA",myfunctionWCWA,0.45,19,1);
+    TF1 *f1wcwa = new TF1("myfuncWCWA",myfunctionWCWA,0.45,3,1);
     f1wcwa->SetParameter(0,1);
     TH1 * f1hwcwa = f1wcwa->GetHistogram();
     f1hwcwa->SetName("wcwa");
     f1hwcwa->Write();
 
-    TF1 *f1wdwa = new TF1("myfuncWDWA",myfunctionWDWA,0.45,19,1);
+    TF1 *f1wdwa = new TF1("myfuncWDWA",myfunctionWDWA,0.45,3,1);
     f1wdwa->SetParameter(0,1);
     TH1 * f1hwdwa = f1wdwa->GetHistogram();
     f1hwdwa->SetName("wdwa");
     f1hwdwa->Write();
 
-    TF1 *f1wewa = new TF1("myfuncWEWA",myfunctionWEWA,0.45,19,1);
+    TF1 *f1wewa = new TF1("myfuncWEWA",myfunctionWEWA,0.45,3,1);
     f1wewa->SetParameter(0,1);
     TH1 * f1hwewa = f1wewa->GetHistogram();
     f1hwewa->SetName("wewa");
