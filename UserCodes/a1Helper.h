@@ -100,7 +100,13 @@ class a1Helper {
   double Scalar(TLorentzVector p1, TLorentzVector p2);
 
   double MomentSFunction(double s,string type="WA");
-
+  double K1(double ct, double QQ, int hel);
+  double K1bar(double ct, double QQ, int hel);
+  double K2(double ct, double QQ, int hel);
+  double K2bar(double ct, double QQ, int hel);
+  double K3(double ct, double QQ, int hel);
+  double K3bar(double ct, double QQ, int hel);
+  double getMoment(double ct, string type, int hel);
   //--------------------------- Hadronic current ---------------------
   //  only 9 structure fucbntions are non-zero in 3pions case
 

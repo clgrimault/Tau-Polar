@@ -38,8 +38,8 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents = 1000000; 
-int EventsToCheck=10;
+int NumberOfEvents = 50000; 
+int EventsToCheck=5;
 
 // elementary test of HepMC typically executed before
 // detector simulation based on http://home.fnal.gov/~mrenna/HCPSS/HCPSShepmc.html
@@ -91,8 +91,8 @@ void redMinus(TauolaParticle *minus)
 
   for(unsigned int dec=0; dec <23; dec++){
      double br =0.0; 
-     //    if(dec==2 || dec == 3) br=0.5;
-    if(dec == 3) br=0.99;
+         if(dec==2 || dec == 3) br=0.5;
+	 // if(dec == 3) br=0.99;
      Tauola::setTauBr(dec, br);
    } 
 
@@ -122,8 +122,8 @@ void redPlus(TauolaParticle *plus)
   // can be called here 
   for(unsigned int dec=0; dec <23; dec++){
      double br =0.0;
-     //         if(dec==3 || dec ==4 || dec ==5) br=0.33;
-      if(dec ==5) br=0.99;
+     if(dec==3 || dec ==4 || dec ==5) br=0.33;
+     //  if(dec ==5) br=0.99;
      Tauola::setTauBr(dec, br);
    }
 
@@ -230,17 +230,17 @@ int main(int argc,char **argv){
  TH1F *Omegamurho_minus= new TH1F("Omegamurho_minus","#omega_{#mu#rho}^{-}",50,-1,1);
 
 
- TH1F *omega_a1_plus= new TH1F("omega_a1_plus","#omega_{a1}^{+}",50,-1.1,1.1);
- TH1F *omega_a1_minus= new TH1F("omega_a1_minus","#omega_{a1}^{-}",50,-1.1,1.1);
+ TH1F *omega_a1_plus= new TH1F("omega_a1_plus","#omega_{a1}^{+}",50,-1,1);
+ TH1F *omega_a1_minus= new TH1F("omega_a1_minus","#omega_{a1}^{-}",50,-1,1);
 
- TH1F *omegabar_a1_plus= new TH1F("omegabar_a1_plus","#bar{#omega}_{a1}^{+}",50,-1.1,1.1);
- TH1F *omegabar_a1_minus= new TH1F("omegabar_a1_minus","#bar{#omega}_{a1}^{-}",50,-1.1,1.1);
+ TH1F *omegabar_a1_plus= new TH1F("omegabar_a1_plus","#bar{#omega}_{a1}^{+}",50,-1,1);
+ TH1F *omegabar_a1_minus= new TH1F("omegabar_a1_minus","#bar{#omega}_{a1}^{-}",50,-1,1);
  
- TH1F *TRFomegabar_a1_plus= new TH1F("TRFomegabar_a1_plus","TRF #omega_{a1}^{+}",50,-1.1,1.1);
- TH1F *TRFomegabar_a1_minus= new TH1F("TRFomegabar_a1_minus","TRF #omega_{a1}^{-}",50,-1.1,1.1);
+ TH1F *TRFomegabar_a1_plus= new TH1F("TRFomegabar_a1_plus","TRF #omega_{a1}^{+}",50,-1,1);
+ TH1F *TRFomegabar_a1_minus= new TH1F("TRFomegabar_a1_minus","TRF #omega_{a1}^{-}",50,-1,1);
 
-  TH1F *TRFomegabar_a1scalar_plus= new TH1F("TRFomegabar_a1scalar_plus","TRF scalar #omega a1",50,-1.1,1.1);
-  TH1F *TRFomegabar_a1scalar_minus= new TH1F("TRFomegabar_a1scalar_minus","TRF scalar  #omega a1",50,-1.1,1.1);
+  TH1F *TRFomegabar_a1scalar_plus= new TH1F("TRFomegabar_a1scalar_plus","TRF scalar #omega a1",50,-1,1);
+  TH1F *TRFomegabar_a1scalar_minus= new TH1F("TRFomegabar_a1scalar_minus","TRF scalar  #omega a1",50,-1,1);
  
 
  TH2F *cosbetacostheta_plus= new TH2F("cosbetacostheta_plus","cos#beta  cos#theta",50,-1,1,50,-1,1);
@@ -249,11 +249,11 @@ int main(int argc,char **argv){
  TH2F *TRFcosbetacostheta_plus= new TH2F("TRFcosbetacostheta_plus","cos#beta  cos#theta",50,-1,1,50,-1,1);
  TH2F *TRFcosbetacostheta_minus= new TH2F("TRFcosbetacostheta_minus","cos#beta  cos#theta",50,-1,1,50,-1,1);
 
- TH1F *omega_a1pi_plus= new TH1F("omega_a1pi_plus","#omega_{a1#pi}^{+}",50,-1.1,1.1);
- TH1F *omega_a1pi_minus= new TH1F("omega_a1pi_minus","#omega_{a1#pi}^{-}",50,-1.1,1.1);
+ TH1F *omega_a1pi_plus= new TH1F("omega_a1pi_plus","#omega_{a1#pi}^{+}",50,-1,1);
+ TH1F *omega_a1pi_minus= new TH1F("omega_a1pi_minus","#omega_{a1#pi}^{-}",50,-1,1);
 
- TH1F *omega_a1mu_plus= new TH1F("omega_a1mu_plus","#omega_{a1#mu}^{+}",50,-1.1,1.1);
- TH1F *omega_a1mu_minus= new TH1F("omega_a1mu_minus","#omega_{a1#mu}^{-}",50,-1.1,1.1);
+ TH1F *omega_a1mu_plus= new TH1F("omega_a1mu_plus","#omega_{a1#mu}^{+}",50,-1,1);
+ TH1F *omega_a1mu_minus= new TH1F("omega_a1mu_minus","#omega_{a1#mu}^{-}",50,-1,1);
 
  TH2F *s1s2= new TH2F("s1s2","s1s2",20,0,2,20,0,2);
 

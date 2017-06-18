@@ -217,14 +217,86 @@ a1Helper::MomentSFunction(double s, string type){
     intx+=inty;
   }
   integral = intx;
-  std::cout<<"check return value  "<< s << "   integral=  " << integral << "  type  "<<   type  << "  :  "<<  WD()<< std::endl;
+  // std::cout<<"check return value  "<< s << "   integral=  " << integral << "  type  "<<   type  << "  :  "<<  WD()<< std::endl;
   subSetup(set.at(0),set.at(1),set.at(2),set.at(3));
-
-
 
   return integral;
 }
+
+double a1Helper::K1(double ct, double QQ, int hel){
+  if(debug){if(fabs(ct) > 1) std::cout<<"Warning! K1: |ct| > 1 "<<std::endl;}
+  return   1 - hel*ct - mtau*mtau*(1+hel*ct)/QQ/QQ;
+}
+double a1Helper::K2(double ct, double QQ, int hel){
+  if(debug){if(fabs(ct) > 1) std::cout<<"Warning! K1: |ct| > 1 "<<std::endl;}
+  return   mtau*mtau*(1+hel*ct)/QQ/QQ;
+}
+double a1Helper::K3(double ct, double QQ, int hel){
+  if(debug){if(fabs(ct) > 1) std::cout<<"Warning! K1: |ct| > 1 "<<std::endl;}
+  return   1 - hel*ct;
+}
+double a1Helper::K1bar(double ct, double QQ, int hel){
+  if(debug){if(fabs(ct) > 1) std::cout<<"Warning! K1bar: |ct| > 1 "<<std::endl;}
+  double cpsi = (ct*(mtau*mtau  + QQ)   + (mtau*mtau  - QQ))/(ct*(mtau*mtau  - QQ)   + (mtau*mtau  + QQ));
+  if(debug){if(fabs(cpsi) > 1) std::cout<<"Warning! K1bar: |cpsi| > 1 "<<std::endl;}
+  return  K1(ct,QQ,hel)*0.5*(3*cpsi*cpsi - 1) - 3*sqrt(mtau*mtau/QQ/QQ)*cpsi*sqrt(1-cpsi*cpsi)*sqrt(1-ct*ct)*hel;
+
+}
+double a1Helper::K2bar(double ct, double QQ, int hel){
+  if(debug){if(fabs(ct) > 1) std::cout<<"Warning! K1bar: |ct| > 1 "<<std::endl;}
+  double cpsi = (ct*(mtau*mtau  + QQ)   + (mtau*mtau  - QQ))/(ct*(mtau*mtau  - QQ)   + (mtau*mtau  + QQ));
+  if(debug){if(fabs(cpsi) > 1) std::cout<<"Warning! K1bar: |cpsi| > 1 "<<std::endl;}
+  return  K2(ct,QQ,hel)*cpsi  + sqrt(mtau*mtau/QQ/QQ)*sqrt(1-cpsi*cpsi)*sqrt(1-ct*ct)*hel;
+
+}
+ double a1Helper::K3bar(double ct, double QQ, int hel){
+  if(debug){if(fabs(ct) > 1) std::cout<<"Warning! K1bar: |ct| > 1 "<<std::endl;}
+  double cpsi = (ct*(mtau*mtau  + QQ)   + (mtau*mtau  - QQ))/(ct*(mtau*mtau  - QQ)   + (mtau*mtau  + QQ));
+  if(debug){if(fabs(cpsi) > 1) std::cout<<"Warning! K1bar: |cpsi| > 1 "<<std::endl;}
+  return  K3(ct,QQ,hel)*cpsi  - sqrt(mtau*mtau/QQ/QQ)*sqrt(1-cpsi*cpsi)*sqrt(1-ct*ct)*hel;
+
+}
  
+
+
+double 
+a1Helper::getMoment(double ct, string type, int hel){
+  int cells(50);
+  double qqmin  = 0.4;
+  double qqmax = 3.0;
+  vector<double> set;
+  set.push_back(_s1);
+  set.push_back(_s2);
+  set.push_back(_s3);
+  set.push_back(_Q);
+  double  stepqq  = ( qqmax - qqmin) / cells;
+  double kern(0);
+  double atQQa(0);
+  double atQQb(0);
+  double atQQ(0);
+  double integral(0);
+  for(unsigned int i=1;i<cells + 1;i++){ 
+    atQQa = qqmin + stepqq*(i-1);
+    atQQb = qqmin + stepqq*i;
+    atQQ = 0.5*(atQQa + atQQb);
+
+    if(type=="one") kern = (2*K1(ct,atQQ,hel) + 3*K2(ct,atQQ,hel))*MomentSFunction(atQQ,"WA");
+    if(type=="beta") kern = 0.2*K1bar(ct,atQQ,hel)*MomentSFunction(atQQ,"WA");
+    if(type=="c2g") kern = -0.5*K1bar(ct,atQQ,hel)*MomentSFunction(atQQ,"WC");
+    if(type=="s2g") kern = 0.5*K1bar(ct,atQQ,hel)*MomentSFunction(atQQ,"WD");
+    if(type=="cb") kern = K3bar(ct,atQQ,hel)*MomentSFunction(atQQ,"WE");
+
+
+
+    integral += kern*stepqq;
+
+  }
+  //  subSetup(set.at(0),set.at(1),set.at(2),set.at(3));
+  return integral;
+}
+ 
+
+
 
 //---------------------------------------  hadronic current ---------------------------
 double 
@@ -486,7 +558,8 @@ a1Helper::Widths(double Q, string type){
     Gamma=Gamma0rhoprime*QQ/mrhoprime/mrhoprime;
  }
   if(type == "a1"){
-    Gamma=Gamma0a1*ga1(Q)/ga1(ma1);
+    //    Gamma=Gamma0a1*ga1(Q)/ga1(ma1);
+    Gamma=Gamma0a1*ma1*ga1(Q)/ga1(ma1)/Q;
  }
   if(type == "piprime"){
     Gamma = Gamma0piprime*pow( sqrt(QQ)/mpiprime  ,5)*pow( (1-mrho*mrho/QQ)/(1-mrho*mrho/mpiprime/mpiprime) ,3);

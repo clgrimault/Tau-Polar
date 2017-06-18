@@ -13,6 +13,218 @@
 void PrintLV(TLorentzVector a){
   std::cout<<" px:    "<< a.Px() << "  py:   "<< a.Py() <<"  pz:   "<< a.Pz() <<"  E:   "<< a.E() << "  mass:   "<< a.M()<< std::endl;
 }
+
+double momentOneP(Double_t *x, Double_t *par)
+{
+TLorentzVector os(-3.664335,0.233661,-5.183266,6.353556);
+TLorentzVector ss1(-7.876100,0.720873,-12.047975,14.412696);
+TLorentzVector ss2(-3.472285,0.243649,-4.660688,5.818730);
+TLorentzVector ta1(-26.788939,2.687771,-37.247365,45.993420);
+TLorentzVector a1(-15.012722,1.198184,-21.891933,26.584986);
+
+std::vector<TLorentzVector> particles;
+particles.push_back(ta1);
+particles.push_back(os);
+particles.push_back(ss1);
+particles.push_back(ss2);
+
+a1Helper Helper(particles,a1);
+
+
+ Float_t xx =x[0];
+ // Double_t f = par[0]*Helper.BreitWigner(xx).Rho2();
+ Double_t f = par[0]*Helper.getMoment(xx,"one",1);
+
+
+ return f;
+}
+
+double momentOneM(Double_t *x, Double_t *par)
+{
+TLorentzVector os(-3.664335,0.233661,-5.183266,6.353556);
+TLorentzVector ss1(-7.876100,0.720873,-12.047975,14.412696);
+TLorentzVector ss2(-3.472285,0.243649,-4.660688,5.818730);
+TLorentzVector ta1(-26.788939,2.687771,-37.247365,45.993420);
+TLorentzVector a1(-15.012722,1.198184,-21.891933,26.584986);
+
+std::vector<TLorentzVector> particles;
+particles.push_back(ta1);
+particles.push_back(os);
+particles.push_back(ss1);
+particles.push_back(ss2);
+
+a1Helper Helper(particles,a1);
+
+
+ Float_t xx =x[0];
+ // Double_t f = par[0]*Helper.BreitWigner(xx).Rho2();
+ Double_t f = par[0]*Helper.getMoment(xx,"one",-1);
+
+
+ return f;
+}
+
+double momentc2gM(Double_t *x, Double_t *par)
+{
+TLorentzVector os(-3.664335,0.233661,-5.183266,6.353556);
+TLorentzVector ss1(-7.876100,0.720873,-12.047975,14.412696);
+TLorentzVector ss2(-3.472285,0.243649,-4.660688,5.818730);
+TLorentzVector ta1(-26.788939,2.687771,-37.247365,45.993420);
+TLorentzVector a1(-15.012722,1.198184,-21.891933,26.584986);
+
+std::vector<TLorentzVector> particles;
+particles.push_back(ta1);
+particles.push_back(os);
+particles.push_back(ss1);
+particles.push_back(ss2);
+
+a1Helper Helper(particles,a1);
+
+
+ Float_t xx =x[0];
+ // Double_t f = par[0]*Helper.BreitWigner(xx).Rho2();
+ Double_t f = par[0]*Helper.getMoment(xx,"c2g",-1);
+
+
+ return f;
+}
+double momentc2gP(Double_t *x, Double_t *par)
+{
+TLorentzVector os(-3.664335,0.233661,-5.183266,6.353556);
+TLorentzVector ss1(-7.876100,0.720873,-12.047975,14.412696);
+TLorentzVector ss2(-3.472285,0.243649,-4.660688,5.818730);
+TLorentzVector ta1(-26.788939,2.687771,-37.247365,45.993420);
+TLorentzVector a1(-15.012722,1.198184,-21.891933,26.584986);
+
+std::vector<TLorentzVector> particles;
+particles.push_back(ta1);
+particles.push_back(os);
+particles.push_back(ss1);
+particles.push_back(ss2);
+
+a1Helper Helper(particles,a1);
+
+
+ Float_t xx =x[0];
+ // Double_t f = par[0]*Helper.BreitWigner(xx).Rho2();
+ Double_t f = par[0]*Helper.getMoment(xx,"c2g",1);
+
+
+ return f;
+}
+
+
+
+
+
+double momentbetaM(Double_t *x, Double_t *par)
+{
+TLorentzVector os(-3.664335,0.233661,-5.183266,6.353556);
+TLorentzVector ss1(-7.876100,0.720873,-12.047975,14.412696);
+TLorentzVector ss2(-3.472285,0.243649,-4.660688,5.818730);
+TLorentzVector ta1(-26.788939,2.687771,-37.247365,45.993420);
+TLorentzVector a1(-15.012722,1.198184,-21.891933,26.584986);
+
+std::vector<TLorentzVector> particles;
+particles.push_back(ta1);
+particles.push_back(os);
+particles.push_back(ss1);
+particles.push_back(ss2);
+
+a1Helper Helper(particles,a1);
+
+
+ Float_t xx =x[0];
+ // Double_t f = par[0]*Helper.BreitWigner(xx).Rho2();
+ Double_t f = par[0]*Helper.getMoment(xx,"beta",-1);
+
+
+ return f;
+}
+
+
+
+double momentbetaP(Double_t *x, Double_t *par)
+{
+TLorentzVector os(-3.664335,0.233661,-5.183266,6.353556);
+TLorentzVector ss1(-7.876100,0.720873,-12.047975,14.412696);
+TLorentzVector ss2(-3.472285,0.243649,-4.660688,5.818730);
+TLorentzVector ta1(-26.788939,2.687771,-37.247365,45.993420);
+TLorentzVector a1(-15.012722,1.198184,-21.891933,26.584986);
+
+std::vector<TLorentzVector> particles;
+particles.push_back(ta1);
+particles.push_back(os);
+particles.push_back(ss1);
+particles.push_back(ss2);
+
+a1Helper Helper(particles,a1);
+
+
+ Float_t xx =x[0];
+ // Double_t f = par[0]*Helper.BreitWigner(xx).Rho2();
+ Double_t f = par[0]*Helper.getMoment(xx,"beta",1);
+
+
+ return f;
+}
+
+
+
+double momentcbM(Double_t *x, Double_t *par)
+{
+TLorentzVector os(-3.664335,0.233661,-5.183266,6.353556);
+TLorentzVector ss1(-7.876100,0.720873,-12.047975,14.412696);
+TLorentzVector ss2(-3.472285,0.243649,-4.660688,5.818730);
+TLorentzVector ta1(-26.788939,2.687771,-37.247365,45.993420);
+TLorentzVector a1(-15.012722,1.198184,-21.891933,26.584986);
+
+std::vector<TLorentzVector> particles;
+particles.push_back(ta1);
+particles.push_back(os);
+particles.push_back(ss1);
+particles.push_back(ss2);
+
+a1Helper Helper(particles,a1);
+
+
+ Float_t xx =x[0];
+ // Double_t f = par[0]*Helper.BreitWigner(xx).Rho2();
+ Double_t f = par[0]*Helper.getMoment(xx,"cb",-1);
+
+
+ return f;
+}
+
+double momentcbP(Double_t *x, Double_t *par)
+{
+TLorentzVector os(-3.664335,0.233661,-5.183266,6.353556);
+TLorentzVector ss1(-7.876100,0.720873,-12.047975,14.412696);
+TLorentzVector ss2(-3.472285,0.243649,-4.660688,5.818730);
+TLorentzVector ta1(-26.788939,2.687771,-37.247365,45.993420);
+TLorentzVector a1(-15.012722,1.198184,-21.891933,26.584986);
+
+std::vector<TLorentzVector> particles;
+particles.push_back(ta1);
+particles.push_back(os);
+particles.push_back(ss1);
+particles.push_back(ss2);
+
+a1Helper Helper(particles,a1);
+
+
+ Float_t xx =x[0];
+ // Double_t f = par[0]*Helper.BreitWigner(xx).Rho2();
+ Double_t f = par[0]*Helper.getMoment(xx,"cb",1);
+
+
+ return f;
+}
+
+
+
+
+
 double myfunctionBRWGRho(Double_t *x, Double_t *par)
 {
 TLorentzVector os(-3.664335,0.233661,-5.183266,6.353556);
@@ -105,6 +317,74 @@ a1Helper Helper(particles,a1);
  Double_t f = par[0]*Helper.MomentSFunction(xx,"WC")/Helper.MomentSFunction(xx,"WA");
  return f;
 }
+
+double myfunctionWSDWA(Double_t *x, Double_t *par)
+{
+TLorentzVector os(-3.664335,0.233661,-5.183266,6.353556);
+TLorentzVector ss1(-7.876100,0.720873,-12.047975,14.412696);
+TLorentzVector ss2(-3.472285,0.243649,-4.660688,5.818730);
+TLorentzVector ta1(-26.788939,2.687771,-37.247365,45.993420);
+TLorentzVector a1(-15.012722,1.198184,-21.891933,26.584986);
+
+std::vector<TLorentzVector> particles;
+particles.push_back(ta1);
+particles.push_back(os);
+particles.push_back(ss1);
+particles.push_back(ss2);
+
+a1Helper Helper(particles,a1);
+
+
+ Float_t xx =x[0];
+ Double_t f = par[0]*Helper.MomentSFunction(xx,"WSD")/Helper.MomentSFunction(xx,"WA");
+ return f;
+}
+
+double myfunctionWSBWA(Double_t *x, Double_t *par)
+{
+TLorentzVector os(-3.664335,0.233661,-5.183266,6.353556);
+TLorentzVector ss1(-7.876100,0.720873,-12.047975,14.412696);
+TLorentzVector ss2(-3.472285,0.243649,-4.660688,5.818730);
+TLorentzVector ta1(-26.788939,2.687771,-37.247365,45.993420);
+TLorentzVector a1(-15.012722,1.198184,-21.891933,26.584986);
+
+std::vector<TLorentzVector> particles;
+particles.push_back(ta1);
+particles.push_back(os);
+particles.push_back(ss1);
+particles.push_back(ss2);
+
+a1Helper Helper(particles,a1);
+
+
+ Float_t xx =x[0];
+ Double_t f = par[0]*Helper.MomentSFunction(xx,"WSB")/Helper.MomentSFunction(xx,"WA");
+ return f;
+}
+double myfunctionWSAWA(Double_t *x, Double_t *par)
+{
+TLorentzVector os(-3.664335,0.233661,-5.183266,6.353556);
+TLorentzVector ss1(-7.876100,0.720873,-12.047975,14.412696);
+TLorentzVector ss2(-3.472285,0.243649,-4.660688,5.818730);
+TLorentzVector ta1(-26.788939,2.687771,-37.247365,45.993420);
+TLorentzVector a1(-15.012722,1.198184,-21.891933,26.584986);
+
+std::vector<TLorentzVector> particles;
+particles.push_back(ta1);
+particles.push_back(os);
+particles.push_back(ss1);
+particles.push_back(ss2);
+
+a1Helper Helper(particles,a1);
+
+
+ Float_t xx =x[0];
+ Double_t f = par[0]*Helper.MomentSFunction(xx,"WSA")/Helper.MomentSFunction(xx,"WA");
+ return f;
+}
+
+
+
 double myfunctionWEWA(Double_t *x, Double_t *par)
 {
 TLorentzVector os(-3.664335,0.233661,-5.183266,6.353556);
@@ -174,44 +454,124 @@ int main(int argc, const char* argv[]) {
 
   // std::cout<<" Helper.MomentSFunction(xx; " << Helper.MomentSFunction(0.45,"WA") << std::endl;
 
-    TF1 *f1brwga1 = new TF1("myfuncBRWGA1",myfunctionBRWGA1,0.45,5,1);
+    TF1 *f1brwga1 = new TF1("myfuncBRWGA1",myfunctionBRWGA1,0.45,6,1);
     f1brwga1->SetParameter(0,1);
     TH1 * f1hbrwga1 = f1brwga1->GetHistogram();
     f1hbrwga1->SetName("brwga1");
-    //   f1hbrwga1->Write();
-    TF1 *f1brwgrho = new TF1("myfuncBRWGRho",myfunctionBRWGRho,0.45,5,1);
+    f1hbrwga1->Write();
+
+
+
+
+
+    TF1 *f1brwgrho = new TF1("myfuncBRWGRho",myfunctionBRWGRho,0.45,6,1);
     f1brwgrho->SetParameter(0,1);
     TH1 * f1hbrwgrho = f1brwgrho->GetHistogram();
     f1hbrwgrho->SetName("brwgrho");
-    //  f1hbrwgrho->Write();
+    f1hbrwgrho->Write();
 
 
 
-    TF1 *f1wa = new TF1("myfuncWA",myfunctionWA,0.45,3,1);
+    TF1 *f1wa = new TF1("myfuncWA",myfunctionWA,0.45,6,1);
      f1wa->SetParameter(0,1);
     TH1 * f1hwa = f1wa->GetHistogram();
     f1hwa->SetName("wa");
-    //  f1hwa->Write();
+    f1hwa->Write();
 
 
 
-    TF1 *f1wcwa = new TF1("myfuncWCWA",myfunctionWCWA,0.45,3,1);
+    TF1 *f1wcwa = new TF1("myfuncWCWA",myfunctionWCWA,0.45,6,1);
     f1wcwa->SetParameter(0,1);
     TH1 * f1hwcwa = f1wcwa->GetHistogram();
     f1hwcwa->SetName("wcwa");
     f1hwcwa->Write();
 
-    TF1 *f1wdwa = new TF1("myfuncWDWA",myfunctionWDWA,0.45,3,1);
+    TF1 *f1wdwa = new TF1("myfuncWDWA",myfunctionWDWA,0.45,6,1);
     f1wdwa->SetParameter(0,1);
     TH1 * f1hwdwa = f1wdwa->GetHistogram();
     f1hwdwa->SetName("wdwa");
     f1hwdwa->Write();
 
-    TF1 *f1wewa = new TF1("myfuncWEWA",myfunctionWEWA,0.45,3,1);
+    TF1 *f1wewa = new TF1("myfuncWEWA",myfunctionWEWA,0.45,6,1);
     f1wewa->SetParameter(0,1);
     TH1 * f1hwewa = f1wewa->GetHistogram();
     f1hwewa->SetName("wewa");
     f1hwewa->Write();
+
+    TF1 *f1wsdwa = new TF1("myfuncWSDWA",myfunctionWSDWA,0.45,6,1);
+    f1wsdwa->SetParameter(0,1);
+    TH1 * f1hwsdwa = f1wsdwa->GetHistogram();
+    f1hwsdwa->SetName("wsdwa");
+    f1hwsdwa->Write();
+    TF1 *f1wsbwa = new TF1("myfuncWSBWA",myfunctionWSBWA,0.45,6,1);
+    f1wsbwa->SetParameter(0,1);
+    TH1 * f1hwsbwa = f1wsbwa->GetHistogram();
+    f1hwsbwa->SetName("wsbwa");
+    f1hwsbwa->Write();
+
+    TF1 *f1wsawa = new TF1("myfuncWSAWA",myfunctionWSAWA,0.45,6,1);
+    f1wsawa->SetParameter(0,1);
+    TH1 * f1hwsawa = f1wsawa->GetHistogram();
+    f1hwsawa->SetName("wsawa");
+    f1hwsawa->Write();
+
+    //-----------------------------------------------------------------------------------------------------------------
+    TF1 *fmoneP = new TF1("momentOneP",momentOneP,-1,1,1);
+    fmoneP->SetParameter(0,1);
+    TH1 * hfmoneP = fmoneP->GetHistogram();
+    hfmoneP->SetName("MomentOneP");
+    hfmoneP ->Write();
+
+     //-----------------------------------------------------------------------------------------------------------------
+    TF1 *fmoneM = new TF1("momentOneM",momentOneM,-1,1,1);
+    fmoneM->SetParameter(0,1);
+    TH1 * hfmoneM = fmoneM->GetHistogram();
+    hfmoneM->SetName("MomentOneM");
+    hfmoneM ->Write();
+
+
+     //-----------------------------------------------------------------------------------------------------------------
+    TF1 *fmc2gM = new TF1("momentc2gM",momentc2gM,-1,1,1);
+    fmc2gM->SetParameter(0,1);
+    TH1 * hfmc2gM = fmc2gM->GetHistogram();
+    hfmc2gM->SetName("Momentc2gM");
+    hfmc2gM ->Write();
+
+    //-----------------------------------------------------------------------------------------------------------------
+    TF1 *fmc2gP = new TF1("momentc2gP",momentc2gP,-1,1,1);
+    fmc2gP->SetParameter(0,1);
+    TH1 * hfmc2gP = fmc2gP->GetHistogram();
+    hfmc2gP->SetName("Momentc2gP");
+    hfmc2gP ->Write();
+
+     //-----------------------------------------------------------------------------------------------------------------
+    TF1 *fmbetaM = new TF1("momentbetaM",momentbetaM,-1,1,1);
+    fmbetaM->SetParameter(0,1);
+    TH1 * hfmbetaM = fmbetaM->GetHistogram();
+    hfmbetaM->SetName("MomentbetaM");
+    hfmbetaM ->Write();
+
+    //-----------------------------------------------------------------------------------------------------------------
+    TF1 *fmbetaP = new TF1("momentbetaP",momentbetaP,-1,1,1);
+    fmbetaP->SetParameter(0,1);
+    TH1 * hfmbetaP = fmbetaP->GetHistogram();
+    hfmbetaP->SetName("MomentbetaP");
+    hfmbetaP ->Write();
+
+    //-----------------------------------------------------------------------------------------------------------------
+    TF1 *fmcbM = new TF1("momentcbM",momentcbM,-1,1,1);
+    fmcbM->SetParameter(0,1);
+    TH1 * hfmcbM = fmcbM->GetHistogram();
+    hfmcbM->SetName("MomentcbM");
+    hfmcbM ->Write();
+
+    //-----------------------------------------------------------------------------------------------------------------
+    TF1 *fmcbP = new TF1("momentcbP",momentcbP,-1,1,1);
+    fmcbP->SetParameter(0,1);
+    TH1 * hfmcbP = fmcbP->GetHistogram();
+    hfmcbP->SetName("MomentcbP");
+    hfmcbP ->Write();
+
 
 
 
