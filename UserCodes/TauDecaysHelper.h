@@ -15,11 +15,19 @@ class TauDecaysHelper {
   TauDecaysHelper();
   TauDecaysHelper(vector<TLorentzVector> TauAndProd, string type);
   ~TauDecaysHelper();
+
   void Configure(vector<TLorentzVector> TauAndProd, string type );
   bool  isConfigured();
   TLorentzVector Boost(TLorentzVector pB, TLorentzVector frame);
   double getOmega();
+  double getCosbetaRho();
+  double getCosthetaRho();
  private:
+  double mrho;
+  double mpi;
+  double mtau;
+  double ma1;
+
   TMatrixT<double> convertToMatrix(TVectorT<double> V);
   TLorentzVector TauLV;
   TLorentzVector ProductLV;

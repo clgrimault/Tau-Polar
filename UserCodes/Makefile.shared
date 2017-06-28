@@ -27,16 +27,12 @@ LIBS          = $(ROOTLIBS) $(SHAREDLIBFLAGS)
 SF_SRCS    = $(wildcard *.cc)
 SF_HDRS    = $(SF_SRCS:.cc=.h)
 
-HDRS          = MultiplyNumbers.h \
-		AddNumbers.h \
-		TauDecaysHelper.h \
+HDRS          = 	TauDecaysHelper.h \
 	        a1Helper 
 	         
 
 
-SRCS          = MultiplyNumbers.cc \
-		a1Helper.cc \
-		AddNumbers.cc \
+SRCS          = 	a1Helper.cc \
 		TauDecaysHelper.cc \
 		main.cc
 

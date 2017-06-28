@@ -1,9 +1,19 @@
 #include "TauDecaysHelper.h"
 #include <iostream>
-TauDecaysHelper::TauDecaysHelper(){ }
-TauDecaysHelper::TauDecaysHelper(vector<TLorentzVector> TauAndProd, string type){
+TauDecaysHelper::TauDecaysHelper():
+  mrho(0.773),
+  mpi(0.13957018),
+  mtau(1.776),
+  ma1(1.251)
+{ }
+TauDecaysHelper::TauDecaysHelper(vector<TLorentzVector> TauAndProd, string type): 
+  mrho(0.773),
+  mpi(0.13957018),
+  mtau(1.776),
+  ma1(1.251)
+ {
   if(type=="muon" || type =="pion"){
-    if(TauAndProd.size()!=2){
+    if(TauAndProd.size()!=2){ 
       std::cout<<" Warning!! Size of input vector  !=2  !! "<< " type:  "<<type<<std::endl;
     }
   }
@@ -15,6 +25,8 @@ TauDecaysHelper::TauDecaysHelper(vector<TLorentzVector> TauAndProd, string type)
 
   Configure(TauAndProd,  type);
 }
+
+
 void 
 TauDecaysHelper::Configure(vector<TLorentzVector> TauAndProd, string type){
   TauLV = TauAndProd.at(0);
@@ -66,6 +78,28 @@ TauDecaysHelper::getOmega(){
   return omega;
 }
 
+double
+TauDecaysHelper::getCosbetaRho(){
+  double cb=-999;
+  if(type_!="rho"){std::cout<<"Can not return cos beta, decay type is not rho!!  but: "<< type_ <<std::endl; return cb;}
+  cb = (mrho/sqrt(mrho*mrho - 4*mpi*mpi))  *   (TauRhoPi.E() -   TauRhoPi0.E())/(TauRhoPi.E() +  TauRhoPi0.E()) ;
+
+  if(fabs(cb) > 1 )std::cout<<"Warning! Cos beta > 1"<<std::endl; 
+  return cb;
+}
+double
+TauDecaysHelper::getCosthetaRho(){
+  double ct=-999;
+  if(type_!="rho"){std::cout<<"Can not return cos theta, decay type is not rho!!  but: "<< type_ <<std::endl; return ct;}
+  double QQ = ProductLV.M2();
+  double x = ProductLV.E()/TauLV.E();
+  double s = 4*TauLV.E()*TauLV.E();
+  if( 1 - 4*mtau*mtau/s  <= 0 ){std::cout<<"Warning! In costheta root square <=0! return -999"<<std::endl; return ct;}
+  ct= (2*x*mtau*mtau - mtau*mtau - QQ)/( (mtau*mtau - QQ)*sqrt(1 - 4*mtau*mtau/s) );
+ 
+  if(fabs(ct) > 1 )std::cout<<"Warning! Cos theta > 1"<<std::endl; 
+  return ct;
+}
 TMatrixT<double> TauDecaysHelper::convertToMatrix(TVectorT<double> V){
   TMatrixT<double> M(V.GetNrows(),1);
   for(int i=0; i < M.GetNrows(); i++){
