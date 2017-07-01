@@ -22,18 +22,44 @@ class TauDecaysHelper {
   double getOmega();
   double getCosbetaRho();
   double getCosthetaRho();
+
+
+  double getUltrarel_cospsiLF();
+  double getSinpsiLF();
+
+  double getSinthetaRho();
+
+
+
+TLorentzVector sLV(); 
+TVector3 nPerp();
+TVector3 ns(); 
+TVector3 nL(); 
+TVector3 nT();
+double  DPF_cosalpha(); 
+double  DPF_sinalpha(); 
+
+
+
  private:
   double mrho;
   double mpi;
   double mtau;
   double ma1;
-
+  bool debug;
   TMatrixT<double> convertToMatrix(TVectorT<double> V);
   TLorentzVector TauLV;
   TLorentzVector ProductLV;
   TLorentzVector TauRhoPi;
   TLorentzVector TauRhoPi0;
   TLorentzVector InvisibleLV;
+
+  TLorentzVector DPF_TauLV;
+  TLorentzVector DPF_TauRhoPi;
+  TLorentzVector DPF_TauRhoPi0;
+  TLorentzVector DPF_InvisibleLV;
+
+
   string type_;
 };
 #endif

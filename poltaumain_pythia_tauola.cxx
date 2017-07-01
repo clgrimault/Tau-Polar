@@ -38,7 +38,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents = 200000; 
+int NumberOfEvents = 2000000; 
 int EventsToCheck=5;
 
 // elementary test of HepMC typically executed before
@@ -207,8 +207,8 @@ int main(int argc,char **argv){
   TFile *file = new TFile("HelicityVals.root","RECREATE");
 
 
-  TH1F *rho_plus= new TH1F("rho_plus","#rho^{+}",50,-1,1);
-  TH1F *rho_minus= new TH1F("rho_minus","#rho^{-}",50,-1,1);
+  TH1F *rhobeta_plus= new TH1F("rhobeta_plus","#rho^{+}",50,-1,1);
+  TH1F *rhobeta_minus= new TH1F("rhobeta_minus","#rho^{-}",50,-1,1);
 
   TH1F *pi_plus= new TH1F("pi_plus","#pi^{+}",50,-1,1);
   TH1F *pi_minus= new TH1F("pi_minus","#pi^{-} ",50,-1,1);
@@ -222,12 +222,13 @@ int main(int argc,char **argv){
   TH1F *Omegapipi_plus= new TH1F("Omegapipi_plus","#omega_{#pi#pi}^{+}",50,-1,1);
   TH1F *Omegapipi_minus= new TH1F("Omegapipi_minus","#omega_{#pi#pi}^{-}",50,-1,1);
   
-  TH1F *Omegapirho_plus= new TH1F("Omegapirho_plus","#omega_{#pi#rho}^{+}",50,-1,1);
-  TH1F *Omegapirho_minus= new TH1F("Omegapirho_minus","#omega_{#pi#rho}^{-}",50,-1,1);
-  
  
- TH1F *Omegamurho_plus= new TH1F("Omegamurho_plus","#omega_{#mu#rho}^{+}",50,-1,1);
- TH1F *Omegamurho_minus= new TH1F("Omegamurho_minus","#omega_{#mu#rho}^{-}",50,-1,1);
+ TH1F *omega_murho_plus= new TH1F("omega_murho_plus","#omega_{#mu#rho}^{+}",50,-1,1);
+ TH1F *omega_murho_minus= new TH1F("omega_murho_minus","#omega_{#mu#rho}^{-}",50,-1,1);
+
+
+ TH1F *omega_rho_plus= new TH1F("omega_rho_plus","#omega_{#rho}^{+}",50,-1,1);
+ TH1F *omega_rho_minus= new TH1F("omega_rho_minus","#omega_{#rho}^{-}",50,-1,1);
 
 
  TH1F *omega_a1_plus= new TH1F("omega_a1_plus","#omega_{a1}^{+}",50,-1,1);
@@ -264,6 +265,21 @@ int main(int argc,char **argv){
 
  TH1F *omega_a1mu_plus= new TH1F("omega_a1mu_plus","#omega_{a1#mu}^{+}",50,-1,1);
  TH1F *omega_a1mu_minus= new TH1F("omega_a1mu_minus","#omega_{a1#mu}^{-}",50,-1,1);
+
+
+  TH1F *omega_pirho_plus= new TH1F("omega_pirho_plus","#omega_{#pi#rho}^{+}",50,-1,1);
+  TH1F *omega_pirho_minus= new TH1F("omega_pirho_minus","#omega_{#pi#rho}^{-}",50,-1,1);
+  
+
+
+ // TH1F *omega_a1rho_plus= new TH1F("omega_a1rho_plus","#omega_{a1#rho}^{+}",50,-1,1);
+ // TH1F *omega_a1rho_minus= new TH1F("omega_a1rho_minus","#omega_{a1#rho}^{-}",50,-1,1);
+
+
+ // TH1F *omega_pirho_plus= new TH1F("omega_pirho_plus","#omega_{#pi#rho}^{+}",50,-1,1);
+ // TH1F *omega_pirho_minus= new TH1F("omega_pirho_minus","#omega_{#pi#rho}^{-}",50,-1,1);
+
+
 
 
 
@@ -535,8 +551,13 @@ int main(int argc,char **argv){
 	if(abs(a->pdg_id())==111){tauandprod.push_back(TLorentzVector(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e()  ) );}
       }
      Rho2.Configure(tauandprod,"rho");
-     rho_plus->Fill(Rho2.getOmega(),HelWeightPlus);
-     rho_minus->Fill(Rho2.getOmega(),HelWeightMinus);
+     rhobeta_plus->Fill(Rho2.getCosbetaRho(),HelWeightPlus);
+     rhobeta_minus->Fill(Rho2.getCosbetaRho(),HelWeightMinus);
+
+     omega_rho_plus->Fill(Rho2.getOmega(),HelWeightPlus);
+     omega_rho_minus->Fill(Rho2.getOmega(),HelWeightMinus);
+
+
      cosbetacosthetarho_plus->Fill(Rho2.getCosbetaRho(),Rho2.getCosthetaRho(),HelWeightPlus);
      cosbetacosthetarho_minus->Fill(Rho2.getCosbetaRho(),Rho2.getCosthetaRho(),HelWeightMinus);
 
@@ -585,15 +606,15 @@ int main(int argc,char **argv){
     if(JAK1 ==2 && JAK2 == 4){
       if(Mu1.isConfigured() && Rho2.isConfigured()){
       double OmMuRho=  (Mu1.getOmega() +Rho2.getOmega() )/(1 + Mu1.getOmega()*Rho2.getOmega());
-      Omegamurho_plus->Fill(OmMuRho,HelWeightPlus);
-      Omegamurho_minus->Fill(OmMuRho,HelWeightMinus);       
+      omega_murho_plus->Fill(OmMuRho,HelWeightPlus);
+      omega_murho_minus->Fill(OmMuRho,HelWeightMinus);       
       }
     }
     if(JAK1 ==3 && JAK2 == 4){
       if(Pi1.isConfigured() && Rho2.isConfigured()){
       double OmPiRho=  (Pi1.getOmega() +Rho2.getOmega() )/(1 + Pi1.getOmega()*Rho2.getOmega());
-      Omegapirho_plus->Fill(OmPiRho,HelWeightPlus);
-      Omegapirho_minus->Fill(OmPiRho,HelWeightMinus);       
+      omega_pirho_plus->Fill(OmPiRho,HelWeightPlus);
+      omega_pirho_minus->Fill(OmPiRho,HelWeightMinus);       
       }
     }
 
@@ -607,16 +628,15 @@ int main(int argc,char **argv){
     }
 
 
-      if(JAK1 ==2 && JAK2 == 5 &&   SubJAK2==51){
-	if(Mu1.isConfigured() && a1h.isConfigured()){
-	  double OmMuA1=  (Mu1.getOmega() +a1h.TRF_vgetA1omega() )/(1 + Mu1.getOmega()*a1h.TRF_vgetA1omega());
-	  omega_a1mu_plus->Fill(OmMuA1,HelWeightPlus);
-	  omega_a1mu_minus->Fill(OmMuA1,HelWeightMinus);       
-	}
+    if(JAK1 ==2 && JAK2 == 5 &&   SubJAK2==51){
+      if(Mu1.isConfigured() && a1h.isConfigured()){
+	double OmMuA1=  (Mu1.getOmega() +a1h.TRF_vgetA1omega() )/(1 + Mu1.getOmega()*a1h.TRF_vgetA1omega());
+	omega_a1mu_plus->Fill(OmMuA1,HelWeightPlus);
+	omega_a1mu_minus->Fill(OmMuA1,HelWeightMinus);       
       }
+    }
 
     
-  
 
     // Run MC-TESTER on the event
     HepMCEvent temp_event(*HepMCEvt,false);
