@@ -73,6 +73,7 @@ TauDecaysHelper::Boost(TLorentzVector pB, TLorentzVector frame){
    result=transform*convertToMatrix(vec);
    return TLorentzVector(result(1,0), result(2,0) ,result(3,0), result(0,0));
 }
+
 double
 TauDecaysHelper::getOmega(){
   double omega=-999;
@@ -91,6 +92,24 @@ TauDecaysHelper::getOmega(){
 }
 
 double
+TauDecaysHelper::getOmegabar(){
+  double omega=-999;
+  if(type_=="pion" || type_=="muon"){
+    omega = 2*ProductLV.E()/TauLV.E() - 1;
+  }
+  if(type_=="rho"){
+    double QQ =  ProductLV.M2();
+    double Be = 0.5*(3*getCosbetaRho() -1);
+    double Ps = 0.5*(3*getUltrarel_cospsiLF() -1);
+    double RR = mtau*mtau/QQ;
+    omega = (RR*getCosthetaRho() - sqrt(RR)*getSinthetaRho()*2* getSinbetaRho()*getCosbetaRho()*DPF_cosalpha() -   getCosthetaRho()* getSinbetaRho()*getSinbetaRho()*(1+RR) )  /  ( RR + (1-RR)*getSinbetaRho()*getSinbetaRho());
+    if(  isinf(fabs(omega)) ||  isnan(fabs(omega))) omega  = -999.;
+  }
+  return omega;
+}
+
+
+double
 TauDecaysHelper::getCosbetaRho(){
   double cb=-999;
   if(type_!="rho"){std::cout<<"Can not return cos beta, decay type is not rho!!  but: "<< type_ <<std::endl; return cb;}
@@ -101,6 +120,20 @@ TauDecaysHelper::getCosbetaRho(){
   if(fabs(cb) > 1 ){if(debug){std::cout<<"Warning! Cos beta > 1:  "<<cb <<std::endl;  }}
   return cb;
 }
+
+
+
+double
+TauDecaysHelper::getSinbetaRho(){
+  double sb=-999;
+  if(type_!="rho"){std::cout<<"Can not return sin beta, decay type is not rho!!  but: "<< type_ <<std::endl; return sb;}
+  if(fabs(getCosbetaRho()) > 1 ){if(debug){std::cout<<"Warning! Cos beta > 1:  "<< getCosbetaRho()<<std::endl;  }return 0;}
+  sb = sqrt(1- getCosbetaRho()*getCosbetaRho());
+  return sb;
+}
+
+
+
 double
 TauDecaysHelper::getCosthetaRho(){
   double ct=-999;

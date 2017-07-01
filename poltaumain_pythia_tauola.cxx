@@ -38,7 +38,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents = 2000000; 
+int NumberOfEvents = 1000000; 
 int EventsToCheck=5;
 
 // elementary test of HepMC typically executed before
@@ -123,7 +123,7 @@ void redPlus(TauolaParticle *plus)
   for(unsigned int dec=0; dec <23; dec++){
      double br =0.0;
      if(dec==3 || dec ==4 || dec ==5) br=0.33;
-     //  if(dec ==5) br=0.99;
+     //if(dec ==4) br=0.99;
      Tauola::setTauBr(dec, br);
    }
 
@@ -229,6 +229,9 @@ int main(int argc,char **argv){
 
  TH1F *omega_rho_plus= new TH1F("omega_rho_plus","#omega_{#rho}^{+}",50,-1,1);
  TH1F *omega_rho_minus= new TH1F("omega_rho_minus","#omega_{#rho}^{-}",50,-1,1);
+
+ TH1F *omegabar_rho_plus= new TH1F("omegabar_rho_plus","#bar{#omega}_{#rho}^{+}",50,-1,1);
+ TH1F *omegabar_rho_minus= new TH1F("omegabar_rho_minus","#bar{#omega}_{#rho}^{-}",50,-1,1);
 
 
  TH1F *omega_a1_plus= new TH1F("omega_a1_plus","#omega_{a1}^{+}",50,-1,1);
@@ -556,6 +559,10 @@ int main(int argc,char **argv){
 
      omega_rho_plus->Fill(Rho2.getOmega(),HelWeightPlus);
      omega_rho_minus->Fill(Rho2.getOmega(),HelWeightMinus);
+
+     omegabar_rho_plus->Fill(Rho2.getOmegabar(),HelWeightPlus);
+     omegabar_rho_minus->Fill(Rho2.getOmegabar(),HelWeightMinus);
+     //     std::cout<<  " omegabar     "<< Rho2.getOmegabar() <<std::endl;
 
 
      cosbetacosthetarho_plus->Fill(Rho2.getCosbetaRho(),Rho2.getCosthetaRho(),HelWeightPlus);

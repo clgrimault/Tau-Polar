@@ -20,14 +20,16 @@ class TauDecaysHelper {
   bool  isConfigured();
   TLorentzVector Boost(TLorentzVector pB, TLorentzVector frame);
   double getOmega();
+  double getOmegabar();
   double getCosbetaRho();
+  double getSinbetaRho();
   double getCosthetaRho();
-
+  double getSinthetaRho();
 
   double getUltrarel_cospsiLF();
   double getSinpsiLF();
 
-  double getSinthetaRho();
+  
 
 
 
