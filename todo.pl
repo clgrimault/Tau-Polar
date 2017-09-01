@@ -23,7 +23,7 @@ if($ARGV[0] eq "--help" || $ARGV[0] eq ""){
     printf("\n\n\n ========================================================================================");
     printf("\nWelcome to tauola installer, please look at the instruction below.");
     printf("\nThis code requires one input option. The syntax is: ./todo.pl [OPTION]");
-    printf("\nRun todo script first with the '--settings <tauoladir>' optins to set up environment variable");
+    printf("\nRun todo script first with the '--setup <tauoladir>' optins to set up environment variable");
     printf("\n\nAfter this step is completed prcoceed further and ");
     printf("\nchoose from the following options:\n");
     printf("\n./todo.pl --help                                             Prints this message");
@@ -167,6 +167,7 @@ for($l=0;$l<$numArgs; $l++){
 	system(sprintf("echo \"#! /bin/bash     \">> qsub_submit.sh"));
 	system(sprintf("echo \"echo 'Starting Job'       \">> qsub_submit.sh"));
 	system(sprintf("echo \"export workdir=$s1_par     \">> qsub_submit.sh"));
+	system(sprintf("echo \"export HOME=$s1_par     \">> qsub_submit.sh"));
 	system(sprintf("echo \"cd $PWD/$tauoladir/tauola++/1.1.5/examples/;    \">> qsub_submit.sh"));
 	system(sprintf("echo \"source $PWD/Install_TauolaEnvironment_$time   \">> qsub_submit.sh"));
 	system(sprintf("echo \"$PWD/$tauoladir/tauola++/1.1.5/examples/poltaumain_pythia_tauola.exe   \">> qsub_submit.sh"));
