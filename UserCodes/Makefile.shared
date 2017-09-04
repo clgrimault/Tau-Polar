@@ -28,11 +28,13 @@ SF_SRCS    = $(wildcard *.cc)
 SF_HDRS    = $(SF_SRCS:.cc=.h)
 
 HDRS          = 	TauDecaysHelper.h \
-	        a1Helper 
+	        a1Helper \
+		rhoHelper
 	         
 
 
 SRCS          = 	a1Helper.cc \
+	        rhoHelper.cc \
 		TauDecaysHelper.cc \
 		main.cc
 
