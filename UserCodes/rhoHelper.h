@@ -37,12 +37,9 @@ class rhoHelper {
   void Configure(vector<TLorentzVector> TauRhoandProd, TLorentzVector RefernceFrame);
   bool isConfigured();
   void Setup(vector<TLorentzVector> TauRhoandProd, TLorentzVector ReferenceFrame );
-
   void Initialize(TLorentzVector t, TLorentzVector mu);
-   std::vector<TLorentzVector> getBoosted(){return TauRhoandProd_RF;}
-
+  std::vector<TLorentzVector> getBoosted(){return TauRhoandProd_RF;}
   TLorentzVector Boost(TLorentzVector pB, TLorentzVector frame);
-
 
   //====================
   double getCosthetaRho(); 
@@ -54,18 +51,14 @@ class rhoHelper {
   double DPF_cosalpha(); 
   double DPF_sinalpha(); 
 
-
   TVector3 nL();
   TVector3 nT();
   TVector3 nPerp();
   TVector3 ns();
   TLorentzVector sLV();
 
-
   double getOmegaRho();
   double getOmegaRhoBar();
-
-
 
  private:
   double mpi;
@@ -76,8 +69,6 @@ class rhoHelper {
   bool debug;
 
   vector<TLorentzVector> TauRhoandProd_RF;
- 
-
   TLorentzVector TauLV;
   TLorentzVector TauRhoPi;
   TLorentzVector TauRhoPi0;
@@ -87,11 +78,7 @@ class rhoHelper {
   TLorentzVector InvisibleLV;
   TLorentzVector DPF_TauLV;
   TLorentzVector DPF_InvisibleLV;
-
   bool isValid_;
-
   TMatrixT<double> convertToMatrix(TVectorT<double> V);
-
-
 };
 #endif
