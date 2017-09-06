@@ -210,6 +210,7 @@ rhoHelper::getOmegaRho(){
   if(  isinf(fabs(omega)) ||  isnan(fabs(omega))) omega  = -999.;
   return omega;
 }
+
 double 
 rhoHelper::getOmegaRhoBar(){
   double omega=-999;
