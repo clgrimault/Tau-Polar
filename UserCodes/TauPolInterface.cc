@@ -24,10 +24,13 @@ TauPolInterface::TauPolInterface(vector<TLorentzVector> TauAndProd, string type)
       std::cout<<" Warning!! Size of input vector  !=3  !! "<< " type:  "<<type<<std::endl;
     }
   }
-
-  Configure(TauAndProd,  type);
-}
-
+  if(type=="a1"){
+    if(TauAndProd.size()!=4){
+      std::cout<<" Warning!! Size of 2nd  input vector  !=4 !! "<< " type:  "<<type<<std::endl;
+    }
+    Configure(TauAndProd,  type);
+  }
+ }
 TauPolInterface::TauPolInterface(vector<TLorentzVector> TauAndProd1, string type1,vector<TLorentzVector> TauAndProd2, string type2): 
   mrho(0.773),
   mpi(0.13957018),
@@ -45,6 +48,11 @@ TauPolInterface::TauPolInterface(vector<TLorentzVector> TauAndProd1, string type
       std::cout<<" Warning!! Size of 1st  input vector  !=3  !! "<< " type:  "<<type1<<std::endl;
     }
   }
+  if(type1=="a1"){
+    if(TauAndProd1.size()!=4){
+      std::cout<<" Warning!! Size of 2nd  input vector  !=4 !! "<< " type:  "<<type1<<std::endl;
+    }
+  }
   if(type2=="lepton" || type2 =="pion"){
     if(TauAndProd2.size()!=2){ 
       std::cout<<" Warning!! Size of 2nd  input vector  !=2  !! "<< " type:  "<<type2<<std::endl;
@@ -55,9 +63,14 @@ TauPolInterface::TauPolInterface(vector<TLorentzVector> TauAndProd1, string type
       std::cout<<" Warning!! Size of 2nd  input vector  !=3  !! "<< " type:  "<<type2<<std::endl;
     }
   }
-
-  ConfigurePair(TauAndProd1,  type1,TauAndProd2,  type2);
-}
+  if(type2=="a1"){
+    if(TauAndProd2.size()!=4){
+      std::cout<<" Warning!! Size of 2nd  input vector  !=4 !! "<< " type:  "<<type2<<std::endl;
+    }
+  }
+  
+  ConfigurePair(TauAndProd1,type1,TauAndProd2,type2);
+ }
 
 void 
 TauPolInterface::Configure(vector<TLorentzVector> TauAndProd, string type){
@@ -73,8 +86,13 @@ TauPolInterface::Configure(vector<TLorentzVector> TauAndProd, string type){
     DPF_TauRhoPi = Boost(TauRhoPi,ProductLV);
     DPF_TauRhoPi0 =  Boost(TauRhoPi0,ProductLV);
   }
+  if(type_=="a1"){
+    TauA1OSPi  = TauAndProd.at(1);
+    TauA1SSPi1 = TauAndProd.at(2);
+    TauA1SSPi2 = TauAndProd.at(3);
+    ProductLV = TauA1OSPi + TauA1SSPi1 + TauA1SSPi2;  
+  }
   InvisibleLV = TauLV - ProductLV;
-
   DPF_TauLV=  Boost(TauLV,ProductLV);
   DPF_InvisibleLV=  Boost(InvisibleLV,ProductLV);
 }
@@ -93,6 +111,13 @@ TauPolInterface::ConfigurePair(vector<TLorentzVector> TauAndProd1, string type1,
     DPF_TauRhoPi1  = Boost(TauRhoPi1,ProductLV1);
     DPF_TauRhoPi01 = Boost(TauRhoPi01,ProductLV1);
   }
+
+  if(type1_=="a1"){
+    TauA1OSPi1  = TauAndProd1.at(1);
+    TauA1SSPi11  = TauAndProd1.at(2);
+    TauA1SSPi21  = TauAndProd1.at(3);
+    ProductLV1 = TauA1OSPi1 + TauA1SSPi11 + TauA1SSPi21;  
+  }
   InvisibleLV1 = TauLV1 - ProductLV1;
   DPF_TauLV1=  Boost(TauLV1,ProductLV1);
   DPF_InvisibleLV1=  Boost(InvisibleLV1,ProductLV1);
@@ -109,6 +134,12 @@ TauPolInterface::ConfigurePair(vector<TLorentzVector> TauAndProd1, string type1,
     ProductLV2     = TauRhoPi2+TauRhoPi02;
     DPF_TauRhoPi2  = Boost(TauRhoPi2,ProductLV2);
     DPF_TauRhoPi02 = Boost(TauRhoPi02,ProductLV2);
+  }
+  if(type2_=="a1"){
+    TauA1OSPi2  = TauAndProd2.at(1);
+    TauA1SSPi12  = TauAndProd2.at(2);
+    TauA1SSPi22  = TauAndProd2.at(3);
+    ProductLV2 = TauA1OSPi2 + TauA1SSPi12 + TauA1SSPi22;  
   }
   InvisibleLV2 = TauLV2 - ProductLV2;
   DPF_TauLV2=  Boost(TauLV2,ProductLV2);
@@ -142,7 +173,13 @@ TauPolInterface::SetupLeg(string which){
       DPF_TauLV=  Boost(TauLV,ProductLV);
       DPF_InvisibleLV=  Boost(InvisibleLV,ProductLV);
 
-
+      if(type_=="a1")
+	{
+	  TauA1OSPi  =   TauA1OSPi1;
+	  TauA1SSPi1  =  TauA1SSPi11;
+	  TauA1SSPi2  =  TauA1SSPi21;
+	  ProductLV = TauA1OSPi + TauA1SSPi1 + TauA1SSPi2;  
+	}
     }
   if(which=="second")
     {
@@ -157,6 +194,15 @@ TauPolInterface::SetupLeg(string which){
 	  DPF_TauRhoPi  = Boost(TauRhoPi,ProductLV);
 	  DPF_TauRhoPi0 = Boost(TauRhoPi0,ProductLV);
 	}
+
+      if(type_=="a1")
+	{
+	  TauA1OSPi  =   TauA1OSPi2;
+	  TauA1SSPi1  =  TauA1SSPi12;
+	  TauA1SSPi2  =  TauA1SSPi22;
+	  ProductLV = TauA1OSPi + TauA1SSPi1 + TauA1SSPi2;  
+	}
+
       InvisibleLV = TauLV - ProductLV;
       DPF_TauLV=  Boost(TauLV,ProductLV);
       DPF_InvisibleLV=  Boost(InvisibleLV,ProductLV);
@@ -216,6 +262,9 @@ TauPolInterface::getOmega(string which)
 	 rho.Configure(particles);
 	 omega=rho.getOmegaRho();
        }
+     if(type_=="a1")
+       {
+       }
      return omega;
    }
 
@@ -238,6 +287,9 @@ TauPolInterface::getOmegabar(string which){
 	rho.Configure(particles);
 	omega=rho.getOmegaRhoBar();
       }
+  if(type_=="a1")
+    {
+    }
   return omega;
 }
 
@@ -262,6 +314,9 @@ TauPolInterface::getCombOmega(){
       rho.Configure(particles);
       omega1=rho.getOmegaRho();
     }
+  if(type_=="a1")
+    {
+    }
   SetupLeg("second");
   double omega2=-999.;
   if(type_=="pion" || type_=="lepton")
@@ -277,6 +332,9 @@ TauPolInterface::getCombOmega(){
       rhoHelper rho;
       rho.Configure(particles);
       omega2=rho.getOmegaRho();
+    }
+  if(type_=="a1")
+    {
     }
 
   double Omega=999.;

@@ -7,7 +7,6 @@
 #include "TVectorT.h"
 #include "TMatrixTSym.h"
 #include <string.h>
-#include <vector> 
 #include "rhoHelper.h"
 #include "a1Helper.h"
 
@@ -47,6 +46,11 @@ class TauPolInterface {
   TLorentzVector ProductLV;
   TLorentzVector TauRhoPi;
   TLorentzVector TauRhoPi0;
+
+  TLorentzVector TauA1OSPi;
+  TLorentzVector TauA1SSPi1;
+  TLorentzVector TauA1SSPi2;
+
   TLorentzVector InvisibleLV;
   TLorentzVector DPF_TauLV;
   TLorentzVector DPF_TauRhoPi;
@@ -57,8 +61,12 @@ class TauPolInterface {
 
   TLorentzVector TauLV1,TauLV2;
   TLorentzVector ProductLV1,ProductLV2;
+
   TLorentzVector TauRhoPi1,TauRhoPi2;
   TLorentzVector TauRhoPi01,TauRhoPi02;
+  TLorentzVector TauA1OSPi1,TauA1OSPi2;
+  TLorentzVector TauA1SSPi11,TauA1SSPi12;
+  TLorentzVector TauA1SSPi21,TauA1SSPi22;
   TLorentzVector InvisibleLV1,InvisibleLV2;
   TLorentzVector DPF_TauLV1,DPF_TauLV2;
   TLorentzVector DPF_TauRhoPi1,DPF_TauRhoPi2;
