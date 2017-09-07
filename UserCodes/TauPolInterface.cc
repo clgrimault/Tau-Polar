@@ -262,7 +262,7 @@ TauPolInterface::getOmega(string which)
 	 particles.push_back(TauRhoPi0);
 	 rhoHelper rho;
 	 rho.Configure(particles, TauRhoPi+TauRhoPi0);
-	 omega=rho.getOmegaRho();
+	 omega=rho.getCosbetaRho();
        }
      if(type_=="a1")
        {
@@ -283,6 +283,7 @@ double
 TauPolInterface::getOmegabar(string which){
   double omega=-999;
   SetupLeg(which);
+
   if(type_=="pion" || type_=="lepton"){
     omega = 2*ProductLV.E()/TauLV.E() - 1;
   }
@@ -330,7 +331,7 @@ TauPolInterface::getCombOmega(){
       particles.push_back(TauRhoPi0);
       rhoHelper rho;
       rho.Configure(particles,TauRhoPi+TauRhoPi0);
-      omega1=rho.getOmegaRho();
+      omega1=rho.getCosbetaRho();
     }
 
      if(type_=="a1")
@@ -344,7 +345,7 @@ TauPolInterface::getCombOmega(){
 	 a1.Configure(particles, TauA1OSPi + TauA1SSPi1 + TauA1SSPi2);
 	 omega1 = a1.getA1omega();
        }
-  SetupLeg("second");
+  SetupLeg("second"); 
   double omega2=-999.;
   if(type_=="pion" || type_=="lepton")
     {
@@ -358,7 +359,8 @@ TauPolInterface::getCombOmega(){
       particles.push_back(TauRhoPi0);
       rhoHelper rho;
       rho.Configure(particles,TauRhoPi+TauRhoPi0);
-      omega2=rho.getOmegaRho();
+      omega2=rho.getCosbetaRho();
+
     }
 
   if(type_=="a1")

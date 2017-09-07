@@ -39,7 +39,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents = 300000; 
+int NumberOfEvents = 50000; 
 int EventsToCheck=5;
 
 // elementary test of HepMC typically executed before
@@ -214,7 +214,7 @@ int main(int argc,char **argv){
   TH1F *pi_plus= new TH1F("pi_plus","#pi^{+}",50,-1,1);
   TH1F *pi_minus= new TH1F("pi_minus","#pi^{-} ",50,-1,1);
 
-  TH1F *mu_plus= new TH1F("mu_plus","#mu^{+}",50,1,1);
+  TH1F *mu_plus= new TH1F("mu_plus","#mu^{+}",50,-1,1);
   TH1F *mu_minus= new TH1F("mu_minus","#mu^{-}",50,-1,1);
   
   TH1F *OmegaMuPi_plus= new TH1F("OmegaMuPi_plus","#omega_{#pi#mu}^{+}",50,-1,1);
@@ -521,7 +521,7 @@ int main(int argc,char **argv){
     TauPolInterface TauPolMu1;
     TauPolInterface TauPolRho2;
     TauPolInterface TauPolA1;
-
+ 
     TauPolInterface TauPolMuPi;
     TauPolInterface TauPolMuRho;
 
@@ -582,13 +582,16 @@ int main(int argc,char **argv){
      Rho2.Configure(tauandprod,"rho");
      rhobeta_plus->Fill(Rho2.getCosbetaRho(),HelWeightPlus);
      rhobeta_minus->Fill(Rho2.getCosbetaRho(),HelWeightMinus);
-     tauandprodRho=tauandprod;
+     tauandprodRho=tauandprod;  
      TauPolRho2.Configure(tauandprod,"rho");
      //     omega_rho_plus->Fill(Rho2.getOmega(),HelWeightPlus);
      //     omega_rho_minus->Fill(Rho2.getOmega(),HelWeightMinus);
      omega_rho_plus->Fill(TauPolRho2.getOmega(),HelWeightPlus);
      omega_rho_minus->Fill(TauPolRho2.getOmega(),HelWeightMinus);
-
+     //     std::cout<<" rho    "<< TauPolRho2.getOmega()<<std::endl;
+     //    std::cout<<" rho TDC    "<< Rho2.getOmega()<<std::endl;
+    //     std::cout<<" rho +   "<< TauPolRho2.getOmega()*HelWeightPlus<<std::endl;
+     //     std::cout<<" rho -   "<< TauPolRho2.getOmega()*HelWeightMinus<<std::endl;
      omegabar_rho_plus->Fill(TauPolRho2.getOmegabar(),HelWeightPlus);
      omegabar_rho_minus->Fill(TauPolRho2.getOmegabar(),HelWeightMinus);
 
@@ -668,7 +671,9 @@ int main(int argc,char **argv){
 
 
       omega_murho_plus->Fill(TauPolMuRho.getCombOmega(),HelWeightPlus);
-      omega_murho_minus->Fill(TauPolMuRho.getCombOmega(),HelWeightMinus);       
+      omega_murho_minus->Fill(TauPolMuRho.getCombOmega(),HelWeightMinus);    
+
+      // if( fabs(TauPolMuRho.getCombOmega())> 1)std::cout<<" mu:    "<< TauPolMuRho.getOmega("first") << "  rho:   "<<  TauPolMuRho.getOmega("second") << " combined    " <<TauPolMuRho.getCombOmega() <<std::endl;
       }
     }
     if(JAK1 ==3 && JAK2 == 4){
