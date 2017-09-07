@@ -29,7 +29,7 @@ class TauPolInterface {
   double getOmegabar(string which="");
   double getCombOmega();
   double getCombOmegaBar();
-
+  TLorentzVector getVisiblePairLV();
  private:
 
   void SetupLeg(string which="");

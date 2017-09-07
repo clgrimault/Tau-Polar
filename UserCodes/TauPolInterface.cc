@@ -95,6 +95,8 @@ TauPolInterface::Configure(vector<TLorentzVector> TauAndProd, string type){
   InvisibleLV = TauLV - ProductLV;
   DPF_TauLV=  Boost(TauLV,ProductLV);
   DPF_InvisibleLV=  Boost(InvisibleLV,ProductLV);
+  //  std::cout<<"Configure type 1 "<< type_; ProductLV.Print();
+
 }
 
 void 
@@ -121,7 +123,7 @@ TauPolInterface::ConfigurePair(vector<TLorentzVector> TauAndProd1, string type1,
   InvisibleLV1 = TauLV1 - ProductLV1;
   DPF_TauLV1=  Boost(TauLV1,ProductLV1);
   DPF_InvisibleLV1=  Boost(InvisibleLV1,ProductLV1);
-
+  //  std::cout<<"Setup Pair  type 1 "<< type1_ <<std::endl; ProductLV1.Print();
 
   TauLV2 = TauAndProd2.at(0);
   type2_=type2;
@@ -144,7 +146,7 @@ TauPolInterface::ConfigurePair(vector<TLorentzVector> TauAndProd1, string type1,
   InvisibleLV2 = TauLV2 - ProductLV2;
   DPF_TauLV2=  Boost(TauLV2,ProductLV2);
   DPF_InvisibleLV2=  Boost(InvisibleLV2,ProductLV2);
-
+  //  std::cout<<"Setup Pair  type 2 "<< type2_ <<std::endl; ProductLV2.Print();
 
   TauLV2 = TauAndProd2.at(0);
   type2_=type2;
@@ -169,10 +171,6 @@ TauPolInterface::SetupLeg(string which){
 	  DPF_TauRhoPi  = Boost(TauRhoPi,ProductLV);
 	  DPF_TauRhoPi0 = Boost(TauRhoPi0,ProductLV);
 	}
-      InvisibleLV = TauLV - ProductLV;
-      DPF_TauLV=  Boost(TauLV,ProductLV);
-      DPF_InvisibleLV=  Boost(InvisibleLV,ProductLV);
-
       if(type_=="a1")
 	{
 	  TauA1OSPi  =   TauA1OSPi1;
@@ -180,6 +178,10 @@ TauPolInterface::SetupLeg(string which){
 	  TauA1SSPi2  =  TauA1SSPi21;
 	  ProductLV = TauA1OSPi + TauA1SSPi1 + TauA1SSPi2;  
 	}
+      InvisibleLV = TauLV - ProductLV;
+      DPF_TauLV=  Boost(TauLV,ProductLV);
+      DPF_InvisibleLV=  Boost(InvisibleLV,ProductLV);
+      //      std::cout<<"type 1 "<< type_ <<std::endl; ProductLV.Print();
     }
   if(which=="second")
     {
@@ -206,7 +208,7 @@ TauPolInterface::SetupLeg(string which){
       InvisibleLV = TauLV - ProductLV;
       DPF_TauLV=  Boost(TauLV,ProductLV);
       DPF_InvisibleLV=  Boost(InvisibleLV,ProductLV);
-
+      //      std::cout<<"type 2 "<< type_ <<std::endl; ProductLV.Print();
 
     }
 }
@@ -229,7 +231,7 @@ TauPolInterface::Boost(TLorentzVector pB, TLorentzVector frame)
      TMatrixT<double> result(4,1);
      TVectorT<double> vec(4); 
      TVector3 b;
-     if(frame.Vect().Mag()==0){ std::cout<<" Boost is not set, perfrom calculation in the Lab Frame   "<<std::endl; return pB;}
+     if(frame.Vect().Mag()==0){ std::cout<<"TPI Boost is not set, perfrom calculation in the Lab Frame   "<<std::endl; return pB;}
      if(frame.E()==0){ std::cout<<" Caution: Please check that you perform boost correctly!  " <<std::endl; return pB;} 
      else   b=frame.Vect()*(1/frame.E());
      vec(0)  = pB.E();    vec(1)  = pB.Px();
@@ -259,7 +261,7 @@ TauPolInterface::getOmega(string which)
 	 particles.push_back(TauRhoPi);
 	 particles.push_back(TauRhoPi0);
 	 rhoHelper rho;
-	 rho.Configure(particles);
+	 rho.Configure(particles, TauRhoPi+TauRhoPi0);
 	 omega=rho.getOmegaRho();
        }
      if(type_=="a1")
@@ -291,7 +293,7 @@ TauPolInterface::getOmegabar(string which){
 	particles.push_back(TauRhoPi);
 	particles.push_back(TauRhoPi0);
 	rhoHelper rho;
-	rho.Configure(particles);
+	rho.Configure(particles,TauRhoPi+TauRhoPi0);
 	omega=rho.getOmegaRhoBar();
       }
 
@@ -327,7 +329,7 @@ TauPolInterface::getCombOmega(){
       particles.push_back(TauRhoPi);
       particles.push_back(TauRhoPi0);
       rhoHelper rho;
-      rho.Configure(particles);
+      rho.Configure(particles,TauRhoPi+TauRhoPi0);
       omega1=rho.getOmegaRho();
     }
 
@@ -355,7 +357,7 @@ TauPolInterface::getCombOmega(){
       particles.push_back(TauRhoPi);
       particles.push_back(TauRhoPi0);
       rhoHelper rho;
-      rho.Configure(particles);
+      rho.Configure(particles,TauRhoPi+TauRhoPi0);
       omega2=rho.getOmegaRho();
     }
 
@@ -394,7 +396,7 @@ TauPolInterface::getCombOmegaBar(){
       particles.push_back(TauRhoPi);
       particles.push_back(TauRhoPi0);
       rhoHelper rho;
-      rho.Configure(particles);
+      rho.Configure(particles,TauRhoPi+TauRhoPi0);
       omega1=rho.getOmegaRho();
     }
   if(type_=="a1")
@@ -421,7 +423,7 @@ TauPolInterface::getCombOmegaBar(){
       particles.push_back(TauRhoPi);
       particles.push_back(TauRhoPi0);
       rhoHelper rho;
-      rho.Configure(particles);
+      rho.Configure(particles,TauRhoPi+TauRhoPi0);
       omega2=rho.getOmegaRhoBar();
     }
   if(type_=="a1")
@@ -440,6 +442,14 @@ TauPolInterface::getCombOmegaBar(){
   if(  isinf(fabs(Omega)) ||  isnan(fabs(Omega))) Omega  = -999.;
   return Omega;
 }
+
+
+TLorentzVector
+TauPolInterface::getVisiblePairLV()
+   { 
+     if(!isPairConfigured()) return TLorentzVector(0,0,0,0);
+     return ProductLV1+ProductLV2;
+   }
 
 TMatrixT<double> TauPolInterface::convertToMatrix(TVectorT<double> V){
   TMatrixT<double> M(V.GetNrows(),1);

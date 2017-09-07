@@ -39,6 +39,7 @@ rhoHelper::Setup(vector<TLorentzVector> TauRhoandProd, TLorentzVector ReferenceF
   InvisibleLV = TauLV - ProductLV;
   DPF_TauLV=  Boost(TauLV,ProductLV);
   DPF_InvisibleLV=  Boost(InvisibleLV,ProductLV);
+
 }
 
 void 
@@ -72,7 +73,7 @@ rhoHelper::Boost(TLorentzVector pB, TLorentzVector frame){
    TMatrixT<double> result(4,1);
    TVectorT<double> vec(4); 
    TVector3 b;
-   if(frame.Vect().Mag()==0){ std::cout<<" Boost is not set, perfrom calculation in the Lab Frame   "<<std::endl; return pB;}
+   if(frame.Vect().Mag()==0){ std::cout<<"RH Boost is not set, perfrom calculation in the Lab Frame   "<<std::endl; return pB;}
     if(frame.E()==0){ std::cout<<" Caution: Please check that you perform boost correctly!  " <<std::endl; return pB;} 
    else   b=frame.Vect()*(1/frame.E());
    vec(0)  = pB.E();    vec(1)  = pB.Px();
@@ -210,7 +211,6 @@ rhoHelper::getOmegaRho(){
   if(  isinf(fabs(omega)) ||  isnan(fabs(omega))) omega  = -999.;
   return omega;
 }
-
 double 
 rhoHelper::getOmegaRhoBar(){
   double omega=-999;

@@ -14,7 +14,7 @@ TauDecaysHelper::TauDecaysHelper(vector<TLorentzVector> TauAndProd, string type)
   ma1(1.251),
   debug(false)
  {
-  if(type=="muon" || type =="pion"){
+  if(type=="lepton" || type =="pion"){
     if(TauAndProd.size()!=2){ 
       std::cout<<" Warning!! Size of input vector  !=2  !! "<< " type:  "<<type<<std::endl;
     }
@@ -33,7 +33,7 @@ void
 TauDecaysHelper::Configure(vector<TLorentzVector> TauAndProd, string type){
   TauLV = TauAndProd.at(0);
   type_=type;
-  if(type_ == "muon" || type_=="pion"){
+  if(type_ == "lepton" || type_=="pion"){
     ProductLV= TauAndProd.at(1);
   }
   if(type_ == "rho" ){
@@ -47,6 +47,7 @@ TauDecaysHelper::Configure(vector<TLorentzVector> TauAndProd, string type){
 
   DPF_TauLV=  Boost(TauLV,ProductLV);
   DPF_InvisibleLV=  Boost(InvisibleLV,ProductLV);
+  //  std::cout<<"TauDecaysHelper  Setup Pair  type 1 "<< type_ <<std::endl; ProductLV.Print();
 }
 bool  
 TauDecaysHelper::isConfigured(){
@@ -60,7 +61,7 @@ TauDecaysHelper::Boost(TLorentzVector pB, TLorentzVector frame){
    TMatrixT<double> result(4,1);
    TVectorT<double> vec(4); 
    TVector3 b;
-   if(frame.Vect().Mag()==0){ std::cout<<" Boost is not set, perfrom calculation in the Lab Frame   "<<std::endl; return pB;}
+   if(frame.Vect().Mag()==0){ std::cout<<"TDH Boost is not set, perfrom calculation in the Lab Frame   "<<std::endl; return pB;}
     if(frame.E()==0){ std::cout<<" Caution: Please check that you perform boost correctly!  " <<std::endl; return pB;} 
    else   b=frame.Vect()*(1/frame.E());
    vec(0)  = pB.E();    vec(1)  = pB.Px();
@@ -77,7 +78,7 @@ TauDecaysHelper::Boost(TLorentzVector pB, TLorentzVector frame){
 double
 TauDecaysHelper::getOmega(){
   double omega=-999;
-  if(type_=="pion" || type_=="muon"){
+  if(type_=="pion" || type_=="lepton"){
     omega = 2*ProductLV.E()/TauLV.E() - 1;
   }
   if(type_=="rho"){
@@ -94,7 +95,7 @@ TauDecaysHelper::getOmega(){
 double
 TauDecaysHelper::getOmegabar(){
   double omega=-999;
-  if(type_=="pion" || type_=="muon"){
+  if(type_=="pion" || type_=="lepton"){
     omega = 2*ProductLV.E()/TauLV.E() - 1;
   }
   if(type_=="rho"){

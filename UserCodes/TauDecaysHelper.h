@@ -7,7 +7,7 @@
 #include "TVectorT.h"
 #include "TMatrixTSym.h"
 #include <string.h>
-#include <vector>
+#include <vector> 
 #include "TLorentzVector.h"
 using namespace std;
 class TauDecaysHelper {
@@ -33,13 +33,13 @@ class TauDecaysHelper {
 
 
 
-TLorentzVector sLV(); 
-TVector3 nPerp();
-TVector3 ns(); 
-TVector3 nL(); 
-TVector3 nT();
-double  DPF_cosalpha(); 
-double  DPF_sinalpha(); 
+  TLorentzVector sLV(); 
+  TVector3 nPerp();
+  TVector3 ns(); 
+  TVector3 nL(); 
+  TVector3 nT();
+  double  DPF_cosalpha(); 
+  double  DPF_sinalpha(); 
 
 
 
@@ -60,7 +60,6 @@ double  DPF_sinalpha();
   TLorentzVector DPF_TauRhoPi;
   TLorentzVector DPF_TauRhoPi0;
   TLorentzVector DPF_InvisibleLV;
-
 
   string type_;
 };
