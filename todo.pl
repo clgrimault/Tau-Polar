@@ -128,6 +128,10 @@ for($l=0;$l<$numArgs; $l++){
 	system(sprintf("cp UserCodes/main.cc $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
 	system(sprintf("cp UserCodes/a1Helper.cc $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
 	system(sprintf("cp UserCodes/a1Helper.h $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
+	system(sprintf("cp UserCodes/rhoHelper.cc $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
+	system(sprintf("cp UserCodes/rhoHelper.h $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
+	system(sprintf("cp UserCodes/TauPolInterface.cc $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
+	system(sprintf("cp UserCodes/TauPolInterface.h $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
 	system(sprintf("cp UserCodes/TauDecaysHelper.h $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
 	system(sprintf("cp UserCodes/TauDecaysHelper.cc $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes/; make  -f Makefile.shared;"));

@@ -6,7 +6,7 @@ a1Helper::a1Helper(){
 
 a1Helper::a1Helper(vector<TLorentzVector> TauA1andProd){
   if(TauA1andProd.size()!=4){
-    std::cout<<" Warning!! Size of input vector != 4 !! "<<std::endl;
+    std::cout<<" Warning!! Size of a1 input vector != 4 !! "<<std::endl;
   }
   TLorentzVector fakeboost(0,0,0,0);
   Setup(TauA1andProd,fakeboost);
@@ -15,7 +15,7 @@ a1Helper::a1Helper(vector<TLorentzVector> TauA1andProd){
 
 a1Helper::a1Helper(vector<TLorentzVector> TauA1andProd, TLorentzVector RefernceFrame){
   if(TauA1andProd.size()!=4){
-    std::cout<<" Warning!! Size of input vector != 4 !! "<<std::endl;
+    std::cout<<" Warning!! Size of a1 input vector != 4 !! "<<std::endl;
   }
   Setup(TauA1andProd,RefernceFrame);
 }
@@ -137,7 +137,7 @@ a1Helper::Boost(TLorentzVector pB, TLorentzVector frame){
    TMatrixT<double> result(4,1);
    TVectorT<double> vec(4); 
    TVector3 b;
-   if(frame.Vect().Mag()==0){ std::cout<<" Boost is not set, perfrom calculation in the Lab Frame   "<<std::endl; return pB;}
+   if(frame.Vect().Mag()==0){ std::cout<<"a1Helper  Boost is not set, perfrom calculation in the Lab Frame   "<<std::endl; return pB;}
     if(frame.E()==0){ std::cout<<" Caution: Please check that you perform boost correctly!  " <<std::endl; return pB;} 
    else   b=frame.Vect()*(1/frame.E());
    vec(0)  = pB.E();    vec(1)  = pB.Px();
