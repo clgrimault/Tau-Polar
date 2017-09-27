@@ -181,6 +181,17 @@ rhoHelper::nT(){
     return   DPF_TauLV.Vect()*(1/DPF_TauLV.Vect().Mag());
 }
 
+double 
+rhoHelper::TFK_cosbeta(){
+  return nT()*nPerp();
+}
+double 
+rhoHelper::TFK_sinbeta(){
+  if(fabs(TFK_cosbeta())> 1){std::cout<<" TFK_cosbeta > 1"<< std::endl; return 0;}
+  return sqrt(1-TFK_cosbeta()*TFK_cosbeta());
+}
+
+
 
 double  
 rhoHelper::DPF_cosalpha(){
@@ -198,27 +209,43 @@ rhoHelper::DPF_sinalpha(){
 
     if(nTCrossns.Mag() ==0 || nTCrossnPerp.Mag() ==0){if(debug){std::cout<<" Can not compute sin alpha, one denominator is 0, return DPF sin alpha =0  "<< std::endl; }return 0;}
     return -ns().Dot(nTCrossnPerp)/nTCrossns.Mag()/nTCrossnPerp.Mag();
-
  }
+
+
 double 
 rhoHelper::getOmegaRho(){
   double omega=-999;
-  double QQ =  ProductLV.M2();
-  double Be = 0.5*(3*getCosbetaRho() -1);
-  double Ps = 0.5*(3*getUltrarel_cospsiLF() -1);
-  double RR = mtau*mtau/QQ;
-  omega = ((-2 + RR + 2*(1+RR)*Ps*Be)*getCosthetaRho() + 3*sqrt(RR)*Be*getSinthetaRho()*2*getUltrarel_cospsiLF()*getSinpsiLF())  /  ( 2 +RR - 2*(1-RR)*Ps*Be);
+  omega = getCosbetaRho();
   if(  isinf(fabs(omega)) ||  isnan(fabs(omega))) omega  = -999.;
   return omega;
 }
-double 
-rhoHelper::getOmegaRhoBar(){
-  double omega=-999;
-  double QQ =  ProductLV.M2();
-  double Be = 0.5*(3*getCosbetaRho() -1);
-  double Ps = 0.5*(3*getUltrarel_cospsiLF() -1);
-  double RR = mtau*mtau/QQ;
-  omega = (RR*getCosthetaRho() - sqrt(RR)*getSinthetaRho()*2* getSinbetaRho()*getCosbetaRho()*DPF_cosalpha() -   getCosthetaRho()* getSinbetaRho()*getSinbetaRho()*(1+RR) )  /  ( RR + (1-RR)*getSinbetaRho()*getSinbetaRho());
-  if(  isinf(fabs(omega)) ||  isnan(fabs(omega))) omega  = -999.;
-  return omega;
-}
+
+
+
+// double 
+// rhoHelper::getOmegaRhoBar(){
+//   double omega=-999;
+//   double QQ =  ProductLV.M2();
+//   double Be = 0.5*(3*getCosbetaRho()*getCosbetaRho() -1);
+//   double Ps = 0.5*(3*getUltrarel_cospsiLF() -1);
+//   double RR = mtau*mtau/QQ;
+//   omega = ((-2 + RR + 2*(1+RR)*Ps*Be)*getCosthetaRho() + 3*sqrt(RR)*Be*getSinthetaRho()*2*getUltrarel_cospsiLF()*getSinpsiLF())  /  ( 2 +RR - 2*(1-RR)*Ps*Be);
+//   if(  isinf(fabs(omega)) ||  isnan(fabs(omega))) omega  = -999.;
+//   return omega;
+// }
+
+
+ double 
+ rhoHelper::getOmegaRhoBar(){
+   double omega=-999;
+   double QQ =  ProductLV.M2();
+   double RR = mtau*mtau/QQ;
+   //      omega = (RR*getCosthetaRho() - sqrt(RR)*getSinthetaRho()*2* getSinbetaRho()*getCosbetaRho()*DPF_cosalpha() -   getCosthetaRho()* getSinbetaRho()*getSinbetaRho()*(1+RR) )  /  ( RR + (1-RR)*getSinbetaRho()*getSinbetaRho());
+   omega = (RR*getCosthetaRho() - sqrt(RR)*getSinthetaRho()*2* TFK_sinbeta()*TFK_cosbeta()*DPF_cosalpha() -   getCosthetaRho()* TFK_sinbeta()*TFK_sinbeta()*(1+RR) )  /  ( RR + (1-RR)*TFK_sinbeta()*TFK_sinbeta());
+   //   std::cout<< " getCosbetaRho  "<< getCosbetaRho() << " TFK beta "<< TFK_cosbeta()<<std::endl;
+   //  omega = RR*getCosthetaRho()*TFK_cosbeta()*TFK_cosbeta()  - getCosthetaRho()*getSinbetaRho()*getSinbetaRho();
+
+   // omega = RR*getCosthetaRho()*getCosbetaRho()*getCosbetaRho()  - getCosthetaRho()*getSinbetaRho()*getSinbetaRho();
+   if(  isinf(fabs(omega)) ||  isnan(fabs(omega))) omega  = -999.;
+   return omega;
+ }

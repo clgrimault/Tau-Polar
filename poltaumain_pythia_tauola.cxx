@@ -13,7 +13,7 @@
 #include "Tauola/TauolaHepMCEvent.h"
 #include "TFile.h"
 #include "TH1F.h"
-#include "TH2F.h"
+#include "TH2F.h" 
 #include "TF1.h"
 #include "TLorentzVector.h"
 #include "UserCodes/a1Helper.h"
@@ -123,8 +123,8 @@ void redPlus(TauolaParticle *plus)
   // can be called here 
   for(unsigned int dec=0; dec <23; dec++){
      double br =0.0;
-     if(dec==3 || dec ==4 || dec ==5) br=0.33;
-     //if(dec ==4) br=0.99;
+     //     if(dec==3 || dec ==4 || dec ==5) br=0.33;
+     if(dec ==4) br=0.99;
      Tauola::setTauBr(dec, br);
    }
 
@@ -217,8 +217,8 @@ int main(int argc,char **argv){
   TH1F *mu_plus= new TH1F("mu_plus","#mu^{+}",50,-1,1);
   TH1F *mu_minus= new TH1F("mu_minus","#mu^{-}",50,-1,1);
   
-  TH1F *OmegaMuPi_plus= new TH1F("OmegaMuPi_plus","#omega_{#pi#mu}^{+}",50,-1,1);
-  TH1F *OmegaMuPi_minus= new TH1F("OmegaMuPi_minus","#omega_{#pi#mu}^{-}",50,-1,1);
+  TH1F *OmegaMuPi_plus= new TH1F("OmegaMuPi_plus","#omega_{#pi#mu}^{+}",50,-2,2);
+  TH1F *OmegaMuPi_minus= new TH1F("OmegaMuPi_minus","#omega_{#pi#mu}^{-}",50,-2,2);
  
   TH1F *Omegapipi_plus= new TH1F("Omegapipi_plus","#omega_{#pi#pi}^{+}",50,-1,1);
   TH1F *Omegapipi_minus= new TH1F("Omegapipi_minus","#omega_{#pi#pi}^{-}",50,-1,1);
@@ -539,7 +539,7 @@ int main(int argc,char **argv){
       tauandprod.push_back(TLorentzVector(FirstTau->momentum().px(), FirstTau->momentum().py(), FirstTau->momentum().pz(), FirstTau->momentum().e()));
       for(std::vector<HepMC::GenParticle>::const_iterator a = FirstTauProducts.begin(); a!=FirstTauProducts.end(); ++a){
 	if(abs(a->pdg_id())==13){tauandprod.push_back(TLorentzVector(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e()  ) );} }
-      Mu1.Configure(tauandprod,"lepton");
+       Mu1.Configure(tauandprod,"lepton");
       tauandprodMuon1=tauandprod;
       TauPolMu1.Configure(tauandprod,"lepton");
       //      mu_plus->Fill(Mu1.getOmega(),HelWeightPlus);
@@ -555,6 +555,9 @@ int main(int argc,char **argv){
       tauandprod.push_back(TLorentzVector(FirstTau->momentum().px(), FirstTau->momentum().py(), FirstTau->momentum().pz(), FirstTau->momentum().e()));
       for(std::vector<HepMC::GenParticle>::const_iterator a = FirstTauProducts.begin(); a!=FirstTauProducts.end(); ++a){
 	if(abs(a->pdg_id())==211){tauandprod.push_back(TLorentzVector(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e()  ) );} }
+
+  
+
       tauandprod1 = tauandprod;
       Pi1.Configure(tauandprod,"pion");
       TauPolPi1.Configure(tauandprod,"pion");
@@ -571,23 +574,32 @@ int main(int argc,char **argv){
       TauPolPi2.Configure(tauandprod,"pion");
       Pi2.Configure(tauandprod,"pion");
     }
-  
+    
+
+    
+    //    std::cout<<  "Starting a new event loop .... event number  : "<< iEvent << std::endl;
     if(JAK2==4){
+      //      std::cout<<"Rho decay is found! ... Jak = "<< JAK2 <<std::endl;
+
       vector<TLorentzVector> tauandprod;
       tauandprod.push_back(TLorentzVector(SecondTau->momentum().px(), SecondTau->momentum().py(), SecondTau->momentum().pz(), SecondTau->momentum().e()));
       for(std::vector<HepMC::GenParticle>::const_iterator a = SecondTauProducts.begin(); a!=SecondTauProducts.end(); ++a){
 	if(abs(a->pdg_id())==211){tauandprod.push_back(TLorentzVector(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e()  ) );}
 	if(abs(a->pdg_id())==111){tauandprod.push_back(TLorentzVector(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e()  ) );}
       }
-     Rho2.Configure(tauandprod,"rho");
-     rhobeta_plus->Fill(Rho2.getCosbetaRho(),HelWeightPlus);
-     rhobeta_minus->Fill(Rho2.getCosbetaRho(),HelWeightMinus);
-     tauandprodRho=tauandprod;  
-     TauPolRho2.Configure(tauandprod,"rho");
+
+      Rho2.Configure(tauandprod,"rho");
+      rhobeta_plus->Fill(Rho2.getCosbetaRho(),HelWeightPlus);
+
+      //std::cout<< " getCosbetaRho  "<< Rho2.getCosbetaRho() << " TFK beta "<< Rho2.TFK_cosbeta()<<std::endl;
+      rhobeta_minus->Fill(Rho2.getCosbetaRho(),HelWeightMinus);
+      tauandprodRho=tauandprod;  
+      TauPolRho2.Configure(tauandprod,"rho");
      //     omega_rho_plus->Fill(Rho2.getOmega(),HelWeightPlus);
      //     omega_rho_minus->Fill(Rho2.getOmega(),HelWeightMinus);
      omega_rho_plus->Fill(TauPolRho2.getOmega(),HelWeightPlus);
      omega_rho_minus->Fill(TauPolRho2.getOmega(),HelWeightMinus);
+
      //     std::cout<<" rho    "<< TauPolRho2.getOmega()<<std::endl;
      //    std::cout<<" rho TDC    "<< Rho2.getOmega()<<std::endl;
     //     std::cout<<" rho +   "<< TauPolRho2.getOmega()*HelWeightPlus<<std::endl;
@@ -636,6 +648,11 @@ int main(int argc,char **argv){
       if(Pi1.isConfigured() && Pi2.isConfigured()){
       double OmPiPi=  (Pi1.getOmega() +Pi2.getOmega() )/(1 + Pi1.getOmega()*Pi2.getOmega());
       TauPolPiPi.ConfigurePair(tauandprod1,"pion",tauandprod2,"pion");
+
+ 
+
+
+
       //      Omegapipi_plus->Fill(OmPiPi,HelWeightPlus);
       //      Omegapipi_minus->Fill(OmPiPi,HelWeightMinus);       
 
@@ -654,6 +671,11 @@ int main(int argc,char **argv){
       if(Mu1.isConfigured() && Pi2.isConfigured()){
       double OmMuPi=  (Mu1.getOmega() +Pi2.getOmega() )/(1 + Mu1.getOmega()*Pi2.getOmega());
       TauPolMuPi.ConfigurePair(tauandprodMuon1,"lepton",tauandprod2,"pion");
+
+ 
+
+
+
       //      OmegaMuPi_plus->Fill(OmMuPi,HelWeightPlus);
       //      OmegaMuPi_minus->Fill(OmMuPi,HelWeightMinus);       
 
@@ -669,9 +691,10 @@ int main(int argc,char **argv){
       //      omega_murho_plus->Fill(OmMuRho,HelWeightPlus);
       //      omega_murho_minus->Fill(OmMuRho,HelWeightMinus);       
 
+    
 
-      omega_murho_plus->Fill(TauPolMuRho.getCombOmega(),HelWeightPlus);
-      omega_murho_minus->Fill(TauPolMuRho.getCombOmega(),HelWeightMinus);    
+      omega_murho_plus->Fill(TauPolMuRho.getCombOmegaBar(),HelWeightPlus);
+      omega_murho_minus->Fill(TauPolMuRho.getCombOmegaBar(),HelWeightMinus);    
 
       // if( fabs(TauPolMuRho.getCombOmega())> 1)std::cout<<" mu:    "<< TauPolMuRho.getOmega("first") << "  rho:   "<<  TauPolMuRho.getOmega("second") << " combined    " <<TauPolMuRho.getCombOmega() <<std::endl;
       }
@@ -680,6 +703,8 @@ int main(int argc,char **argv){
       if(Pi1.isConfigured() && Rho2.isConfigured()){
       double OmPiRho=  (Pi1.getOmega() +Rho2.getOmega() )/(1 + Pi1.getOmega()*Rho2.getOmega());
       TauPolPiRho.ConfigurePair(tauandprod1,"pion",tauandprodRho,"rho");
+
+
       omega_pirho_plus->Fill(TauPolPiRho.getCombOmega(),HelWeightPlus);
       omega_pirho_minus->Fill(TauPolPiRho.getCombOmega(),HelWeightMinus);       
       }
@@ -694,6 +719,8 @@ int main(int argc,char **argv){
 	omega_a1pi_minus->Fill(TauPolPiA1.getCombOmega(),HelWeightMinus);       
 
 
+
+
       //      omega_a1pi_plus->Fill(OmPiA1,HelWeightPlus);
       //      omega_a1pi_minus->Fill(OmPiA1,HelWeightMinus);       
       }
@@ -704,8 +731,8 @@ int main(int argc,char **argv){
       if(Mu1.isConfigured() && a1h.isConfigured()){
 	double OmMuA1=  (Mu1.getOmega() +a1h.TRF_vgetA1omega() )/(1 + Mu1.getOmega()*a1h.TRF_vgetA1omega());
 	TauPolMuA1.ConfigurePair(tauandprodMuon1,"lepton",tauandprodA1,"a1");
-	omega_a1mu_plus->Fill(TauPolMuA1.getCombOmega(),HelWeightPlus);
-	omega_a1mu_minus->Fill(TauPolMuA1.getCombOmega(),HelWeightMinus);       
+	omega_a1mu_plus->Fill(TauPolMuA1.getCombOmegaBar(),HelWeightPlus);
+	omega_a1mu_minus->Fill(TauPolMuA1.getCombOmegaBar(),HelWeightMinus);       
       }
     }
 

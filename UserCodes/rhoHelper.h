@@ -44,8 +44,18 @@ class rhoHelper {
   //====================
   double getCosthetaRho(); 
   double getSinthetaRho();
-  double getSinbetaRho();
+
   double getCosbetaRho();
+  double getSinbetaRho();
+
+
+
+  double TFK_cosbeta();
+  double TFK_sinbeta();
+
+
+
+
   double getUltrarel_cospsiLF();
   double getSinpsiLF();
   double DPF_cosalpha(); 
