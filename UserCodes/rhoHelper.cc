@@ -23,22 +23,41 @@ void
 rhoHelper::Setup(vector<TLorentzVector> TauRhoandProd, TLorentzVector ReferenceFrame){
    mpi   = 0.13957018; // GeV 
    mpi0 = 0.1349766;   // GeV
-   mtau = 1.776; // GeV
+   mtau = 1.77687; // GeV
    coscab = 0.975; 
    mrho = 0.773; // GeV
    debug=false;
    for(int i=0; i<TauRhoandProd.size(); i++){
      TauRhoandProd_RF.push_back(Boost(TauRhoandProd.at(i),ReferenceFrame));
    }
-  TauLV = TauRhoandProd.at(0);
+  TauLV         = TauRhoandProd.at(0);
   TauRhoPi      = TauRhoandProd.at(1);
   TauRhoPi0     = TauRhoandProd.at(2);
   ProductLV     = TauRhoPi+TauRhoPi0;
   DPF_TauRhoPi  = Boost(TauRhoPi,ProductLV);
-  DPF_TauRhoPi0 =  Boost(TauRhoPi0,ProductLV);
+  DPF_TauRhoPi0 = Boost(TauRhoPi0,ProductLV);
   InvisibleLV = TauLV - ProductLV;
   DPF_TauLV=  Boost(TauLV,ProductLV);
+  // std::cout<<" boosted  ";  DPF_TauLV.Print();
+
   DPF_InvisibleLV=  Boost(InvisibleLV,ProductLV);
+
+   // TVector3 RotVector = DPF_TauLV.Vect();
+   // DPF_TauLV.SetVect(Rotate(DPF_TauLV.Vect(),RotVector));
+   // DPF_TauRhoPi.SetVect(Rotate(DPF_TauRhoPi.Vect(),RotVector));
+   // DPF_TauRhoPi0.SetVect(Rotate(DPF_TauRhoPi0.Vect(),RotVector));
+   // ProductLV.SetVect(Rotate(ProductLV.Vect(),RotVector)); //  rotate nL
+
+ 
+
+
+   // TVector3 RotVector = ProductLV.Vect();
+   // DPF_TauLV.SetVect(Rotate(DPF_TauLV.Vect(),RotVector));
+   // DPF_TauRhoPi.SetVect(Rotate(DPF_TauRhoPi.Vect(),RotVector));
+   // DPF_TauRhoPi0.SetVect(Rotate(DPF_TauRhoPi0.Vect(),RotVector));
+   // ProductLV.SetVect(Rotate(ProductLV.Vect(),RotVector)); //  rotate nL
+
+   RotationVector=DPF_TauLV.Vect();
 
 }
 
@@ -85,6 +104,13 @@ rhoHelper::Boost(TLorentzVector pB, TLorentzVector frame){
    transform(3,0)=-gamma*b.Z(); transform(3,1) =((gamma-1)*b.Z()*b.X()/b.Mag2()) ;  transform(3,2) = ((gamma-1)*b.Z()*b.Y()/b.Mag2());  transform(3,3) = (1 + (gamma-1)*b.Z()*b.Z()/b.Mag2()); 
    result=transform*convertToMatrix(vec);
    return TLorentzVector(result(1,0), result(2,0) ,result(3,0), result(0,0));
+}
+TVector3
+rhoHelper::Rotate(TVector3 LVec, TVector3 Rot){
+  TVector3 vec = LVec;
+  vec.RotateZ(0.5*TMath::Pi() - Rot.Phi());  // not 0.5, to avoid warnings about 0 pT
+  vec.RotateX(Rot.Theta());
+  return vec;
 }
 
 double
@@ -158,7 +184,14 @@ rhoHelper::sLV(){
   double QQ = ProductLV.M2();
   double l0 = 0.5*(mtau*mtau + QQ)/sqrt(QQ);
   double l   = 0.5*(mtau*mtau  - QQ)/sqrt(QQ);
-  return TLorentzVector(getSinpsiLF(),0,-l0*getCosthetaRho()/mtau,-l*getCosthetaRho()/mtau);
+  // std::cout<<"l "<< l<<" l0  "<< l0 << " costheta   "<<getCosthetaRho() <<std::endl;
+  //  return TLorentzVector(getSinpsiLF(),0,-l0*getCosthetaRho()/mtau,-l*getCosthetaRho()/mtau);
+  TLorentzVector tspin(getSinthetaRho(),0,-l0*getCosthetaRho()/mtau,-l*getCosthetaRho()/mtau);
+
+  // tspin.SetVect(Rotate(tspin.Vect(),DPF_TauLV.Vect()));
+  return tspin;
+
+   //  return TLorentzVector(getSinthetaRho(),0,l0*getCosthetaRho()/mtau,l*getCosthetaRho()/mtau);
 }
 
 TVector3
@@ -166,10 +199,22 @@ rhoHelper::nPerp(){
   return   DPF_TauRhoPi.Vect()*(1/DPF_TauRhoPi.Vect().Mag());
 }
 
+
+// TVector3
+// rhoHelper::ns(){
+//   return   sLV().Vect()*(1/sLV().Vect().Mag());
+// }
+
+
+
 TVector3
-rhoHelper::ns(){
+rhoHelper::ns(){  
+  double QQ = ProductLV.M2();
+  double l0 = 0.5*(mtau*mtau + QQ)/sqrt(QQ);
+  double l   = 0.5*(mtau*mtau  - QQ)/sqrt(QQ);
   return   sLV().Vect()*(1/sLV().Vect().Mag());
 }
+
 
 TVector3
 rhoHelper::nL(){
@@ -178,12 +223,39 @@ rhoHelper::nL(){
  
 TVector3
 rhoHelper::nT(){
-    return   DPF_TauLV.Vect()*(1/DPF_TauLV.Vect().Mag());
+  return   DPF_TauLV.Vect()*(1/DPF_TauLV.Vect().Mag());
+}
+double rhoHelper::getCosBetaTest(){
+  return nPerp()*nL();
+}
+double 
+rhoHelper::getSinBetaTest(){
+  if(fabs(getCosBetaTest())> 1){std::cout<<" getCosBetaTest > 1"<< std::endl; return 0;}
+  return sqrt(1-getCosBetaTest()*getCosBetaTest());
+}
+
+
+
+TVector3
+rhoHelper::nTRotated(){
+  TVector3 vec= DPF_TauLV.Vect();
+  vec.RotateZ(0.5*TMath::Pi() - vec.Phi());
+  vec.RotateX(vec.Theta());
+  return   vec;
+}
+TVector3
+rhoHelper::nPerpRotated(){
+  TVector3 vec= DPF_TauRhoPi.Vect();
+  vec.RotateZ(0.5*TMath::Pi() - DPF_TauLV.Vect().Phi());
+  vec.RotateX(DPF_TauLV.Vect().Theta());
+  return   vec;
 }
 
 double 
 rhoHelper::TFK_cosbeta(){
-  return nT()*nPerp();
+    return nT()*nPerp();
+  //  return nT()*nPerp();
+  //  return nL()*nPerp();
 }
 double 
 rhoHelper::TFK_sinbeta(){
@@ -192,15 +264,97 @@ rhoHelper::TFK_sinbeta(){
 }
 
 
+double rhoHelper::TFK_costheta(){
+  return -ns()*nT();
+}
+double rhoHelper::TFK_sintheta(){
+  if(fabs(TFK_costheta())> 1){std::cout<<" TFK_costheta > 1"<< std::endl; return 0;}
+  return sqrt(1-TFK_costheta()*TFK_costheta());
+}
 
+ 
 double  
 rhoHelper::DPF_cosalpha(){
      TVector3 nTCrossns  = nT().Cross(ns());
      TVector3 nTCrossnPerp  = nT().Cross(nPerp());
+     //  std::cout<<"-------- "<<std::endl;  
+      // std::cout<<"nT "<<std::endl;  nT().Print();
+      // std::cout<<"ns "<<std::endl;  ns().Print();
+      // std::cout<<"nPerp "<<std::endl;  nPerp().Print();
+      // (DPF_TauRhoPi0 + DPF_TauRhoPi).Print();
+      // std::cout<<"rho Mass "<< (DPF_TauRhoPi0 + DPF_TauRhoPi).M() <<std::endl;
+
+      // std::cout<<" Pi "<<std::endl;  DPF_TauRhoPi0.Print();
+      // std::cout<<" Pi0 "<<std::endl;  DPF_TauRhoPi.Print();
+
+       //  std::cout<<"beta "<<     TFK_cosbeta()<< "  " <<   getCosbetaRho() <<std::endl;
+
+
+
+
+
+     //    std::cout<<"nT cross ns "<<std::endl;  nTCrossns.Print();
+     //  std::cout<<"nT cross nPepr "<<std::endl;  nTCrossnPerp.Print();
+     // std::cout<<""<<std::endl; std::cout<<std::endl; std::cout<<std::endl; 
+     // std::cout<<"  TFK theta   "<< TFK_costheta()<< " costehta   "<< getCosthetaRho()<<std::endl; 
+       // std::cout<<"  thete   "<< getCosthetaRho()<<std::endl; 
+     // std::cout<<"     "<< sLV()*DPF_TauLV<<std::endl; 
+
+     //  TFK_costheta() 
+
+     //     sLV().Print();
+     // DPF_TauLV.Print();
 
     if(nTCrossns.Mag() ==0 || nTCrossnPerp.Mag() ==0){if(debug){std::cout<<" Can not compute cos alpha, one denominator is 0, return DPF cos alpha =0  "<< std::endl; }return 0;}
    return nTCrossns.Dot(nTCrossnPerp)/nTCrossns.Mag()/nTCrossnPerp.Mag();
 }
+
+
+double  
+rhoHelper::DPF_cosalphaTest(){
+     TVector3 nTCrossns  = nL().Cross(nT());
+     TVector3 nTCrossnPerp  = nL().Cross(nPerp());
+     //  nL().Print();
+    if(nTCrossns.Mag() ==0 || nTCrossnPerp.Mag() ==0){if(debug){std::cout<<" Can not compute cos alpha, one denominator is 0, return DPF cos alpha =0  "<< std::endl; }return 0;}
+   return nTCrossns.Dot(nTCrossnPerp)/nTCrossns.Mag()/nTCrossnPerp.Mag();
+}
+
+
+ // double  
+ // rhoHelper::DPF_cosalpha(){
+ //      TVector3 nTCrossns  = nL().Cross(nT());
+ //      TVector3 nTCrossnPerp  = nL().Cross(nPerp());
+ //      // std::cout<<"-------- "<<std::endl;  
+ //      // std::cout<<"nT "<<std::endl;  nT().Print();
+ //      // std::cout<<"ns "<<std::endl;  ns().Print();
+ //      // std::cout<<"nT cross ns "<<std::endl;  nTCrossns.Print();
+ //      // std::cout<<""<<std::endl; std::cout<<std::endl; std::cout<<std::endl; 
+ //        // std::cout<<"  TFK theta   "<< TFK_costheta()<<std::endl; 
+ //        // std::cout<<"  thete   "<< getCosthetaRho()<<std::endl; 
+ //      //   std::cout<<"     "<< sLV()*DPF_TauLV<<std::endl; 
+ //      //     sLV().Print();
+ //      // DPF_TauLV.Print();
+
+ //     if(nTCrossns.Mag() ==0 || nTCrossnPerp.Mag() ==0){if(debug){std::cout<<" Can not compute cos alpha, one denominator is 0, return DPF cos alpha =0  "<< std::endl; }return 0;}
+ //    return nTCrossns.Dot(nTCrossnPerp)/nTCrossns.Mag()/nTCrossnPerp.Mag();
+ // }
+
+
+
+
+
+double  
+rhoHelper::DPF_sinalphaTest(){
+    TVector3 nTCrossns  = nT().Cross(ns());
+    TVector3 nTCrossnPerp  = nL().Cross(nPerp());
+
+    if(nTCrossns.Mag() ==0 || nTCrossnPerp.Mag() ==0){if(debug){std::cout<<" Can not compute sin alpha, one denominator is 0, return DPF sin alpha =0  "<< std::endl; }return 0;}
+    return -nT().Dot(nTCrossnPerp)/nTCrossns.Mag()/nTCrossnPerp.Mag();
+ }
+
+
+
+
 
 double  
 rhoHelper::DPF_sinalpha(){
@@ -215,37 +369,58 @@ rhoHelper::DPF_sinalpha(){
 double 
 rhoHelper::getOmegaRho(){
   double omega=-999;
-  omega = getCosbetaRho();
+   omega = TFK_cosbeta();
+  //  omega = getCosbetaRho();
+  // omega = DPF_cosalpha();
+
   if(  isinf(fabs(omega)) ||  isnan(fabs(omega))) omega  = -999.;
   return omega;
 }
 
 
+//----------------------  angles beta  + theta
+  double 
+  rhoHelper::getOmegaRhoBar(){
+    double omega=-999;
+    double QQ =  ProductLV.M2();
+    double Be = 0.5*(3*getCosbetaRho()*getCosbetaRho() -1);
+    double Ps = 0.5*(3*getUltrarel_cospsiLF() -1);
+    double RR = mtau*mtau/QQ;
+    double R = sqrt(RR);
+    //    omega = ((-2 + RR + 2*(1+RR)*Ps*Be)*getCosthetaRho() + 3*sqrt(RR)*Be*getSinthetaRho()*2*getUltrarel_cospsiLF()*getSinpsiLF())  /  ( 2 +RR - 2*(1-RR)*Ps*Be);
+    omega = ((-2 + RR + 2*(1+RR)*Ps*Be)*getCosthetaRho() + 3*sqrt(RR)*Be*getSinthetaRho()*2*getUltrarel_cospsiLF()*getSinpsiLF() -R*getSinthetaRho()*2*getCosbetaRho()*getSinbetaRho()*DPF_cosalphaTest() )  /  ( 2 +RR - 2*(1-RR)*Ps*Be);
 
-// double 
-// rhoHelper::getOmegaRhoBar(){
-//   double omega=-999;
-//   double QQ =  ProductLV.M2();
-//   double Be = 0.5*(3*getCosbetaRho()*getCosbetaRho() -1);
-//   double Ps = 0.5*(3*getUltrarel_cospsiLF() -1);
-//   double RR = mtau*mtau/QQ;
-//   omega = ((-2 + RR + 2*(1+RR)*Ps*Be)*getCosthetaRho() + 3*sqrt(RR)*Be*getSinthetaRho()*2*getUltrarel_cospsiLF()*getSinpsiLF())  /  ( 2 +RR - 2*(1-RR)*Ps*Be);
-//   if(  isinf(fabs(omega)) ||  isnan(fabs(omega))) omega  = -999.;
-//   return omega;
-// }
+    //  std::cout<<"  "<< R*getSinthetaRho()*2*TFK_cosbeta()*TFK_sinbeta()*DPF_cosalphaTest() <<std::endl;
 
 
- double 
- rhoHelper::getOmegaRhoBar(){
-   double omega=-999;
-   double QQ =  ProductLV.M2();
-   double RR = mtau*mtau/QQ;
-   //      omega = (RR*getCosthetaRho() - sqrt(RR)*getSinthetaRho()*2* getSinbetaRho()*getCosbetaRho()*DPF_cosalpha() -   getCosthetaRho()* getSinbetaRho()*getSinbetaRho()*(1+RR) )  /  ( RR + (1-RR)*getSinbetaRho()*getSinbetaRho());
-   omega = (RR*getCosthetaRho() - sqrt(RR)*getSinthetaRho()*2* TFK_sinbeta()*TFK_cosbeta()*DPF_cosalpha() -   getCosthetaRho()* TFK_sinbeta()*TFK_sinbeta()*(1+RR) )  /  ( RR + (1-RR)*TFK_sinbeta()*TFK_sinbeta());
-   //   std::cout<< " getCosbetaRho  "<< getCosbetaRho() << " TFK beta "<< TFK_cosbeta()<<std::endl;
-   //  omega = RR*getCosthetaRho()*TFK_cosbeta()*TFK_cosbeta()  - getCosthetaRho()*getSinbetaRho()*getSinbetaRho();
+    if(  isinf(fabs(omega)) ||  isnan(fabs(omega))) omega  = -999.;
+    return omega;
+  }
 
-   // omega = RR*getCosthetaRho()*getCosbetaRho()*getCosbetaRho()  - getCosthetaRho()*getSinbetaRho()*getSinbetaRho();
-   if(  isinf(fabs(omega)) ||  isnan(fabs(omega))) omega  = -999.;
-   return omega;
- }
+
+
+
+  
+
+
+
+       // double 
+       // rhoHelper::getOmegaRhoBar(){
+       //   double omega=-999;
+       //   double QQ =  ProductLV.M2();
+       //   double RR = mtau*mtau/QQ;
+   
+       // 	 omega = (RR*TFK_costheta() - sqrt(RR)*TFK_sintheta()*2* TFK_sinbeta()*TFK_cosbeta()*DPF_cosalpha() -   TFK_costheta()* TFK_sinbeta()*TFK_sinbeta()*(1+RR) )  /  ( RR + (1-RR)*TFK_sinbeta()*TFK_sinbeta());
+
+
+       // 		 // omega = ( - sqrt(RR)*TFK_sintheta()*2* TFK_sinbeta()*TFK_cosbeta()*DPF_cosalpha() -   TFK_costheta()* TFK_sinbeta()*TFK_sinbeta()*(1+RR) )  /  ( RR + (1-RR)*TFK_sinbeta()*TFK_sinbeta());
+       
+       // 	 // omega = (RR*getCosthetaRho() - sqrt(RR)*getSinthetaRho()*2* TFK_sinbeta()*TFK_cosbeta()*DPF_cosalpha() -   getCosthetaRho()* TFK_sinbeta()*TFK_sinbeta()*(1+RR) )  /  ( RR + (1-RR)*TFK_sinbeta()*TFK_sinbeta());
+       
+
+       // 	 // std::cout<<"  "<< RR*TFK_costheta()/( RR + (1-RR)*TFK_sinbeta()*TFK_sinbeta()) <<"  "<< (sqrt(RR)*TFK_sintheta()*2* TFK_sinbeta()*TFK_cosbeta()*DPF_cosalpha() )/  ( RR + (1-RR)*TFK_sinbeta()*TFK_sinbeta()) <<std::endl;
+       //  if(  isinf(fabs(omega)) ||  isnan(fabs(omega))) omega  = -999. ;
+       //   return omega;
+       // }
+
+

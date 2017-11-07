@@ -22,7 +22,7 @@
 
 //pythia header files
 #ifdef PYTHIA8180_OR_LATER
-#include "Pythia8/Pythia.h"
+#include "Pythia8/Pythia.h" 
 #include "Pythia8/Pythia8ToHepMC.h"
 #else 
 #include "Pythia.h"
@@ -39,7 +39,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents = 50000; 
+int NumberOfEvents = 20000; 
 int EventsToCheck=5;
 
 // elementary test of HepMC typically executed before
@@ -123,8 +123,8 @@ void redPlus(TauolaParticle *plus)
   // can be called here 
   for(unsigned int dec=0; dec <23; dec++){
      double br =0.0;
-     //     if(dec==3 || dec ==4 || dec ==5) br=0.33;
-     if(dec ==4) br=0.99;
+     //      if(dec==3 || dec ==4 || dec ==5) br=0.33;
+      if(dec ==4) br=0.99;
      Tauola::setTauBr(dec, br);
    }
 
@@ -231,11 +231,11 @@ int main(int argc,char **argv){
  TH1F *omega_murho_minus= new TH1F("omega_murho_minus","#omega_{#mu#rho}^{-}",50,-1,1);
 
 
- TH1F *omega_rho_plus= new TH1F("omega_rho_plus","#omega_{#rho}^{+}",50,-1,1);
- TH1F *omega_rho_minus= new TH1F("omega_rho_minus","#omega_{#rho}^{-}",50,-1,1);
+ TH1F *omega_rho_plus= new TH1F("omega_rho_plus","#omega_{#rho}^{+}",50,-1.1,1.1);
+ TH1F *omega_rho_minus= new TH1F("omega_rho_minus","#omega_{#rho}^{-}",50,-1.1,1.1);
 
- TH1F *omegabar_rho_plus= new TH1F("omegabar_rho_plus","#bar{#omega}_{#rho}^{+}",50,-1,1);
- TH1F *omegabar_rho_minus= new TH1F("omegabar_rho_minus","#bar{#omega}_{#rho}^{-}",50,-1,1);
+ TH1F *omegabar_rho_plus= new TH1F("omegabar_rho_plus","#bar{#omega}_{#rho}^{+}",50,-1.1,1.1);
+ TH1F *omegabar_rho_minus= new TH1F("omegabar_rho_minus","#bar{#omega}_{#rho}^{-}",50,-1.1,1.1);
 
 
  TH1F *omega_a1_plus= new TH1F("omega_a1_plus","#omega_{a1}^{+}",50,-1,1);
@@ -410,6 +410,7 @@ int main(int argc,char **argv){
 		for ( HepMC::GenEvent::particle_const_iterator dd =HepMCEvt->particles_begin();  dd != HepMCEvt->particles_end(); ++dd ){  
 		  if( abs((*dd)->pdg_id())!=213  ){
 		    if((*d)->end_vertex() == (*dd)->production_vertex()){
+
 		      FirstTauProducts.push_back(**dd);
 		    }
 		  }
@@ -512,7 +513,9 @@ int main(int argc,char **argv){
     TauDecaysHelper Pi2;
     TauDecaysHelper Rho2;
     a1Helper a1h;
+    rhoHelper RhoHelp;
 
+    TauDecaysHelper RhoTPI;
     TauPolInterface TauPolPi1;
     TauPolInterface TauPolPi2;
     TauPolInterface TauPolPiPi;
@@ -533,7 +536,8 @@ int main(int argc,char **argv){
     vector<TLorentzVector> tauandprodMuon1,tauandprodRho,tauandprodA1;
     tau1.SetPxPyPzE(FirstTau->momentum().px(), FirstTau->momentum().py(), FirstTau->momentum().pz(), FirstTau->momentum().e());
     tau2.SetPxPyPzE(SecondTau->momentum().px(), SecondTau->momentum().py(), SecondTau->momentum().pz(), SecondTau->momentum().e());
-    
+    //    tau1.Print();
+    //    tau2.Print();
     if(JAK1==2){
       vector<TLorentzVector> tauandprod;
       tauandprod.push_back(TLorentzVector(FirstTau->momentum().px(), FirstTau->momentum().py(), FirstTau->momentum().pz(), FirstTau->momentum().e()));
@@ -583,29 +587,44 @@ int main(int argc,char **argv){
 
       vector<TLorentzVector> tauandprod;
       tauandprod.push_back(TLorentzVector(SecondTau->momentum().px(), SecondTau->momentum().py(), SecondTau->momentum().pz(), SecondTau->momentum().e()));
+      //      std::cout<<" ---- "<<std::endl;
       for(std::vector<HepMC::GenParticle>::const_iterator a = SecondTauProducts.begin(); a!=SecondTauProducts.end(); ++a){
+	//	std::cout<<" rho decays:   "<< a->pdg_id() << std::endl;
 	if(abs(a->pdg_id())==211){tauandprod.push_back(TLorentzVector(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e()  ) );}
 	if(abs(a->pdg_id())==111){tauandprod.push_back(TLorentzVector(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e()  ) );}
       }
-
+      RhoTPI.Configure(tauandprod,"rho");
       Rho2.Configure(tauandprod,"rho");
-      rhobeta_plus->Fill(Rho2.getCosbetaRho(),HelWeightPlus);
 
-      //std::cout<< " getCosbetaRho  "<< Rho2.getCosbetaRho() << " TFK beta "<< Rho2.TFK_cosbeta()<<std::endl;
-      rhobeta_minus->Fill(Rho2.getCosbetaRho(),HelWeightMinus);
       tauandprodRho=tauandprod;  
       TauPolRho2.Configure(tauandprod,"rho");
-     //     omega_rho_plus->Fill(Rho2.getOmega(),HelWeightPlus);
-     //     omega_rho_minus->Fill(Rho2.getOmega(),HelWeightMinus);
-     omega_rho_plus->Fill(TauPolRho2.getOmega(),HelWeightPlus);
-     omega_rho_minus->Fill(TauPolRho2.getOmega(),HelWeightMinus);
 
-     //     std::cout<<" rho    "<< TauPolRho2.getOmega()<<std::endl;
+      RhoHelp.Configure(tauandprod,tauandprod.at(1) + tauandprod.at(2));
+
+      // rhobeta_plus->Fill(TauPolRho2.getOmega(),HelWeightPlus);
+      // rhobeta_minus->Fill(TauPolRho2.getOmega(),HelWeightMinus);
+
+
+      // omega_rho_plus->Fill(RhoTPI.getCosbetaRho(),HelWeightPlus);
+      // omega_rho_minus->Fill(RhoTPI.getCosbetaRho(),HelWeightMinus);
+
+      rhobeta_plus->Fill(RhoHelp.getCosBetaTest(),HelWeightPlus);
+      rhobeta_minus->Fill(RhoHelp.getCosBetaTest(),HelWeightMinus);
+      // std::cout<<"   "<<HelWeightPlus<< "  "<< HelWeightMinus <<std::endl;
+
+      omega_rho_plus->Fill(RhoHelp.getCosbetaRho(),HelWeightPlus);
+      omega_rho_minus->Fill(RhoHelp.getCosbetaRho(),HelWeightMinus);
+
+
+
+      //   std::cout<<" rho beta 1   "<< RhoTPI.getCosbetaRho()<<std::endl;
      //    std::cout<<" rho TDC    "<< Rho2.getOmega()<<std::endl;
     //     std::cout<<" rho +   "<< TauPolRho2.getOmega()*HelWeightPlus<<std::endl;
      //     std::cout<<" rho -   "<< TauPolRho2.getOmega()*HelWeightMinus<<std::endl;
-     omegabar_rho_plus->Fill(TauPolRho2.getOmegabar(),HelWeightPlus);
-     omegabar_rho_minus->Fill(TauPolRho2.getOmegabar(),HelWeightMinus);
+     // omegabar_rho_plus->Fill(TauPolRho2.getOmegabar(),HelWeightPlus);
+     // omegabar_rho_minus->Fill(TauPolRho2.getOmegabar(),HelWeightMinus);
+     omegabar_rho_plus->Fill(RhoHelp.getOmegaRhoBar(),HelWeightPlus);
+     omegabar_rho_minus->Fill(RhoHelp.getOmegaRhoBar(),HelWeightMinus);
 
      //     omegabar_rho_plus->Fill(Rho2.getOmegabar(),HelWeightPlus);
      //     omegabar_rho_minus->Fill(Rho2.getOmegabar(),HelWeightMinus);

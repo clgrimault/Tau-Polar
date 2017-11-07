@@ -40,7 +40,9 @@ class rhoHelper {
   void Initialize(TLorentzVector t, TLorentzVector mu);
   std::vector<TLorentzVector> getBoosted(){return TauRhoandProd_RF;}
   TLorentzVector Boost(TLorentzVector pB, TLorentzVector frame);
+  TVector3 Rotate(TVector3 LVec, TVector3 Rot);
 
+  TVector3 RotationVector;
   //====================
   double getCosthetaRho(); 
   double getSinthetaRho();
@@ -48,10 +50,14 @@ class rhoHelper {
   double getCosbetaRho();
   double getSinbetaRho();
 
-
+  double getCosBetaTest();
+  double getSinBetaTest();
 
   double TFK_cosbeta();
   double TFK_sinbeta();
+
+  double TFK_costheta();
+  double TFK_sintheta();
 
 
 
@@ -61,11 +67,19 @@ class rhoHelper {
   double DPF_cosalpha(); 
   double DPF_sinalpha(); 
 
+  double DPF_cosalphaTest(); 
+  double DPF_sinalphaTest(); 
+
+
+
   TVector3 nL();
   TVector3 nT();
   TVector3 nPerp();
   TVector3 ns();
+  TVector3 nTRotated();
+  TVector3 nPerpRotated();
   TLorentzVector sLV();
+
 
   double getOmegaRho();
   double getOmegaRhoBar();

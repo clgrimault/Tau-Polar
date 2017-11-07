@@ -286,8 +286,6 @@ a1Helper::getMoment(double ct, string type, int hel){
     if(type=="s2g") kern = 0.5*K1bar(ct,atQQ,hel)*MomentSFunction(atQQ,"WD");
     if(type=="cb") kern = K3bar(ct,atQQ,hel)*MomentSFunction(atQQ,"WE");
 
-
-
     integral += kern*stepqq;
 
   }

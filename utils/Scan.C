@@ -22,7 +22,7 @@ static float Pol = 0;
 static float Lum = 50;
 
 
- TFile *_file0 = TFile::Open("Helicity2MEv.root");
+ TFile *_file0 = TFile::Open("1.root");
 
 // TFile *data = TFile::Open("LOCAL_COMBINED_templatesdata_default.root");
 
@@ -275,7 +275,7 @@ void Scan(){
     eF = FakeDataIncl->GetBinError(ibin);
     integ += omega*omega*F*delta/(1+Pol*omega)/(1+Pol*omega);
     err+= pow(omega*omega*eF*delta/(1+Pol*omega)/(1+Pol*omega),2);
-     std::cout<<"omega  "<< integ << std::endl;
+    //     std::cout<<"omega  "<< integ << std::endl;
 
   }
     
@@ -309,7 +309,7 @@ void Scan(){
 
   TGraphErrors *gr3pi = new TGraphErrors(21,polX,sens3pi,epolX,esens3pi );
   gr3pi->Draw();
-  TGraphErrors *grincl = new TGraphErrors(21,polX,sensincl,epolX,esensincl );
-  grincl->Draw("same");
+  // TGraphErrors *grincl = new TGraphErrors(21,polX,sensincl,epolX,esensincl );
+  // grincl->Draw("same");
 
 }
