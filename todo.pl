@@ -62,7 +62,7 @@ for($l=0;$l<$numArgs; $l++){
 
 	printf("\n\nInstructions:");
 	printf("\nTo complete this step do:  \n\n");
-	printf("\n    1)   Install_TauolaEnvironment_$time \n");
+	printf("\n    1)   source Install_TauolaEnvironment_$time \n");
 	printf("\n    2)  ./todo.pl --tauola $setdir \n\n");
     }
     if($ARGV[$l] eq "--tauola"){
