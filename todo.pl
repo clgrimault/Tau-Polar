@@ -139,6 +139,8 @@ for($l=0;$l<$numArgs; $l++){
 	system(sprintf("cp UserCodes/TauPolInterface.h $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
 	system(sprintf("cp UserCodes/TauDecaysHelper.h $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
 	system(sprintf("cp UserCodes/TauDecaysHelper.cc $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
+	system(sprintf("cp UserCodes/PolarimetricA1.cc $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
+	system(sprintf("cp UserCodes/PolarimetricA1.h $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes/; make  -f Makefile.shared;"));
 #	system(sprintf("cp Makefile  $PWD/$tauoladir/tauola++/1.1.5/examples;"));
 #	system(sprintf("cp poltaumain_pythia_tauola.cxx  $PWD/$tauoladir/tauola++/1.1.5/examples;"));
