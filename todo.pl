@@ -50,11 +50,11 @@ for($l=0;$l<$numArgs; $l++){
 
 	system(sprintf("rm Install_TauolaEnvironment_*"));	
 	system(sprintf("echo \"export PYTHIA8DATA='$PWD/$setdir/tauola++/1.1.5/pythia8/176/xmldoc'\">> Install_TauolaEnvironment_$time"));
-	system(sprintf("echo \"export LD_LIBRARY_PATH=$SLDP:$PWD/TauSpiner/tauola++/1.1.5/lib\">> Install_TauolaEnvironment_$time"));
+	system(sprintf("echo \"export LD_LIBRARY_PATH=$SLDP:$PWD/$setdir/tauola++/1.1.5/TauSpiner/lib\">> Install_TauolaEnvironment_$time"));
 	system(sprintf("echo \"export LD_LIBRARY_PATH=$SLDP:$PWD/$setdir/tauola++/1.1.5/pythia8/176/lib/\">> Install_TauolaEnvironment_$time"));
 	system(sprintf("echo \"export LD_LIBRARY_PATH=$SLDP:$PWD/$setdir/tauola++/1.1.5/HepMC-2.06.05/workdir/lib \">> Install_TauolaEnvironment_$time"));
 	system(sprintf("echo \"export LD_LIBRARY_PATH=$SLDP:$PWD/$setdir/tauola++/1.1.5/lhapdf-5.9.1/workdir/lib\">> Install_TauolaEnvironment_$time"));
-	system(sprintf("echo \"export LD_LIBRARY_PATH=$SLDP:$PWD//$setdir/tauola++/1.1.5/examples/UserCodes\">> Install_TauolaEnvironment_$time"));
+	system(sprintf("echo \"export LD_LIBRARY_PATH=$SLDP:$PWD/$setdir/tauola++/1.1.5/examples/UserCodes\">> Install_TauolaEnvironment_$time"));
 	system(sprintf("echo \"cernlib-use --version 5.34.18 root \n\">> Install_TauolaEnvironment_$time"));
 
 	system(sprintf("cp Makefile.template Makefile; "));
@@ -62,7 +62,7 @@ for($l=0;$l<$numArgs; $l++){
 
 	printf("\n\nInstructions:");
 	printf("\nTo complete this step do:  \n\n");
-	printf("\n    1)   source Install_TauolaEnvironment_$time \n");
+	printf("\n    1)   Install_TauolaEnvironment_$time \n");
 	printf("\n    2)  ./todo.pl --tauola $setdir \n\n");
     }
     if($ARGV[$l] eq "--tauola"){

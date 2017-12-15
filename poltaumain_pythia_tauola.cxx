@@ -4,8 +4,7 @@
  * tauola, plots of polatization observables for tau-> mununu and tau-> pinu
  * are produced.
  *
- * @author Vladimir Cherepanov
- * @date  01 MAY 2017
+
  */ 
      
 #include "Tauola/Log.h"
@@ -16,10 +15,16 @@
 #include "TH2F.h" 
 #include "TF1.h"
 #include "TLorentzVector.h"
+#include "TVector3.h"
 #include "UserCodes/a1Helper.h"
 #include "UserCodes/TauDecaysHelper.h"
 #include "UserCodes/TauPolInterface.h"
-
+#include "UserCodes/PolarimetricA1.h"
+#include "TLorentzVector.h"
+#include "TComplex.h"
+#include "TMatrixT.h"
+#include "TVectorT.h"
+#include "TMatrixTSym.h"
 //pythia header files
 #ifdef PYTHIA8180_OR_LATER
 #include "Pythia8/Pythia.h" 
@@ -39,7 +44,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents = 20000; 
+int NumberOfEvents =5000; 
 int EventsToCheck=5;
 
 // elementary test of HepMC typically executed before
@@ -71,6 +76,45 @@ void checkMomentumConservationInEvent(HepMC::GenEvent *evt)
 	cout.precision(6);
 	cout.setf(ios_base::floatfield);
 }
+TMatrixT<double> convertToMatrix(TVectorT<double> V){
+  TMatrixT<double> M(V.GetNrows(),1);
+  for(int i=0; i < M.GetNrows(); i++){
+    M(i,0)=V(i);
+  } return M;
+}
+
+
+TLorentzVector 
+BoostR(TLorentzVector pB, TLorentzVector frame){
+   TMatrixT<double> transform(4,4);
+   TMatrixT<double> result(4,1);
+   TVectorT<double> vec(4); 
+   TVector3 b;
+   if(frame.Vect().Mag()==0){ std::cout<<"RH Boost is not set, perfrom calculation in the Lab Frame   "<<std::endl; return pB;}
+    if(frame.E()==0){ std::cout<<" Caution: Please check that you perform boost correctly!  " <<std::endl; return pB;} 
+   else   b=frame.Vect()*(1/frame.E());
+   vec(0)  = pB.E();    vec(1)  = pB.Px();
+   vec(2)  = pB.Py();   vec(3)  = pB.Pz();
+   double gamma  = 1/sqrt( 1 - b.Mag2());
+   // std::cout<<" beta "<< b.Mag() <<" gamma   "<< gamma <<std::endl;
+   // std::cout<<" vector to be boosted   ";
+   //   pB.Print();
+   transform(0,0)=gamma; transform(0,1) =- gamma*b.X() ;  transform(0,2) =  - gamma*b.Y();  transform(0,3) = - gamma*b.Z(); 
+   //   std::cout<<" (0)   "<< transform(0,0) <<" (1)  "<< transform(0,1)<<" (2)  "<<transform(0,2) <<" (3)  "<< transform(0,3)<<std::endl;
+   transform(1,0)=-gamma*b.X(); transform(1,1) =(1+ (gamma-1)*b.X()*b.X()/b.Mag2()) ;  transform(1,2) = ((gamma-1)*b.X()*b.Y()/b.Mag2());  transform(1,3) = ((gamma-1)*b.X()*b.Z()/b.Mag2());
+   transform(2,0)=-gamma*b.Y(); transform(2,1) = ((gamma-1)*b.Y()*b.X()/b.Mag2());  transform(2,2) = (1 + (gamma-1)*b.Y()*b.Y()/b.Mag2());  transform(2,3) =  ((gamma-1)*b.Y()*b.Z()/b.Mag2()); 
+   transform(3,0)=-gamma*b.Z(); transform(3,1) =((gamma-1)*b.Z()*b.X()/b.Mag2()) ;  transform(3,2) = ((gamma-1)*b.Z()*b.Y()/b.Mag2());  transform(3,3) = (1 + (gamma-1)*b.Z()*b.Z()/b.Mag2()); 
+   result=transform*convertToMatrix(vec);
+   return TLorentzVector(result(1,0), result(2,0) ,result(3,0), result(0,0));
+}
+TVector3
+Rotate(TVector3 LVec, TVector3 Rot){
+  TVector3 vec = LVec;
+  vec.RotateZ(0.5*TMath::Pi() - Rot.Phi());  // not 0.5, to avoid warnings about 0 pT
+  vec.RotateX(Rot.Theta());
+  return vec;
+}
+
 
 void redMinus(TauolaParticle *minus)
 {
@@ -90,12 +134,14 @@ void redMinus(TauolaParticle *minus)
   // can be called here 
 
 
-  for(unsigned int dec=0; dec <23; dec++){
-     double br =0.0; 
-         if(dec==2 || dec == 3) br=0.5;
-	 // if(dec == 3) br=0.99;
-     Tauola::setTauBr(dec, br);
-   } 
+   for(unsigned int dec=0; dec <23; dec++){
+      double br =0.0; 
+      //         if( dec == 4) br=0.99;
+      if( dec ==5) br=0.99;
+      //	 if(dec ==5) br=0.99;
+   	 // if(dec == 3) br=0.99;
+      Tauola::setTauBr(dec, br);
+   }
 
      // Tauola::setTauBr(0, 0.0);     Tauola::setTauBr(1, 0.0);      Tauola::setTauBr(2, 1.0);      Tauola::setTauBr(3, 0.0);      Tauola::setTauBr(4, 0.0);
      // Tauola::setTauBr(5, 0.0);     Tauola::setTauBr(6, 0.0);      Tauola::setTauBr(7, 0.0);      Tauola::setTauBr(8, 0.0);      Tauola::setTauBr(9, 0.0);
@@ -123,8 +169,10 @@ void redPlus(TauolaParticle *plus)
   // can be called here 
   for(unsigned int dec=0; dec <23; dec++){
      double br =0.0;
-     //      if(dec==3 || dec ==4 || dec ==5) br=0.33;
-      if(dec ==4) br=0.99;
+     // if(dec==3 || dec ==4) br=0.49;
+         if(dec==5) br=0.98;
+	 //    if(dec ==5) br=0.99;
+     //if(dec ==4) br=0.99;
      Tauola::setTauBr(dec, br);
    }
 
@@ -137,7 +185,7 @@ void redPlus(TauolaParticle *plus)
 
 
 }
-void SortPions(    std::vector<HepMC::GenParticle > pionsvec)
+void SortPions(std::vector<HepMC::GenParticle > pionsvec)
 {
 
   int npim(0),npip(0);
@@ -231,15 +279,15 @@ int main(int argc,char **argv){
  TH1F *omega_murho_minus= new TH1F("omega_murho_minus","#omega_{#mu#rho}^{-}",50,-1,1);
 
 
- TH1F *omega_rho_plus= new TH1F("omega_rho_plus","#omega_{#rho}^{+}",50,-1.1,1.1);
- TH1F *omega_rho_minus= new TH1F("omega_rho_minus","#omega_{#rho}^{-}",50,-1.1,1.1);
+ TH1F *omega_rho_plus= new TH1F("omega_rho_plus","#omega_{#rho}^{+}",50,-11,11);
+ TH1F *omega_rho_minus= new TH1F("omega_rho_minus","#omega_{#rho}^{-}",50,-11,11);
 
- TH1F *omegabar_rho_plus= new TH1F("omegabar_rho_plus","#bar{#omega}_{#rho}^{+}",50,-1.1,1.1);
- TH1F *omegabar_rho_minus= new TH1F("omegabar_rho_minus","#bar{#omega}_{#rho}^{-}",50,-1.1,1.1);
+ TH1F *omegabar_rho_plus= new TH1F("omegabar_rho_plus","#bar{#omega}_{#rho}^{+}",50,-1,1);
+ TH1F *omegabar_rho_minus= new TH1F("omegabar_rho_minus","#bar{#omega}_{#rho}^{-}",50,-1,1);
 
 
- TH1F *omega_a1_plus= new TH1F("omega_a1_plus","#omega_{a1}^{+}",50,-1,1);
- TH1F *omega_a1_minus= new TH1F("omega_a1_minus","#omega_{a1}^{-}",50,-1,1);
+ TH1F *omega_a1_plus= new TH1F("omega_a1_plus","#omega_{a1}^{+}",40,-1.5,1.5);
+ TH1F *omega_a1_minus= new TH1F("omega_a1_minus","#omega_{a1}^{-}",40,-1.5,1.5);
 
  TH1F *omegabar_a1_plus= new TH1F("omegabar_a1_plus","#bar{#omega}_{a1}^{+}",50,-1,1);
  TH1F *omegabar_a1_minus= new TH1F("omegabar_a1_minus","#bar{#omega}_{a1}^{-}",50,-1,1);
@@ -276,6 +324,9 @@ int main(int argc,char **argv){
  TH1F *omega_pirho_plus= new TH1F("omega_pirho_plus","#omega_{#pi#rho}^{+}",50,-1,1);
  TH1F *omega_pirho_minus= new TH1F("omega_pirho_minus","#omega_{#pi#rho}^{-}",50,-1,1);
   
+ TH1F *a1_mcos2gamma_plus= new TH1F("a1_mcos2gamma_plus"," <cos2#gamma>^{+}",50,-0.5,0.5);
+ TH1F *a1_mcos2gamma_minus= new TH1F("a1_mcos2gamma_minus"," <cos2#gamma>^{-}",50,-0.5,0.5);
+
 
 
  // TH1F *omega_a1rho_plus= new TH1F("omega_a1rho_plus","#omega_{a1#rho}^{+}",50,-1,1);
@@ -357,7 +408,7 @@ int main(int argc,char **argv){
 
     if(iEvent%1000==0) Log::Info()<<"Event: "<<iEvent<<endl;
     if (!pythia.next()) continue;
-
+    //    std::cout<<"-------------- "<<std::endl;
     // Convert event record to HepMC
     HepMC::GenEvent * HepMCEvt = new HepMC::GenEvent();
 
@@ -447,7 +498,7 @@ int main(int argc,char **argv){
 		if(abs((*d)->pdg_id()) ==  12) {JAK2 =1; 
 		}else if(abs((*d)->pdg_id()) ==  14){ JAK2=2;
 		}else if(abs((*d)->pdg_id())==  211){ JAK2 = 3;}
-
+		
 		if( abs((*d)->pdg_id())==213 ){
 		  JAK2 = 4;
 		  for ( HepMC::GenEvent::particle_const_iterator dd =HepMCEvt->particles_begin();  dd != HepMCEvt->particles_end(); ++dd ){  
@@ -458,6 +509,15 @@ int main(int argc,char **argv){
 		    }
 		  }
 		}
+	 	// if(JAK2==4){
+		//   for ( HepMC::GenEvent::particle_const_iterator d =HepMCEvt->particles_begin();  d != HepMCEvt->particles_end(); ++d )
+		//     {  
+		//       if(abs((*d)->pdg_id()) ==  16) std::cout<<" neutrino MC : x   "<< (*d)->momentum().px() <<"  "<<(*d)->momentum().py() <<"  "<< (*d)->momentum().pz()<<"  "<<(*d)->momentum().e() <<std::endl;
+		    
+		//   if(abs((*d)->pdg_id()) ==  213) std::cout<<" rho MC : x   "<< (*d)->momentum().px() <<"  "<<(*d)->momentum().py() <<"  "<< (*d)->momentum().pz()<<"  "<<(*d)->momentum().e() <<std::endl;
+		
+		//     }
+	 	// }
 		if( abs((*d)->pdg_id())==20213 ){
 		  JAK2 = 5; int npi(0);
 		  for ( HepMC::GenEvent::particle_const_iterator dd =HepMCEvt->particles_begin();  dd != HepMCEvt->particles_end(); ++dd ){  
@@ -479,16 +539,19 @@ int main(int argc,char **argv){
       }
     }
   
-    Log::Debug(5)<<"helicites =  "<<Tauola::getHelPlus()<<" "<<Tauola::getHelMinus()
-                 <<" electroweak wt= "<<Tauola::getEWwt()<<endl;
+    //    Log::Debug(5)<<"helicites =  "<<Tauola::getHelPlus()<<" "<<Tauola::getHelMinus()
+    //            <<" electroweak wt= "<<Tauola::getEWwt()<<endl;
+
+
+    //  std::cout<<"helicites =  "<<Tauola::getHelPlus()<<" "<<Tauola::getHelMinus()                <<" electroweak wt= "<<Tauola::getEWwt()<<endl;
 
     bool HelPlus=false;
     bool HelMinus=false;
-    if(Tauola::getHelPlus() ==1 )HelPlus=true;;
-    if(Tauola::getHelPlus() ==-1)HelMinus=true;;
+    if(Tauola::getHelPlus() ==1 )HelMinus=true;
+    if(Tauola::getHelPlus() ==-1)HelPlus=true;
     int HelWeightPlus = HelPlus;
     int HelWeightMinus = HelMinus;
-
+    int tauHelicity  = Tauola::getHelPlus();
 
    
     TLorentzVector tau1(0,0,0,0);
@@ -514,7 +577,7 @@ int main(int argc,char **argv){
     TauDecaysHelper Rho2;
     a1Helper a1h;
     rhoHelper RhoHelp;
-
+    PolarimetricA1 Polarimetr;
     TauDecaysHelper RhoTPI;
     TauPolInterface TauPolPi1;
     TauPolInterface TauPolPi2;
@@ -536,8 +599,73 @@ int main(int argc,char **argv){
     vector<TLorentzVector> tauandprodMuon1,tauandprodRho,tauandprodA1;
     tau1.SetPxPyPzE(FirstTau->momentum().px(), FirstTau->momentum().py(), FirstTau->momentum().pz(), FirstTau->momentum().e());
     tau2.SetPxPyPzE(SecondTau->momentum().px(), SecondTau->momentum().py(), SecondTau->momentum().pz(), SecondTau->momentum().e());
-    //    tau1.Print();
-    //    tau2.Print();
+    // //------------------------  check frames ------------------------------------
+    // std::cout<<"--------------------"<<std::endl;
+    // std::cout<<"tau1   ";  tau1.Print();
+    // std::cout<<"tau2   ";  tau2.Print();
+    // TLorentzVector Z = tau1+tau2;
+    // std::cout<<"Z "<< "("<< Z.Px() <<" , "<< Z.Py() <<" , "<< Z.Pz() << " , "<< Z.E() <<"  ) "<<std::endl; 
+    // std::cout<<"Rotate to tau1 frame "<<std::endl;
+
+    // TLorentzVector BoostedTau1 = BoostR(tau1,Z);
+    // TLorentzVector BoostedTau2 = BoostR(tau2,Z);
+
+
+
+
+    // TVector3 RotVector1 = BoostedTau1.Vect();
+    // TLorentzVector RotatedTau1 = BoostedTau1;
+    // TLorentzVector RotatedTau2 = BoostedTau2;
+    // TLorentzVector RotatedZ = BoostedTau1+ BoostedTau2;
+    // RotatedTau1.SetVect(Rotate(RotatedTau1.Vect(),RotVector1));
+    // RotatedTau2.SetVect(Rotate(RotatedTau2.Vect(),RotVector1));
+    // RotatedZ.SetVect(Rotate(RotatedZ.Vect(),RotVector1));
+
+    // std::cout<<"tau1   ";  RotatedTau1.Print();
+    // std::cout<<"tau2   ";  RotatedTau2.Print();
+    // std::cout<<"Z "<< "("<< RotatedZ.Px() <<" , "<< RotatedZ.Py() <<" , "<< RotatedZ.Pz() << " , "<< RotatedZ.E() <<"  ) "<<std::endl; 
+
+
+
+
+
+
+
+
+    //   BoostR(tau1,Z).Print();
+    //   BoostR(tau2,Z).Print();
+    //   BoostR(Z,Z).Print();
+    
+     
+     // std::cout<<"boost to tau1 frame "<<std::endl;
+     // std::cout<<"first tau "; BoostR(tau1,tau1).Print();
+     // std::cout<<"second tau ";     BoostR(tau2,tau1).Print();
+     // std::cout<<"second tau ";     BoostR(Z,tau1).Print();
+
+
+
+    // TVector3 RotVector = tau1.Vect();
+    // RotatedTau1.SetVect(Rotate(RotatedTau1.Vect(),RotVector));
+    // RotatedTau2.SetVect(Rotate(RotatedTau2.Vect(),RotVector));
+    // std::cout<<"Rot  tau1   ";  RotatedTau1.Print();
+    // std::cout<<"Rot  tau2   ";  RotatedTau2.Print();
+    // TVector3 BoostVect = tau1.BoostVector();
+    // TLorentzVector RotatedTau1Boost = BoostR(RotatedTau1,RotatedTau1);
+    // TLorentzVector RotatedTau2Boost = BoostR(RotatedTau2,RotatedTau1);
+    // TLorentzVector RotatedTau2Boost_checkRoot = RotatedTau1;
+    // RotatedTau2Boost_checkRoot.Boost(-BoostVect);
+
+    // std::cout<<"Rot boosted  tau1   ";  RotatedTau1Boost.Print();
+    // std::cout<<"Rot boosted  tau2   ";  RotatedTau2Boost.Print();
+ 
+    // std::cout<<"Rot boosted  tau1      "<< "("<< RotatedTau1Boost.Px() <<" , "<< RotatedTau1Boost.Py() <<" , "<< RotatedTau1Boost.Pz() << " , "<< RotatedTau1Boost.E() <<"  ) "<<std::endl; 
+    // std::cout<<"Rot boosted  tau2      "<< "("<< RotatedTau2Boost.Px() <<" , "<< RotatedTau2Boost.Py() <<" , "<< RotatedTau2Boost.Pz() << " , "<< RotatedTau2Boost.E() <<"  ) "<<std::endl; 
+    // std::cout<<"Rot boosted  tau2 cc   "<< "("<< RotatedTau2Boost_checkRoot.Px() <<" , "<< RotatedTau2Boost_checkRoot.Py() <<" , "<< RotatedTau2Boost_checkRoot.Pz() << " , "<< RotatedTau2Boost_checkRoot.E() <<"  ) "<<std::endl; 
+
+
+  // vec.RotateZ(0.5*TMath::Pi() - Rot.Phi());  // not 0.5, to avoid warnings about 0 pT
+  // vec.RotateX(Rot.Theta());
+    //---------------------------------------------------------------------------
     if(JAK1==2){
       vector<TLorentzVector> tauandprod;
       tauandprod.push_back(TLorentzVector(FirstTau->momentum().px(), FirstTau->momentum().py(), FirstTau->momentum().pz(), FirstTau->momentum().e()));
@@ -554,19 +682,43 @@ int main(int argc,char **argv){
     }
 
 
-    if(JAK1==3){
+    if(JAK2==3){
       vector<TLorentzVector> tauandprod;
-      tauandprod.push_back(TLorentzVector(FirstTau->momentum().px(), FirstTau->momentum().py(), FirstTau->momentum().pz(), FirstTau->momentum().e()));
-      for(std::vector<HepMC::GenParticle>::const_iterator a = FirstTauProducts.begin(); a!=FirstTauProducts.end(); ++a){
+      tauandprod.push_back(TLorentzVector(SecondTau->momentum().px(), SecondTau->momentum().py(), SecondTau->momentum().pz(), SecondTau->momentum().e()));
+      for(std::vector<HepMC::GenParticle>::const_iterator a = SecondTauProducts.begin(); a!=SecondTauProducts.end(); ++a){
 	if(abs(a->pdg_id())==211){tauandprod.push_back(TLorentzVector(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e()  ) );} }
 
   
+      TLorentzVector piLab = tauandprod.at(1);
+      TLorentzVector tauLab = tauandprod.at(0);
+      TVector3 Rot1 = tauLab.Vect();
 
-      tauandprod1 = tauandprod;
-      Pi1.Configure(tauandprod,"pion");
-      TauPolPi1.Configure(tauandprod,"pion");
-      pi_plus->Fill(TauPolPi1.getOmega(),HelWeightPlus);
-      pi_minus->Fill(TauPolPi1.getOmega(),HelWeightMinus);
+      TLorentzVector tauLabR1    = tauLab;
+      TLorentzVector piLabR1     =piLab ;
+      tauLabR1.SetVect(Rotate(tauLabR1.Vect(),Rot1));
+      piLabR1.SetVect(Rotate(piLabR1.Vect(),Rot1));
+
+      // std::cout<<"TauRotated ";tauLabR1.Print();
+      // std::cout<<"Pi Rotated ";piLabR1.Print();
+      TLorentzVector tauTau= BoostR(tauLabR1,tauLabR1);
+      TLorentzVector piTau= BoostR(piLabR1,tauLabR1);
+
+      TVector3 piTauDir = piTau.Vect()*(1/piTau.Vect().Mag());
+      TVector3 TauLabDir = tauLabR1.Vect()*(1/tauLabR1.Vect().Mag());
+     
+      // std::cout<<"helicity "<<tauHelicity<<std::endl;
+      // std::cout<<"piTauDir ";piTauDir.Print();
+      // std::cout<<"TauLabDir ";TauLabDir.Print();
+ 
+
+      pi_plus->Fill(piTauDir*TauLabDir,HelWeightPlus);
+      pi_minus->Fill(piTauDir*TauLabDir,HelWeightMinus);
+
+      // tauandprod1 = tauandprod;
+      // Pi1.Configure(tauandprod,"pion");
+      // TauPolPi1.Configure(tauandprod,"pion");
+      // pi_plus->Fill(TauPolPi1.getOmega(),HelWeightPlus);
+      // pi_minus->Fill(TauPolPi1.getOmega(),HelWeightMinus);
     }
 
     if(JAK2==3){
@@ -582,13 +734,13 @@ int main(int argc,char **argv){
 
     
     //    std::cout<<  "Starting a new event loop .... event number  : "<< iEvent << std::endl;
-    if(JAK2==4){
+    if(JAK1==4){
       //      std::cout<<"Rho decay is found! ... Jak = "<< JAK2 <<std::endl;
 
       vector<TLorentzVector> tauandprod;
-      tauandprod.push_back(TLorentzVector(SecondTau->momentum().px(), SecondTau->momentum().py(), SecondTau->momentum().pz(), SecondTau->momentum().e()));
+      tauandprod.push_back(TLorentzVector(FirstTau->momentum().px(), FirstTau->momentum().py(), FirstTau->momentum().pz(), FirstTau->momentum().e()));
       //      std::cout<<" ---- "<<std::endl;
-      for(std::vector<HepMC::GenParticle>::const_iterator a = SecondTauProducts.begin(); a!=SecondTauProducts.end(); ++a){
+      for(std::vector<HepMC::GenParticle>::const_iterator a = FirstTauProducts.begin(); a!=FirstTauProducts.end(); ++a){
 	//	std::cout<<" rho decays:   "<< a->pdg_id() << std::endl;
 	if(abs(a->pdg_id())==211){tauandprod.push_back(TLorentzVector(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e()  ) );}
 	if(abs(a->pdg_id())==111){tauandprod.push_back(TLorentzVector(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e()  ) );}
@@ -598,8 +750,41 @@ int main(int argc,char **argv){
 
       tauandprodRho=tauandprod;  
       TauPolRho2.Configure(tauandprod,"rho");
+      //      std::cout<<"neutrino for rho decay  "<<std::endl;
+      //      (tauandprod.at(0) - (tauandprod.at(1) + tauandprod.at(2))).Print();
+      RhoHelp.Configure(tauandprod,tauandprod.at(1) + tauandprod.at(2),tauHelicity);
+      //      std::cout<<"tau eta "<< tauandprod.at(0).Eta() <<std::endl;
+      //      if(tauandprod.at(0).Eta() > 0.88)
+	{
+      
+      TLorentzVector pi0Lab = tauandprod.at(2);
+      TLorentzVector piLab = tauandprod.at(1);
+      TLorentzVector tauLab = tauandprod.at(0);
+      TVector3 Rot1 = tauLab.Vect();
+     
+      TLorentzVector tauLabR1    = tauLab;
+      TLorentzVector piLabR1     =piLab ;
+      TLorentzVector pi0LabR1     =pi0Lab ;
+      tauLabR1.SetVect(Rotate(tauLabR1.Vect(),Rot1));
+      piLabR1.SetVect(Rotate(piLabR1.Vect(),Rot1));
+      pi0LabR1.SetVect(Rotate(pi0LabR1.Vect(),Rot1));
+     
+      // std::cout<<"TauRotated ";tauLabR1.Print();
+      // std::cout<<"Pi Rotated ";piLabR1.Print();
+      TLorentzVector tauTau= BoostR(tauLabR1,tauLabR1);
+      TLorentzVector piTau= BoostR(piLabR1,tauLabR1);
+      TLorentzVector pi0Tau= BoostR(pi0LabR1,tauLabR1);
 
-      RhoHelp.Configure(tauandprod,tauandprod.at(1) + tauandprod.at(2));
+      TLorentzVector q= piTau  - pi0Tau;
+      TLorentzVector P= tauTau;
+      TLorentzVector N= tauTau - piTau - pi0Tau;
+      TVector3 h = P.M()*(2*(q*N)*q.Vect() - q.Mag2()*N.Vect()) * (1/ (2*(q*N)*(q*P) - q.Mag2()*(N*P)));
+      TVector3 TauLabDir =tauLabR1.Vect()*(1/tauLabR1.Vect().Mag());
+      // h.Print();
+      // TauLabDir.Print();
+      // std::cout<<" (q*N) "<< (q*N)  <<std::endl;
+      // std::cout<<" (q*P) "<< (q*P)  <<std::endl;
+      // std::cout<<" (N*P) "<< (N*P)  <<std::endl;
 
       // rhobeta_plus->Fill(TauPolRho2.getOmega(),HelWeightPlus);
       // rhobeta_minus->Fill(TauPolRho2.getOmega(),HelWeightMinus);
@@ -608,14 +793,16 @@ int main(int argc,char **argv){
       // omega_rho_plus->Fill(RhoTPI.getCosbetaRho(),HelWeightPlus);
       // omega_rho_minus->Fill(RhoTPI.getCosbetaRho(),HelWeightMinus);
 
-      rhobeta_plus->Fill(RhoHelp.getCosBetaTest(),HelWeightPlus);
-      rhobeta_minus->Fill(RhoHelp.getCosBetaTest(),HelWeightMinus);
+       rhobeta_plus->Fill(RhoHelp.getCosbetaRho(),HelWeightPlus);
+       rhobeta_minus->Fill(RhoHelp.getCosbetaRho(),HelWeightMinus);
+
+
       // std::cout<<"   "<<HelWeightPlus<< "  "<< HelWeightMinus <<std::endl;
 
-      omega_rho_plus->Fill(RhoHelp.getCosbetaRho(),HelWeightPlus);
-      omega_rho_minus->Fill(RhoHelp.getCosbetaRho(),HelWeightMinus);
+      omega_rho_plus->Fill(RhoHelp.TFK_cosbeta(),HelWeightPlus);
+      omega_rho_minus->Fill(RhoHelp.TFK_cosbeta(),HelWeightMinus);
 
-
+      //     TauLabDir.Print();
 
       //   std::cout<<" rho beta 1   "<< RhoTPI.getCosbetaRho()<<std::endl;
      //    std::cout<<" rho TDC    "<< Rho2.getOmega()<<std::endl;
@@ -623,12 +810,18 @@ int main(int argc,char **argv){
      //     std::cout<<" rho -   "<< TauPolRho2.getOmega()*HelWeightMinus<<std::endl;
      // omegabar_rho_plus->Fill(TauPolRho2.getOmegabar(),HelWeightPlus);
      // omegabar_rho_minus->Fill(TauPolRho2.getOmegabar(),HelWeightMinus);
-     omegabar_rho_plus->Fill(RhoHelp.getOmegaRhoBar(),HelWeightPlus);
-     omegabar_rho_minus->Fill(RhoHelp.getOmegaRhoBar(),HelWeightMinus);
+     // omegabar_rho_plus->Fill(RhoHelp.getOmegaRhoBar(),HelWeightPlus);
+     // omegabar_rho_minus->Fill(RhoHelp.getOmegaRhoBar(),HelWeightMinus);
+     omegabar_rho_plus->Fill(h*TauLabDir,HelWeightPlus);
+     omegabar_rho_minus->Fill(h*TauLabDir,HelWeightMinus);
 
+
+ 
+
+      }
      //     omegabar_rho_plus->Fill(Rho2.getOmegabar(),HelWeightPlus);
      //     omegabar_rho_minus->Fill(Rho2.getOmegabar(),HelWeightMinus);
-     //     std::cout<<  " omegabar     "<< Rho2.getOmegabar() <<std::endl;
+     //      std::cout<<  " omegabar     "<< RhoHelp.getCosBetaTest() <<std::endl;
 
 
      cosbetacosthetarho_plus->Fill(Rho2.getCosbetaRho(),Rho2.getCosthetaRho(),HelWeightPlus);
@@ -638,10 +831,15 @@ int main(int argc,char **argv){
 
     if(JAK2==5 && SubJAK2==51){
       vector<TLorentzVector> particles;
+      particles.clear();
       SortPions(A1Pions);
-      a1ospi.SetPxPyPzE(A1Pions.at(0).momentum().px(), A1Pions.at(0).momentum().py(), A1Pions.at(0).momentum().pz(), A1Pions.at(0).momentum().e());
-      a1ss1pi.SetPxPyPzE(A1Pions.at(1).momentum().px(), A1Pions.at(1).momentum().py(), A1Pions.at(1).momentum().pz(), A1Pions.at(1).momentum().e());
-      a1ss2pi.SetPxPyPzE(A1Pions.at(2).momentum().px(), A1Pions.at(2).momentum().py(), A1Pions.at(2).momentum().pz(), A1Pions.at(2).momentum().e());
+      // std::cout<<"pions " <<std::endl;
+      //   std::cout<<      A1Pions.at(0).pdg_id()<<std::endl;
+      //   std::cout<<      A1Pions.at(1).pdg_id()<<std::endl;
+      //   std::cout<<      A1Pions.at(2).pdg_id()<<std::endl;
+      a1ss1pi.SetPxPyPzE(A1Pions.at(0).momentum().px(), A1Pions.at(0).momentum().py(), A1Pions.at(0).momentum().pz(), A1Pions.at(0).momentum().e());
+      a1ss2pi.SetPxPyPzE(A1Pions.at(1).momentum().px(), A1Pions.at(1).momentum().py(), A1Pions.at(1).momentum().pz(), A1Pions.at(1).momentum().e());
+      a1ospi.SetPxPyPzE(A1Pions.at(2).momentum().px(), A1Pions.at(2).momentum().py(), A1Pions.at(2).momentum().pz(), A1Pions.at(2).momentum().e());
       particles.push_back(tau1);
       particles.push_back(a1ospi);
       particles.push_back(a1ss1pi);
@@ -651,14 +849,26 @@ int main(int argc,char **argv){
       tauandprodA1=particles;
       //      omega_a1_minus->Fill(a1h.getA1omega(),HelWeightMinus);                                                          omega_a1_plus->Fill(a1h.getA1omega(),HelWeightPlus);
 
-      omega_a1_minus->Fill(TauPolA1.getOmega(),HelWeightMinus);                                                          omega_a1_plus->Fill(TauPolA1.getOmega(),HelWeightPlus);
+      //      omega_a1_minus->Fill(TauPolA1.getOmega(),HelWeightMinus);                                                          omega_a1_plus->Fill(TauPolA1.getOmega(),HelWeightPlus);
       TRFomegabar_a1_minus->Fill(a1h.TRF_vgetA1omega(),HelWeightMinus);                                      TRFomegabar_a1_plus->Fill(a1h.TRF_vgetA1omega(),HelWeightPlus);
       TRFomegabar_a1scalar_minus->Fill(a1h.TRF_vgetA1omega("scalar"),HelWeightMinus);                  TRFomegabar_a1scalar_plus->Fill(a1h.TRF_vgetA1omega("scalar"),HelWeightPlus);
       cosbetacostheta_minus->Fill(a1h.cosbeta(),a1h.costhetaLF(),HelWeightMinus);                              cosbetacostheta_plus->Fill(a1h.cosbeta(),a1h.costhetaLF(),HelWeightPlus);
       TRFcosbetacostheta_minus->Fill(a1h.TRF_cosbeta(),a1h.costhetaLF(),HelWeightMinus);                  TRFcosbetacostheta_plus->Fill(a1h.TRF_cosbeta(),a1h.costhetaLF(),HelWeightPlus);
       omegabar_a1_minus->Fill(a1h.vgetA1omega("bar")  ,HelWeightMinus);                                          omegabar_a1_plus->Fill(a1h.vgetA1omega("bar"),HelWeightPlus);
       //      std::cout<<"MomentSFunction "<< a1h.MomentSFunction(0.89,"WA") <<std::endl;
+      //    std::cout<<      particles.size() <<std::endl;
+      Polarimetr.Configure(particles, particles.at(0));
+      // Polarimetr.PolarimetricVector().Print();
+      omega_a1_minus->Fill(Polarimetr.result(),HelWeightMinus);  omega_a1_plus->Fill(Polarimetr.result(),HelWeightPlus);
       s1s2->Fill((a1ospi+a1ss2pi).M2(),(a1ospi+a1ss1pi).M2());
+      int hel(0);
+      if(HelWeightMinus==1) hel = -1;
+      if(HelWeightPlus==1) hel = 1;
+      if(HelWeightPlus==1)      a1_mcos2gamma_plus->Fill(a1h.getMoment(a1h.costhetaLF(),"c2g", 1));                 
+      if(HelWeightMinus==1)      a1_mcos2gamma_minus->Fill(a1h.getMoment(a1h.costhetaLF(),"c2g", -1));                 
+      //      std::cout<< "result "<<Polarimetr.result() <<"   " << hel<<std::endl;
+      //      if(HelWeightPlus==1) std::cout<<"  a1 Moments  "<< a1h.getMoment(a1h.costhetaLF(),"beta", 1) <<std::endl;
+
     }
  
 
@@ -703,31 +913,31 @@ int main(int argc,char **argv){
       }
     }
 
-    if(JAK1 ==2 && JAK2 == 4){
-      if(Mu1.isConfigured() && Rho2.isConfigured()){
-      double OmMuRho=  (Mu1.getOmega() +Rho2.getOmega() )/(1 + Mu1.getOmega()*Rho2.getOmega());
-      TauPolMuRho.ConfigurePair(tauandprodMuon1,"lepton",tauandprodRho,"rho");
-      //      omega_murho_plus->Fill(OmMuRho,HelWeightPlus);
-      //      omega_murho_minus->Fill(OmMuRho,HelWeightMinus);       
+    // if(JAK1 ==2 && JAK2 == 4){
+    //   if(Mu1.isConfigured() && Rho2.isConfigured()){
+    //   double OmMuRho=  (Mu1.getOmega() +Rho2.getOmega() )/(1 + Mu1.getOmega()*Rho2.getOmega());
+    //   TauPolMuRho.ConfigurePair(tauandprodMuon1,"lepton",tauandprodRho,"rho");
+    //   //      omega_murho_plus->Fill(OmMuRho,HelWeightPlus);
+    //   //      omega_murho_minus->Fill(OmMuRho,HelWeightMinus);       
 
     
 
-      omega_murho_plus->Fill(TauPolMuRho.getCombOmegaBar(),HelWeightPlus);
-      omega_murho_minus->Fill(TauPolMuRho.getCombOmegaBar(),HelWeightMinus);    
+    //   omega_murho_plus->Fill(TauPolMuRho.getCombOmegaBar(),HelWeightPlus);
+    //   omega_murho_minus->Fill(TauPolMuRho.getCombOmegaBar(),HelWeightMinus);    
 
-      // if( fabs(TauPolMuRho.getCombOmega())> 1)std::cout<<" mu:    "<< TauPolMuRho.getOmega("first") << "  rho:   "<<  TauPolMuRho.getOmega("second") << " combined    " <<TauPolMuRho.getCombOmega() <<std::endl;
-      }
-    }
-    if(JAK1 ==3 && JAK2 == 4){
-      if(Pi1.isConfigured() && Rho2.isConfigured()){
-      double OmPiRho=  (Pi1.getOmega() +Rho2.getOmega() )/(1 + Pi1.getOmega()*Rho2.getOmega());
-      TauPolPiRho.ConfigurePair(tauandprod1,"pion",tauandprodRho,"rho");
+    //   // if( fabs(TauPolMuRho.getCombOmega())> 1)std::cout<<" mu:    "<< TauPolMuRho.getOmega("first") << "  rho:   "<<  TauPolMuRho.getOmega("second") << " combined    " <<TauPolMuRho.getCombOmega() <<std::endl;
+    //   }
+    // }
+    // if(JAK1 ==3 && JAK2 == 4){
+    //   if(Pi1.isConfigured() && Rho2.isConfigured()){
+    //   double OmPiRho=  (Pi1.getOmega() +Rho2.getOmega() )/(1 + Pi1.getOmega()*Rho2.getOmega());
+    //   TauPolPiRho.ConfigurePair(tauandprod1,"pion",tauandprodRho,"rho");
 
 
-      omega_pirho_plus->Fill(TauPolPiRho.getCombOmega(),HelWeightPlus);
-      omega_pirho_minus->Fill(TauPolPiRho.getCombOmega(),HelWeightMinus);       
-      }
-    }
+    //   omega_pirho_plus->Fill(TauPolPiRho.getCombOmega(),HelWeightPlus);
+    //   omega_pirho_minus->Fill(TauPolPiRho.getCombOmega(),HelWeightMinus);       
+    //   }
+    // }
 
 
     if(JAK1 ==3 && JAK2 == 5 &&   SubJAK2==51){

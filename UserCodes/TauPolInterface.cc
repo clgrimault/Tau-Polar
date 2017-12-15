@@ -260,7 +260,7 @@ TauPolInterface::getOmega(string which)
 	 particles.push_back(TauRhoPi);
 	 particles.push_back(TauRhoPi0);
 	 rhoHelper rho;
-	 rho.Configure(particles, TauRhoPi+TauRhoPi0);
+	 rho.Configure(particles, TauRhoPi+TauRhoPi0,1);
 	 omega=rho.getOmegaRho();
        }
      if(type_=="a1")
@@ -293,7 +293,7 @@ TauPolInterface::getOmegabar(string which){
 	particles.push_back(TauRhoPi);
 	particles.push_back(TauRhoPi0);
 	rhoHelper rho;
-	rho.Configure(particles,TauRhoPi+TauRhoPi0);
+	rho.Configure(particles,TauRhoPi+TauRhoPi0,1);
 	omega=rho.getOmegaRhoBar();
       }
 
@@ -329,7 +329,7 @@ TauPolInterface::getCombOmega(){
       particles.push_back(TauRhoPi);
       particles.push_back(TauRhoPi0);
       rhoHelper rho;
-      rho.Configure(particles,TauRhoPi+TauRhoPi0);
+      rho.Configure(particles,TauRhoPi+TauRhoPi0,1);
       omega1=rho.getOmegaRho();
     }
 
@@ -357,7 +357,7 @@ TauPolInterface::getCombOmega(){
       particles.push_back(TauRhoPi);
       particles.push_back(TauRhoPi0);
       rhoHelper rho;
-      rho.Configure(particles,TauRhoPi+TauRhoPi0);
+      rho.Configure(particles,TauRhoPi+TauRhoPi0,1);
       omega2=rho.getCosbetaRho();
 
     }
@@ -397,7 +397,7 @@ TauPolInterface::getCombOmegaBar(){
       particles.push_back(TauRhoPi);
       particles.push_back(TauRhoPi0);
       rhoHelper rho;
-      rho.Configure(particles,TauRhoPi+TauRhoPi0);
+      rho.Configure(particles,TauRhoPi+TauRhoPi0,1);
       omega1=rho.getOmegaRhoBar();
     }
   if(type_=="a1")
@@ -424,7 +424,7 @@ TauPolInterface::getCombOmegaBar(){
       particles.push_back(TauRhoPi);
       particles.push_back(TauRhoPi0);
       rhoHelper rho;
-      rho.Configure(particles,TauRhoPi+TauRhoPi0);
+      rho.Configure(particles,TauRhoPi+TauRhoPi0,1);
       omega2=rho.getOmegaRhoBar();
     }
   if(type_=="a1")

@@ -30,13 +30,13 @@ class rhoHelper {
  
  public:
   rhoHelper();
-  rhoHelper(vector<TLorentzVector> TauRhoandProd);
-  rhoHelper(vector<TLorentzVector> TauRhoandProd, TLorentzVector RefernceFrame);
+  rhoHelper(vector<TLorentzVector> TauRhoandProd, int helicity);
+  rhoHelper(vector<TLorentzVector> TauRhoandProd, TLorentzVector RefernceFrame, int helicity);
   ~rhoHelper();
-  void Configure(vector<TLorentzVector> TauRhoandProd);
-  void Configure(vector<TLorentzVector> TauRhoandProd, TLorentzVector RefernceFrame);
+  void Configure(vector<TLorentzVector> TauRhoandProd, int helicity);
+  void Configure(vector<TLorentzVector> TauRhoandProd, TLorentzVector RefernceFrame, int helicity);
   bool isConfigured();
-  void Setup(vector<TLorentzVector> TauRhoandProd, TLorentzVector ReferenceFrame );
+  void Setup(vector<TLorentzVector> TauRhoandProd, TLorentzVector ReferenceFrame, int helicity );
   void Initialize(TLorentzVector t, TLorentzVector mu);
   std::vector<TLorentzVector> getBoosted(){return TauRhoandProd_RF;}
   TLorentzVector Boost(TLorentzVector pB, TLorentzVector frame);
@@ -59,7 +59,7 @@ class rhoHelper {
   double TFK_costheta();
   double TFK_sintheta();
 
-
+  bool toplot;
 
 
   double getUltrarel_cospsiLF();
@@ -91,6 +91,8 @@ class rhoHelper {
   double coscab;
   double mrho;
   bool debug;
+  int TauHelicity;
+
 
   vector<TLorentzVector> TauRhoandProd_RF;
   TLorentzVector TauLV;

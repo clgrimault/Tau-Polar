@@ -30,12 +30,14 @@ SF_HDRS    = $(SF_SRCS:.cc=.h)
 HDRS          = 	TauDecaysHelper.h \
 	        a1Helper \
 		rhoHelper \
+		PolarimetricA1 \
 		TauPolInterface
 	         
 
 
 SRCS          = 	a1Helper.cc \
 	        rhoHelper.cc \
+		PolarimetricA1.cc \
 		TauDecaysHelper.cc \
 		TauPolInterface.cc \
 		main.cc
