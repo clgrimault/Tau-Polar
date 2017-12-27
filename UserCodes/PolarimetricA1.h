@@ -134,8 +134,8 @@ class PolarimetricA1 {
   TComplex JN(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1, TLorentzVector N);
   TComplex ConjJN(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1, TLorentzVector N);
 
-  TLorentzVector PTenzor5(TLorentzVector aR, TLorentzVector aI, TLorentzVector bR, TLorentzVector bI, TLorentzVector cR, TLorentzVector cI);
-  TLorentzVector PTenzor(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1, TLorentzVector N);
+  TLorentzVector PTenzor5(TLorentzVector aR, TLorentzVector aI, TLorentzVector bR, TLorentzVector bI, TLorentzVector c);
+  TLorentzVector PTenzor(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1, TLorentzVector N); 
   TLorentzVector PolarimetricVector(); 
   double result();
   double VV1();
@@ -165,6 +165,13 @@ class PolarimetricA1 {
   double ga1(double  Q);
   double Mass(string type="rho");
 
+  TComplex BWIGML(double S, double M,  double G, double m1, double m2, int L);
+  TComplex FPIKM(double W, double XM1, double XM2);
+  TComplex F3PI(double IFORM,double QQ,double SA,double SB);
+  TComplex FA1A1P(double XMSQ);
+  double WGA1(double QQ);
+  double WGA1C(double S);
+  double WGA1N(double S);
 
   TComplex  BWa1(float QQ);
   TComplex  BWrho(float QQ);

@@ -23,7 +23,7 @@ PolarimetricA1::PolarimetricA1(vector<TLorentzVector> TauA1andProd, TLorentzVect
 
 void 
 PolarimetricA1::Setup(vector<TLorentzVector> TauA1andProd, TLorentzVector ReferenceFrame){
-   mpi   = 0.13957018; // GeV 
+   mpi  = 0.13957018; // GeV 
    mpi0 = 0.1349766;   // GeV
    mtau = 1.776; // GeV
    coscab = 0.975; 
@@ -510,8 +510,8 @@ double
 PolarimetricA1::JJ(){
   double QQ = _Q*_Q;
   return  (V1()*BreitWigner(sqrt(_s2),"rho").Rho2() + V2()*BreitWigner(sqrt(_s1),"rho").Rho2()  + VV12()*( BreitWigner(sqrt(_s1),"rho")*Conjugate(BreitWigner(sqrt(_s2),"rho")) + BreitWigner(sqrt(_s2),"rho")*Conjugate(BreitWigner(sqrt(_s1),"rho"))  ))*f3(sqrt(QQ)).Rho2();
-  std::cout<<" FORM1  "<<f3(sqrt(QQ))* BreitWigner(sqrt(_s2),"rho") <<std::endl;
-  std::cout<<" FORM2  "<<f3(sqrt(QQ))* BreitWigner(sqrt(_s1),"rho") <<std::endl;
+  // std::cout<<" FORM1  "<<f3(sqrt(QQ))* BreitWigner(sqrt(_s2),"rho") <<std::endl;
+  // std::cout<<" FORM2  "<<f3(sqrt(QQ))* BreitWigner(sqrt(_s1),"rho") <<std::endl;
 
 }
 
@@ -524,35 +524,53 @@ PolarimetricA1::JJ(){
 
 
 TLorentzVector
-PolarimetricA1::PTenzor5(TLorentzVector aR, TLorentzVector aI, TLorentzVector bR, TLorentzVector bI, TLorentzVector cR, TLorentzVector cI){ 
-  TComplex a0 (aR.E(), aI.E());  TComplex a1(aR.Px(),aI.Px());   TComplex a2(aR.Py(),aI.Py());   TComplex a3(aR.Pz(),aI.Pz());
-  TComplex b0(bR.E(), bI.E());   TComplex b1(bR.Px(),bI.Px());   TComplex b2(bR.Py(),bI.Py());   TComplex b3(bR.Pz(),bI.Pz());
-  TComplex c0(cR.E(), cI.E());   TComplex c1(cR.Px(),cI.Px());   TComplex c2(cR.Py(),cI.Py());   TComplex c3(cR.Pz(),cI.Pz());
+PolarimetricA1::PTenzor5(TLorentzVector aR, TLorentzVector aI, TLorentzVector bR, TLorentzVector bI, TLorentzVector c){ 
+  TComplex a4(aR.E(), aI.E());  TComplex a1(aR.Px(),aI.Px());   TComplex a2(aR.Py(),aI.Py());   TComplex a3(aR.Pz(),aI.Pz());
+  TComplex b4(bR.E(), bI.E());  TComplex b1(bR.Px(),bI.Px());   TComplex b2(bR.Py(),bI.Py());   TComplex b3(bR.Pz(),bI.Pz());
+  // double  c1 = c.Px();   double  c2 = c.Py();   double  c3 = c.Pz();   double  c4 = c.E();
+  
+  //  TComplex c0(cR.E(), cI.E());  TComplex c1(cR.Px(),cI.Px());   TComplex c2(cR.Py(),cI.Py());   TComplex c3(cR.Pz(),cI.Pz());
+  double  c1 = c.Px();   double  c2 = c.Py();   double  c3 = c.Pz();   double  c4 = c.E();
+
+  double d34 = (a3*b4 - a4*b3).Im();
+  double d24 = (a2*b4 - a4*b2).Im();  
+  double d23 = (a2*b3 - a3*b2).Im();
+  double d14 = (a1*b4 - a4*b1).Im();
+  double d13 = (a1*b3 - a3*b1).Im();
+  double d12 = (a1*b2 - a2*b1).Im();
+
+  double PIAX1 = 2*( c2*d34 - c3*d24 + c4*d23);
+  double PIAX2 = 2*(-c1*d34 + c3*d14 - c4*d13);
+  double PIAX3 = 2*( c1*d24 - c2*d14 + c4*d12);
+  double PIAX4 = 2*(-c1*d23 + c2*d13 - c3*d12);
+
   //std::cout<<" a0, a1, a2, a3  "<< a0<< a1 <<a2<<a3<<std::endl;
-//0:  (  a1*(b2*c3  - b3*c2) - a2*( b1 * c3   - b3 *c1 )  + a3*( b1* c2   - b2* c1)  )
-//1: -(  a0*(b2*c3  - b3*c2) - a2*( b0 * c3   - b3 *c0 )  + a3*( b0* c2   - b2* c0)  )
-//2:  (  a0*(b1*c3  - b3*c1) - a1*( b0 * c3   - b3 *c0 )  + a3*( b0* c1   - b1* c0)  )
-//3: -(  a0*(b1*c2  - b2*c1) - a1*( b0 * c2   - b2 *c0 )  + a2*( b0* c1   - b1* c0)  )
+  //0:  (  a1*(b2*c3  - b3*c2) - a2*( b1 * c3   - b3 *c1 )  + a3*( b1* c2   - b2* c1)  )
+  //1: -(  a0*(b2*c3  - b3*c2) - a2*( b0 * c3   - b3 *c0 )  + a3*( b0* c2   - b2* c0)  )
+  //2:  (  a0*(b1*c3  - b3*c1) - a1*( b0 * c3   - b3 *c0 )  + a3*( b0* c1   - b1* c0)  )
+  //3: -(  a0*(b1*c2  - b2*c1) - a1*( b0 * c2   - b2 *c0 )  + a2*( b0* c1   - b1* c0)  )
 
-  TComplex d0 = (  a1*(b2*c3  - b3*c2) - a2*( b1 * c3   - b3 *c1 )  + a3*( b1* c2   - b2* c1)  );
-  TComplex d1 =-(  a0*(b2*c3  - b3*c2) - a2*( b0 * c3   - b3 *c0 )  + a3*( b0* c2   - b2* c0)  );
-  TComplex d2 = (  a0*(b1*c3  - b3*c1) - a1*( b0 * c3   - b3 *c0 )  + a3*( b0* c1   - b1* c0)  );
-  TComplex d3 =-(  a0*(b1*c2  - b2*c1) - a1*( b0 * c2   - b2 *c0 )  + a2*( b0* c1   - b1* c0)  );
+  // TComplex d0 = (  a1*(b2*c3  - b3*c2) - a2*( b1 * c3   - b3 *c1 )  + a3*( b1* c2   - b2* c1)  );
+  // TComplex d1 =-(  a0*(b2*c3  - b3*c2) - a2*( b0 * c3   - b3 *c0 )  + a3*( b0* c2   - b2* c0)  );
+  // TComplex d2 = (  a0*(b1*c3  - b3*c1) - a1*( b0 * c3   - b3 *c0 )  + a3*( b0* c1   - b1* c0)  );
+  // TComplex d3 =-(  a0*(b1*c2  - b2*c1) - a1*( b0 * c2   - b2 *c0 )  + a2*( b0* c1   - b1* c0)  );
 
 
-//0:   (  a.Px()*(b.Py()*c.Pz() - b.Pz()*c.Py()) - a.Py()*( b.Px() * c.Pz()  - b.Pz() *c.Px() ) + a.Pz()*( b.Px()* c.Py()   - b.Py()* c.Px())  )
-//1: - (  a.E()*(b.Py()*c.Pz()  - b.Pz()*c.Py()) - a.Py()*( b.E() * c.Pz()   - b.Pz() *c.E() )  + a.Pz()*( b.E() * c.Py()   - b.Py()* c.E())  )
-//2:   (  a.E()*(b.Px()*c.Pz()  - b.Pz()*c.Px()) - a.Px()*( b.E() * c.Pz()   - b.Pz() *c.E() )  + a.Pz()*( b.E() * c.Px()   - b.Px()* c.E())  )
-//3: - (  a.E()*(b.Px()*c.Py()  - b.Py()*c.Px()) - a.Px()*( b.E() * c.Py()   - b.Py() *c.E() )  + a.Py()*( b.E() * c.Px()   - b.Px()* c.E())  )
-// TLorentzVector d(- (  a.E()*(b.Py()*c.Pz()  - b.Pz()*c.Py()) - a.Py()*( b.E() * c.Pz()   - b.Pz() *c.E() )  + a.Pz()*( b.E() * c.Py()   - b.Py()* c.E())  ),
-// 	   	      (  a.E()*(b.Px()*c.Pz()  - b.Pz()*c.Px()) - a.Px()*( b.E() * c.Pz()   - b.Pz() *c.E() )  + a.Pz()*( b.E() * c.Px()   - b.Px()* c.E())  ),
-// 		    - (  a.E()*(b.Px()*c.Py()  - b.Py()*c.Px()) - a.Px()*( b.E() * c.Py()   - b.Py() *c.E() )  + a.Py()*( b.E() * c.Px()   - b.Px()* c.E())  ),
-// 		      (  a.Px()*(b.Py()*c.Pz() - b.Pz()*c.Py()) - a.Py()*( b.Px() * c.Pz()  - b.Pz() *c.Px() ) + a.Pz()*( b.Px()* c.Py()   - b.Py()* c.Px())  ));
-// 
-  TLorentzVector d(2*d1.Im(),2*d2.Im(),2*d3.Im(),2*d0.Im());
+  //0:   (  a.Px()*(b.Py()*c.Pz() - b.Pz()*c.Py()) - a.Py()*( b.Px() * c.Pz()  - b.Pz() *c.Px() ) + a.Pz()*( b.Px()* c.Py()   - b.Py()* c.Px())  )
+  //1: - (  a.E()*(b.Py()*c.Pz()  - b.Pz()*c.Py()) - a.Py()*( b.E() * c.Pz()   - b.Pz() *c.E() )  + a.Pz()*( b.E() * c.Py()   - b.Py()* c.E())  )
+  //2:   (  a.E()*(b.Px()*c.Pz()  - b.Pz()*c.Px()) - a.Px()*( b.E() * c.Pz()   - b.Pz() *c.E() )  + a.Pz()*( b.E() * c.Px()   - b.Px()* c.E())  )
+  //3: - (  a.E()*(b.Px()*c.Py()  - b.Py()*c.Px()) - a.Px()*( b.E() * c.Py()   - b.Py() *c.E() )  + a.Py()*( b.E() * c.Px()   - b.Px()* c.E())  )
+  // TLorentzVector d(- (  a.E()*(b.Py()*c.Pz()  - b.Pz()*c.Py()) - a.Py()*( b.E() * c.Pz()   - b.Pz() *c.E() )  + a.Pz()*( b.E() * c.Py()   - b.Py()* c.E())  ),
+  // 	   	      (  a.E()*(b.Px()*c.Pz()  - b.Pz()*c.Px()) - a.Px()*( b.E() * c.Pz()   - b.Pz() *c.E() )  + a.Pz()*( b.E() * c.Px()   - b.Px()* c.E())  ),
+  // 		    - (  a.E()*(b.Px()*c.Py()  - b.Py()*c.Px()) - a.Px()*( b.E() * c.Py()   - b.Py() *c.E() )  + a.Py()*( b.E() * c.Px()   - b.Px()* c.E())  ),
+  // 		      (  a.Px()*(b.Py()*c.Pz() - b.Pz()*c.Py()) - a.Py()*( b.Px() * c.Pz()  - b.Pz() *c.Px() ) + a.Pz()*( b.Px()* c.Py()   - b.Py()* c.Px())  ));
+  // 
+  TLorentzVector d(PIAX1,PIAX2,PIAX3,PIAX4);
+    //TLorentzVector d(2*d1.Im(),2*d2.Im(),2*d3.Im(),2*d0.Im());
   // d.Print();
   return d;
 }
+
 
 TComplex
 PolarimetricA1::f3(double Q){ 
@@ -585,8 +603,14 @@ PolarimetricA1::PolarimetricVector(){
 
    TLorentzVector vec1 = q1 - q3 -  a1* (a1*(q1-q3)/a1.M2());
    TLorentzVector vec2 = q2 - q3 -  a1* (a1*(q2-q3)/a1.M2());
+//    std::cout<<" s1,s2,QQ  "<< s1 <<"  "<<s2<<"  "<<a1.M2()<<std::endl;
+
+// 0.742717  0.433661  1.61186
 
 
+   std::cout<<" F3PI1   "<< F3PI(1,1.61186,0.742717,0.433661) <<std::endl;
+   std::cout<<" F3PI2   "<< F3PI(2,1.61186,0.742717,0.433661) <<std::endl;
+   std::cout<<" F3PI3   "<< F3PI(3,1.61186,0.742717,0.433661) <<std::endl;
 
    TComplex BWProd1 = f3(a1.M())*BreitWigner(sqrt(s2),"rho");
    TComplex BWProd2 = f3(a1.M())*BreitWigner(sqrt(s1),"rho");
@@ -594,8 +618,8 @@ PolarimetricA1::PolarimetricVector(){
    double BWProd1Re = BWProd1.Re();   double BWProd1Im = BWProd1.Im();
    double BWProd2Re = BWProd2.Re();   double BWProd2Im = BWProd2.Im();
 
-   TLorentzVector NIm(0,0,0,0);
-   TLorentzVector PT5 = PTenzor5(JConjRe( q1,  q2,  q3,  a1), JConjIm( q1,  q2,  q3,  a1), JRe( q1,  q2,  q3,  a1), JIm( q1,  q2,  q3,  a1),N,NIm);
+ 
+   TLorentzVector PT5 = PTenzor5(JConjRe( q1,  q2,  q3,  a1), JConjIm( q1,  q2,  q3,  a1), JRe( q1,  q2,  q3,  a1), JIm( q1,  q2,  q3,  a1),N);
  
    double omega = P*PTenzor(q1,q2,q3,a1,N) - P*PT5;
 
@@ -635,6 +659,7 @@ PolarimetricA1::PTenzor(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3,
 
   TComplex factor1=ConjJN(q1,q2,q3,a1,N)*L1 + JN(q1,q2,q3,a1,N)*CL1;
   TComplex factor2=ConjJN(q1,q2,q3,a1,N)*L2 + JN(q1,q2,q3,a1,N)*CL2;
+
   TLorentzVector  Ptenz= 2*BreitWigner(sqrt(s1),"rho").Rho2()*(vec2*N)*vec2 + 2*BreitWigner(sqrt(s2),"rho").Rho2()*(vec1*N)*vec1 + 2*(BreitWigner(sqrt(s2),"rho")*Conjugate(BreitWigner(sqrt(s1),"rho"))  ).Re() *((vec1*N)*vec2 + (vec2*N)*vec1) - JJ()*N;
 
   TLorentzVector out  = 2*(factor1*vec1 + factor2*vec2 - JJ()*N);
@@ -814,7 +839,7 @@ PolarimetricA1::BreitWigner(double Q, string type){
   // im = m*m*m*g/(pow(m*m - QQ,2) + m*m*g*g);
   re = (m*m*(m*m - QQ))/(pow(m*m - QQ,2) + m*m*g*g);
   im = Q*g/(pow(m*m - QQ,2) + m*m*g*g);
-
+ 
 
   TComplex out(re,im);
   return out;
@@ -1236,3 +1261,405 @@ PolarimetricA1::Rotate(TVector3 LVec, TVector3 Rot){
   vec.RotateX(Rot.Theta());
   return vec;
 }
+
+
+
+//------- L-wave BreightWigner for rho
+TComplex 
+PolarimetricA1::BWIGML(double S, double M,  double G, double m1, double m2, int L){
+  int IPOW;
+  double MP = pow(m1+m2,2);
+  double MM = pow(m1-m2,2);
+  double MSQ = M*M;
+  double W = sqrt(S);
+  double WGS =0.0;
+  double QS,QM;
+  if(W > m1+m2){
+    QS = sqrt(fabs( (S  - MP)*(S  - MM)))/W;
+    QM = sqrt(fabs( (MSQ - MP)*(MSQ - MM)))/M;
+    IPOW = 2*L +1;
+    WGS=G*(MSQ/W)*pow(QS/QM, IPOW);
+  }
+
+  // std::cout<<" MSQ  "<<MSQ <<std::endl;
+  // std::cout<<" WGS:  "<<G*(MSQ/W) <<" *  " <<QS/QM <<std::endl;
+ TComplex out;
+ out = TComplex(MSQ,0)/TComplex(MSQ - S, -WGS) ;
+ return out;
+}
+
+TComplex
+PolarimetricA1::FPIKM(double W, double XM1, double XM2){
+  double ROM  = 0.773;
+  double ROG  = 0.145;
+  double ROM1 = 1.370;
+  double ROG1 = 0.510;
+  double BETA1=-0.145;
+  double PIM  = 0.140;
+  
+  double S=W*W;
+  int L =1; // P-wave
+  TComplex out = (BWIGML(S,ROM,ROG,XM1,XM2,L) + BETA1*BWIGML(S,ROM1,ROG1,XM1,XM2,L))/(1+BETA1);
+  return out;
+  
+} 
+
+
+TComplex
+PolarimetricA1::F3PI(double IFORM,double QQ,double SA,double SB){
+  double MRO = 0.7743;
+  double GRO = 0.1491;
+  double MRP = 1.370 ;
+  double GRP = 0.386 ;
+  double MF2 = 1.275;
+  double GF2 = 0.185;
+  double MF0 = 1.186;
+  double GF0 = 0.350;
+  double MSG = 0.860;
+  double GSG = 0.880;
+  double MPIZ = mpi0;
+  double MPIC = mpi;
+
+
+  double M1 = mpi;
+  double M2 = mpi;
+  double M3 = mpi;
+
+  double M1SQ = M1*M1;
+  double M2SQ = M2*M2;
+  double M3SQ = M3*M3;
+  
+  
+  TComplex  BT1 = TComplex(1.,0.);
+  TComplex  BT2 = TComplex(0.12,0.)*TComplex(1, 0.99*TMath::Pi(), true);//  TComplex(1, 0.99*TMath::Pi(), true);   Real part must be equal to one, stupid polar implemenation in root
+  TComplex  BT3 = TComplex(0.37,0.)*TComplex(1, -0.15*TMath::Pi(), true);
+  TComplex  BT4 = TComplex(0.87,0.)*TComplex(1, 0.53*TMath::Pi(), true);
+  TComplex  BT5 = TComplex(0.71,0.)*TComplex(1, 0.56*TMath::Pi(), true);
+  TComplex  BT6 = TComplex(2.10,0.)*TComplex(1, 0.23*TMath::Pi(), true);
+  TComplex  BT7 = TComplex(0.77,0.)*TComplex(1, -0.54*TMath::Pi(), true);
+
+  TComplex  F3PIFactor(0.,0.); // initialize to zero
+
+  if(IFORM == 1 || IFORM == 2 ){
+  double S1 = SA;
+  double S2 = SB;
+  double S3 = QQ-SA-SB+M1SQ+M2SQ+M3SQ;
+  // std::cout<<"S1  "<< BT1  <<std::endl;
+  // std::cout<<"S2  "<< BT5  <<std::endl;
+  // std::cout<<"S3  "<< BT6  <<std::endl;
+  //Lorentz invariants for all the contributions:
+  double F134 = -(1./3.)*((S3-M3SQ)-(S1-M1SQ));
+  double F15A = -(1./2.)*((S2-M2SQ)-(S3-M3SQ));
+  double F15B = -(1./18.)*(QQ-M2SQ+S2)*(2.*M1SQ+2.*M3SQ-S2)/S2;
+  double F167 = -(2./3.);
+
+  // Breit Wigners for all the contributions:
+
+ 
+  TComplex  FRO1 = BWIGML(S1,MRO,GRO,M2,M3,1);
+  TComplex  FRP1 = BWIGML(S1,MRP,GRP,M2,M3,1);
+  TComplex  FRO2 = BWIGML(S2,MRO,GRO,M3,M1,1);
+  TComplex  FRP2 = BWIGML(S2,MRP,GRP,M3,M1,1);
+  TComplex  FF21 = BWIGML(S1,MF2,GF2,M2,M3,2);
+  TComplex  FF22 = BWIGML(S2,MF2,GF2,M3,M1,2);
+  TComplex  FSG2 = BWIGML(S2,MSG,GSG,M3,M1,0);
+  TComplex  FF02 = BWIGML(S2,MF0,GF0,M3,M1,0);
+
+  // std::cout<<"FRO1  "<< FRO1  <<std::endl;
+  // std::cout<<" FRP1 "<< FRP1  <<std::endl;
+  // std::cout<<"FRO2  "<< FRO2  <<std::endl;
+  // std::cout<<"FRP2  "<< FRP2  <<std::endl;
+  // std::cout<<"FF21  "<< FF21  <<std::endl;
+  // std::cout<<"FF22  "<<FF22   <<std::endl;
+  // std::cout<<"FSG2  "<<FSG2   <<std::endl;
+  // std::cout<<"FF02  "<<FF02   <<std::endl;
+
+
+  F3PIFactor = BT1*FRO1+BT2*FRP1+
+    BT3*TComplex(F134,0.)*FRO2+BT4*TComplex(F134,0.)*FRP2
+    -BT5*TComplex(F15A,0.)*FF21-BT5*TComplex(F15B,0.)*FF22
+    -BT6*TComplex(F167,0.)*FSG2-BT7*TComplex(F167,0.)*FF02;
+
+  } else if (IFORM == 3 ){
+
+    double S3 = SA;
+    double S1 = SB;
+    double S2 = QQ-SA-SB+M1SQ+M2SQ+M3SQ;
+
+    double F34A = (1./3.)*((S2-M2SQ)-(S3-M3SQ));
+    double F34B = (1./3.)*((S3-M3SQ)-(S1-M1SQ));
+    double F35A = -(1./18.)*(QQ-M1SQ+S1)*(2.*M2SQ+2.*M3SQ-S1)/S1;
+    double F35B =  (1./18.)*(QQ-M2SQ+S2)*(2.*M3SQ+2.*M1SQ-S2)/S2;
+    double F36A = -(2./3.);
+    double F36B =  (2./3.);
+
+    //C Breit Wigners for all the contributions:
+    TComplex  FRO1 = BWIGML(S1,MRO,GRO,M2,M3,1);
+    TComplex  FRP1 = BWIGML(S1,MRP,GRP,M2,M3,1);
+    TComplex  FRO2 = BWIGML(S2,MRO,GRO,M3,M1,1);
+    TComplex  FRP2 = BWIGML(S2,MRP,GRP,M3,M1,1);
+    TComplex  FF21 = BWIGML(S1,MF2,GF2,M2,M3,2);
+    TComplex  FF22 = BWIGML(S2,MF2,GF2,M3,M1,2);
+    TComplex  FSG1 = BWIGML(S1,MSG,GSG,M2,M3,0);
+    TComplex  FSG2 = BWIGML(S2,MSG,GSG,M3,M1,0);
+    TComplex  FF01 = BWIGML(S1,MF0,GF0,M2,M3,0);
+    TComplex  FF02 = BWIGML(S2,MF0,GF0,M3,M1,0);
+    
+    F3PIFactor = 
+      BT3*(TComplex(F34A,0.)*FRO1+TComplex(F34B,0.)*FRO2)+
+      BT4*(TComplex(F34A,0.)*FRP1+TComplex(F34B,0.)*FRP2)
+      -BT5*(TComplex(F35A,0.)*FF21+TComplex(F35B,0.)*FF22)
+      -BT6*(TComplex(F36A,0.)*FSG1+TComplex(F36B,0.)*FSG2)
+      -BT7*(TComplex(F36A,0.)*FF01+TComplex(F36B,0.)*FF02);
+    
+    // F3PIFactor = TComplex(0.,0.);
+ 
+
+  }
+
+  TComplex FORMA1 = FA1A1P(QQ);
+  TComplex F3PIFactor_ret =  F3PIFactor*FORMA1;
+
+  return F3PIFactor;
+} 
+
+
+TComplex
+PolarimetricA1::FA1A1P(double XMSQ){
+  double  XM1 = 1.275000;
+  double  XG1 =0.700 ; 
+  double  XM2 = 1.461000 ;
+  double  XG2 = 0.250; 
+  TComplex BET = TComplex(0.00,0.);
+
+  double GG1 = XM1*XG1/(1.3281*0.806);
+  double GG2 = XM2*XG2/(1.3281*0.806);
+  double XM1SQ = XM1*XM1;
+  double XM2SQ = XM2*XM2;
+
+  double GF = WGA1(XMSQ);
+  double FG1 = GG1*GF;
+  double FG2 = GG2*GF;
+  TComplex F1 = TComplex(-XM1SQ,0.0)/TComplex(XMSQ-XM1SQ,FG1);
+  TComplex F2 = TComplex(-XM2SQ,0.0)/TComplex(XMSQ-XM2SQ,FG2);
+  TComplex FA1A1P = F1+BET*F2;
+
+  return FA1A1P;
+}
+
+
+double 
+PolarimetricA1::WGA1(double QQ){
+// C mass-dependent M*Gamma of a1 through its decays to 
+// C.   [(rho-pi S-wave) + (rho-pi D-wave) + 
+// C.    (f2 pi D-wave) + (f0pi S-wave)]
+// C.  AND simple K*K S-wave
+  double  MKST = 0.894;
+  double  MK = 0.496;
+  double  MK1SQ = (MKST+MK)*(MKST+MK);
+  double  MK2SQ = (MKST-MK)*(MKST-MK);
+  //C coupling constants squared:
+  double   C3PI = 0.2384*0.2384;
+  double   CKST = 4.7621*4.7621*C3PI;
+// C Parameterization of numerical integral of total width of a1 to 3pi.
+// C From M. Schmidtler, CBX-97-64-Update.
+  double  S = QQ;
+  double  WG3PIC = WGA1C(S);
+  double  WG3PIN = WGA1N(S);
+
+  //C Contribution to M*Gamma(m(3pi)^2) from S-wave K*K, if above threshold
+  double  GKST = 0.0;
+  if(S > MK1SQ) GKST = sqrt((S-MK1SQ)*(S-MK2SQ))/(2.*S);
+
+  double WGA1_ret = C3PI*(WG3PIC+WG3PIN)+CKST*GKST;
+  return WGA1_ret;
+}
+
+
+double
+PolarimetricA1::WGA1C(double S){
+  double STH,Q0,Q1,Q2,P0,P1,P2,P3,P4,G1_IM;
+
+  Q0 =   5.80900; Q1 =  -3.00980; Q2 =   4.57920;
+  P0 = -13.91400; P1 =  27.67900; P2 = -13.39300;
+  P3 =   3.19240; P4 =  -0.10487; STH=0.1753;
+
+
+  if(S < STH){
+    G1_IM=0.0;
+  }else if(S > STH && S < 0.823){
+    G1_IM = Q0*   pow(S-STH,3)   *(1. + Q1*(S-STH) + Q2*pow(S-STH,2));
+  }
+  else{
+    G1_IM = P0 + P1*S + P2*S*S+ P3*S*S*S + P4*S*S*S*S;
+  }
+
+  double WGA1C_ret = G1_IM;
+  return WGA1C_ret;
+}
+
+double
+PolarimetricA1::WGA1N(double S){
+  double STH,Q0,Q1,Q2,P0,P1,P2,P3,P4,G1_IM;
+  Q0 =   6.28450;Q1 =  -2.95950;Q2 =   4.33550;
+  P0 = -15.41100;P1 =  32.08800;P2 = -17.66600;
+  P3 =   4.93550;P4 =  -0.37498;STH   = 0.1676;
+  
+  if(S < STH){
+    G1_IM = 0.0;
+  }else if(S > STH && S < 0.823){
+    G1_IM = Q0*pow(S-STH,3)*(1. + Q1*(S-STH) + Q2*pow(S-STH,2));
+  }
+  else{
+    G1_IM = P0 + P1*S + P2*S*S+ P3*S*S*S + P4*S*S*S*S;
+  }
+  double WGA1N_ret = G1_IM;
+  return WGA1N_ret;
+}
+
+
+// C=======================================================================
+//       COMPLEX FUNCTION FA1A1P(XMSQ)
+// C     ==================================================================
+// C     complex form-factor for a1+a1prime.                       AJW 1/98
+// C     ==================================================================
+
+//       REAL XMSQ
+//       REAL PKORB,WGA1
+//       REAL XM1,XG1,XM2,XG2,XM1SQ,XM2SQ,GG1,GG2,GF,FG1,FG2
+//       COMPLEX BET,F1,F2
+//       INTEGER IFIRST/0/
+
+//       IF (IFIRST.EQ.0) THEN
+//         IFIRST = 1
+
+// C The user may choose masses and widths that differ from nominal:
+
+
+// C scale factors relative to nominal:
+//         GG1 = XM1*XG1/(1.3281*0.806)
+//         GG2 = XM2*XG2/(1.3281*0.806)
+
+//         XM1SQ = XM1*XM1
+//         XM2SQ = XM2*XM2
+//       END IF
+
+//       GF = WGA1(XMSQ)
+//       FG1 = GG1*GF
+//       FG2 = GG2*GF
+//       F1 = CMPLX(-XM1SQ,0.0)/CMPLX(XMSQ-XM1SQ,FG1)
+//       F2 = CMPLX(-XM2SQ,0.0)/CMPLX(XMSQ-XM2SQ,FG2)
+//       FA1A1P = F1+BET*F2
+
+//       RETURN
+//       END
+// C=======================================================================
+
+
+
+
+//       COMPLEX FUNCTION FPIKM(W,XM1,XM2)
+// C **********************************************************
+// C     PION FORM FACTOR
+// C **********************************************************
+//       COMPLEX BWIGM
+//       REAL ROM,ROG,ROM1,ROG1,BETA1,PI,PIM,S,W
+//       EXTERNAL BWIG
+//       DATA  INIT /0/
+// C
+// C ------------ PARAMETERS --------------------
+//       IF (INIT.EQ.0 ) THEN
+//       INIT=1
+//       PI=3.141592654
+//       PIM=.140
+//       ROM=0.773
+//       ROG=0.145
+//       ROM1=1.370
+//       ROG1=0.510
+// C      BETA1=-0.145
+//       BETA1=0.
+//       ENDIF
+// C -----------------------------------------------
+//       S=W**2
+//       FPIKM=(BWIGM(S,ROM,ROG,XM1,XM2)+BETA1*BWIGM(S,ROM1,ROG1,XM1,XM2))
+//      & /(1+BETA1)
+// C      FPIKM=(BWIGM(S,ROM1,ROG1,XM1,XM2))
+// C     & /(1+BETA1)
+//       RETURN
+//       END
+
+
+
+//       COMPLEX FUNCTION BWIGML(S,M,G,M1,M2,L)
+// C **********************************************************
+// C     L-WAVE BREIT-WIGNER
+// C **********************************************************
+//       REAL S,M,G,M1,M2
+//       INTEGER L,IPOW
+//       REAL MSQ,W,WGS,MP,MM,QS,QM
+
+//       MP = (M1+M2)**2
+//       MM = (M1-M2)**2
+//       MSQ = M*M
+//       W = SQRT(S)
+//       WGS = 0.0
+//       IF (W.GT.(M1+M2)) THEN
+//         QS=SQRT(ABS((S   -MP)*(S   -MM)))/W
+//         QM=SQRT(ABS((MSQ -MP)*(MSQ -MM)))/M
+//         IPOW = 2*L+1
+//         WGS=G*(MSQ/W)*(QS/QM)**IPOW
+//       ENDIF
+
+//       BWIGML=CMPLX(MSQ,0.)/CMPLX(MSQ-S,-WGS)
+
+//       RETURN
+//       END
+
+
+
+
+
+
+
+
+
+
+// C=======================================================================
+//       COMPLEX FUNCTION FA1A1P(XMSQ)
+// C     ==================================================================
+// C     complex form-factor for a1+a1prime.                       AJW 1/98
+// C     ==================================================================
+
+//       REAL XMSQ
+//       REAL PKORB,WGA1
+//       REAL XM1,XG1,XM2,XG2,XM1SQ,XM2SQ,GG1,GG2,GF,FG1,FG2
+//       COMPLEX BET,F1,F2
+//       INTEGER IFIRST/0/
+
+//       IF (IFIRST.EQ.0) THEN
+//         IFIRST = 1
+
+// C The user may choose masses and widths that differ from nominal:
+//         XM1 = PKORB(1,10)
+//         XG1 = PKORB(2,10)
+//         XM2 = PKORB(1,17)
+//         XG2 = PKORB(2,17)
+//         BET = CMPLX(PKORB(3,17),0.)
+// C scale factors relative to nominal:
+//         GG1 = XM1*XG1/(1.3281*0.806)
+//         GG2 = XM2*XG2/(1.3281*0.806)
+
+//         XM1SQ = XM1*XM1
+//         XM2SQ = XM2*XM2
+//       END IF
+
+//       GF = WGA1(XMSQ)
+//       FG1 = GG1*GF
+//       FG2 = GG2*GF
+//       F1 = CMPLX(-XM1SQ,0.0)/CMPLX(XMSQ-XM1SQ,FG1)
+//       F2 = CMPLX(-XM2SQ,0.0)/CMPLX(XMSQ-XM2SQ,FG2)
+//       FA1A1P = F1+BET*F2
+
+//       RETURN
+//       END
+// C=======================================================================

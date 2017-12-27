@@ -134,7 +134,7 @@ void redMinus(TauolaParticle *minus)
   // can be called here 
 
 
-   for(unsigned int dec=0; dec <23; dec++){
+   for(unsigned int dec=1; dec <23; dec++){
       double br =0.0; 
       //         if( dec == 4) br=0.99;
       if( dec ==5) br=0.99;
@@ -167,7 +167,7 @@ void redPlus(TauolaParticle *plus)
   // Tauola::setTauBr(int mode, double br);
   // Tauola::setTaukle(double bra1, double brk0, double brk0b,double brks);
   // can be called here 
-  for(unsigned int dec=0; dec <23; dec++){
+  for(unsigned int dec=1; dec <23; dec++){
      double br =0.0;
      // if(dec==3 || dec ==4) br=0.49;
          if(dec==5) br=0.98;
@@ -338,7 +338,10 @@ int main(int argc,char **argv){
 
 
 
-
+TH1F *s1= new TH1F("s1","s2",40,0,2);
+TH1F *s2= new TH1F("s2","s2",40,0,2);
+TH1F *qq= new TH1F("qq","qq",40,0,3);
+TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 
 
  TH2F *s1s2= new TH2F("s1s2","s1s2",20,0,2,20,0,2);
@@ -396,7 +399,7 @@ int main(int argc,char **argv){
   //  Tauola::setTauLifetime(0.0); //new tau lifetime in mm
     Tauola::spin_correlation.setAll(true);
 
-  //  Log::LogDebug(true);
+    Log::LogDebug(true);
 
     Tauola::setRedefineTauMinus(redMinus);  // activates execution of routine redMinus in TAUOLA interface
     Tauola::setRedefineTauPlus(redPlus);    // activates execution of routine redPlus  in TAUOLA interface
@@ -858,8 +861,12 @@ int main(int argc,char **argv){
       //      std::cout<<"MomentSFunction "<< a1h.MomentSFunction(0.89,"WA") <<std::endl;
       //    std::cout<<      particles.size() <<std::endl;
       Polarimetr.Configure(particles, particles.at(0));
+      s1->Fill((a1ospi +a1ss1pi).M() );
+      s2->Fill((a1ospi +a1ss2pi).M() );
+      qq->Fill((a1ospi+a1ss1pi+a1ss2pi).M());
       // Polarimetr.PolarimetricVector().Print();
       omega_a1_minus->Fill(Polarimetr.result(),HelWeightMinus);  omega_a1_plus->Fill(Polarimetr.result(),HelWeightPlus);
+      hmag->Fill(Polarimetr.PolarimetricVector().Vect().Mag());
       s1s2->Fill((a1ospi+a1ss2pi).M2(),(a1ospi+a1ss1pi).M2());
       int hel(0);
       if(HelWeightMinus==1) hel = -1;

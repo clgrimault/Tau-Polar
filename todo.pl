@@ -81,6 +81,7 @@ for($l=0;$l<$numArgs; $l++){
 	system(sprintf("cd $tauoladir/tauola++/1.1.5/; wget http://www.hepforge.org/archive/lhapdf/lhapdf-5.9.1.tar.gz; tar -xzvf lhapdf-5.9.1.tar.gz;"));
 	system(sprintf("cd $tauoladir/tauola++/1.1.5/; wget http://mc-tester.web.cern.ch/MC-TESTER/MC-TESTER-1.25.0.tar.gz; tar -xzvf MC-TESTER-1.25.0.tar.gz;"));
 	system(sprintf("cd $tauoladir/tauola++/1.1.5/; wget http://lcgapp.cern.ch/project/simu/HepMC/download/HepMC-2.06.05.tar.gz;  tar -xzvf  HepMC-2.06.05.tar.gz;"));
+#	system(sprintf("cp tauola.f  $PWD/$tauoladir/tauola++/1.1.5/tauola-fortran/tauola/; "));
 	printf("\n Downloading Complete ... \n");
 	printf("\n Start Installation ... \n\n\n");
 	printf("\n ___________________Installing HEPMC ... _____________________\n\n\n");
