@@ -137,6 +137,13 @@ class PolarimetricA1 {
   TLorentzVector PTenzor5(TLorentzVector aR, TLorentzVector aI, TLorentzVector bR, TLorentzVector bI, TLorentzVector c);
   TLorentzVector PTenzor(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1, TLorentzVector N); 
   TLorentzVector PolarimetricVector(); 
+
+  TLorentzVector CLVEC(std::vector<TComplex> H, std::vector<TComplex> HC, TLorentzVector N);
+  TLorentzVector CLAXI(std::vector<TComplex> H, std::vector<TComplex> HC, TLorentzVector N);
+
+
+
+
   double result();
   double VV1();
   double VV2();
@@ -173,6 +180,7 @@ class PolarimetricA1 {
   double WGA1C(double S);
   double WGA1N(double S);
 
+
   TComplex  BWa1(float QQ);
   TComplex  BWrho(float QQ);
   TComplex  BWrhoPrime(float QQ);
@@ -205,6 +213,10 @@ class PolarimetricA1 {
   double gpiprimerhopi;
   double grhopipi;
   double beta;
+  double COEF1;
+  double COEF2;
+  double COEF3;
+
 
   const TLorentzVector a1pos;
   const TLorentzVector a1pss1;
