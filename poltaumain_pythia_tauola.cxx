@@ -129,8 +129,8 @@ void redMinus(TauolaParticle *minus)
   //
   // Any combination of methods
   // Tauola::setTauBr(int mode, double br);
-  //   Tauola::setTaukle(double bra1, double brk0, double brk0b,double brks);
-  Tauola::setTaukle(1, 0,0,0);
+  //Tauola::setTaukle(double bra1, double brk0, double brk0b,double brks);
+   Tauola::setTaukle(1, 0,0,0);
   // can be called here 
 
 
@@ -165,7 +165,8 @@ void redPlus(TauolaParticle *plus)
   //
   // Any combination of methods
   // Tauola::setTauBr(int mode, double br);
-  // Tauola::setTaukle(double bra1, double brk0, double brk0b,double brks);
+  //Tauola::setTaukle(double bra1, double brk0, double brk0b,double brks);
+   Tauola::setTaukle(1, 0,0,0);
   // can be called here 
   for(unsigned int dec=1; dec <23; dec++){
      double br =0.0;
@@ -836,10 +837,14 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
       vector<TLorentzVector> particles;
       particles.clear();
       SortPions(A1Pions);
-      // std::cout<<"pions " <<std::endl;
-      //   std::cout<<      A1Pions.at(0).pdg_id()<<std::endl;
-      //   std::cout<<      A1Pions.at(1).pdg_id()<<std::endl;
-      //   std::cout<<      A1Pions.at(2).pdg_id()<<std::endl;
+       // std::cout<<"pions " <<std::endl;
+       //   std::cout<<      A1Pions.at(0).pdg_id()<<std::endl;
+       //   std::cout<<      A1Pions.at(1).pdg_id()<<std::endl;
+       //   std::cout<<      A1Pions.at(2).pdg_id()<<std::endl;
+
+
+
+      int taucharge =  (A1Pions.at(0).pdg_id()+A1Pions.at(1).pdg_id()+A1Pions.at(2).pdg_id() > 0) ? 1 : -1;
       a1ss1pi.SetPxPyPzE(A1Pions.at(0).momentum().px(), A1Pions.at(0).momentum().py(), A1Pions.at(0).momentum().pz(), A1Pions.at(0).momentum().e());
       a1ss2pi.SetPxPyPzE(A1Pions.at(1).momentum().px(), A1Pions.at(1).momentum().py(), A1Pions.at(1).momentum().pz(), A1Pions.at(1).momentum().e());
       a1ospi.SetPxPyPzE(A1Pions.at(2).momentum().px(), A1Pions.at(2).momentum().py(), A1Pions.at(2).momentum().pz(), A1Pions.at(2).momentum().e());
@@ -860,12 +865,17 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
       omegabar_a1_minus->Fill(a1h.vgetA1omega("bar")  ,HelWeightMinus);                                          omegabar_a1_plus->Fill(a1h.vgetA1omega("bar"),HelWeightPlus);
       //      std::cout<<"MomentSFunction "<< a1h.MomentSFunction(0.89,"WA") <<std::endl;
       //    std::cout<<      particles.size() <<std::endl;
-      Polarimetr.Configure(particles, particles.at(0));
+      Polarimetr.Configure(particles, particles.at(0),taucharge);
       s1->Fill((a1ospi +a1ss1pi).M() );
       s2->Fill((a1ospi +a1ss2pi).M() );
       qq->Fill((a1ospi+a1ss1pi+a1ss2pi).M());
       // Polarimetr.PolarimetricVector().Print();
       omega_a1_minus->Fill(Polarimetr.result(),HelWeightMinus);  omega_a1_plus->Fill(Polarimetr.result(),HelWeightPlus);
+     //  std::cout<<"Polarimetr.result() "<< Polarimetr.result() <<std::endl;
+     //   a1ospi.Print();
+     //   a1ss1pi.Print();
+     // a1ss2pi.Print();
+      std::cout<<"masses  "<<a1ospi.M() <<"  "<< a1ss1pi.M() << "  "<< a1ss2pi.M() <<std::endl;
       hmag->Fill(Polarimetr.PolarimetricVector().Vect().Mag());
       s1s2->Fill((a1ospi+a1ss2pi).M2(),(a1ospi+a1ss1pi).M2());
       int hel(0);

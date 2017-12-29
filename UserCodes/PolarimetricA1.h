@@ -33,10 +33,10 @@ class PolarimetricA1 {
   PolarimetricA1(vector<TLorentzVector> TauA1andProd);
   PolarimetricA1(vector<TLorentzVector> TauA1andProd, TLorentzVector RefernceFrame);
   ~PolarimetricA1();
-  void Configure(vector<TLorentzVector> TauA1andProd);
-  void Configure(vector<TLorentzVector> TauA1andProd, TLorentzVector RefernceFrame);
+  void Configure(vector<TLorentzVector> TauA1andProd, int taucharge);
+  void Configure(vector<TLorentzVector> TauA1andProd, TLorentzVector RefernceFrame, int taucharge);
   bool isConfigured();
-  void Setup(vector<TLorentzVector> TauA1andProd, TLorentzVector ReferenceFrame );
+  void Setup(vector<TLorentzVector> TauA1andProd, TLorentzVector ReferenceFrame, int taucharge );
   void subSetup(double s1, double s2, double s3, double Q);
 
   void Initialize(TLorentzVector t, TLorentzVector mu);
@@ -216,7 +216,7 @@ class PolarimetricA1 {
   double COEF1;
   double COEF2;
   double COEF3;
-
+  int SIGN;
 
   const TLorentzVector a1pos;
   const TLorentzVector a1pss1;

@@ -9,7 +9,8 @@ PolarimetricA1::PolarimetricA1(vector<TLorentzVector> TauA1andProd){
     std::cout<<" Warning!! Size of a1 input vector != 4 !! "<<std::endl;
   }
   TLorentzVector fakeboost(0,0,0,0);
-  Setup(TauA1andProd,fakeboost);
+  int fakecharge = 1;
+  Setup(TauA1andProd,fakeboost,fakecharge);
 }
 
 
@@ -17,12 +18,13 @@ PolarimetricA1::PolarimetricA1(vector<TLorentzVector> TauA1andProd, TLorentzVect
   if(TauA1andProd.size()!=4){
     std::cout<<" Warning!! Size of a1 input vector != 4 !! "<<std::endl;
   }
-  Setup(TauA1andProd,RefernceFrame);
+  int fakecharge = 1;
+  Setup(TauA1andProd,RefernceFrame,fakecharge);
 }
 
 
 void 
-PolarimetricA1::Setup(vector<TLorentzVector> TauA1andProd, TLorentzVector ReferenceFrame){
+PolarimetricA1::Setup(vector<TLorentzVector> TauA1andProd, TLorentzVector ReferenceFrame, int taucharge){
    mpi  = 0.13957018; // GeV 
    mpi0 = 0.1349766;   // GeV
    mtau = 1.776; // GeV
@@ -43,7 +45,7 @@ PolarimetricA1::Setup(vector<TLorentzVector> TauA1andProd, TLorentzVector Refere
    COEF1 =2.0*sqrt(2.)/3.0;
    COEF2 =-2.0*sqrt(2.)/3.0;
    COEF3 = 2.0*sqrt(2.)/3.0; //C AJW 2/98: Add in the D-wave and I=0 3pi substructure:
-  
+   SIGN = taucharge;
 
 
    debug  = false;
@@ -102,22 +104,22 @@ PolarimetricA1::subSetup(double s1, double s2, double s3, double Q){
  
 
 void 
-PolarimetricA1::Configure(vector<TLorentzVector> TauA1andProd){
+PolarimetricA1::Configure(vector<TLorentzVector> TauA1andProd, int taucharge){
 
   if(TauA1andProd.size()!=4){
     std::cout<<" Warning!! Size of input vector != 4 !! "<<std::endl;
   }
   TLorentzVector fakeboost(0,0,0,0);
-  Setup(TauA1andProd,fakeboost);
+  Setup(TauA1andProd,fakeboost,taucharge);
 
 }
 
 void 
-PolarimetricA1::Configure(vector<TLorentzVector> TauA1andProd, TLorentzVector RefernceFrame){
+PolarimetricA1::Configure(vector<TLorentzVector> TauA1andProd, TLorentzVector RefernceFrame, int taucharge){
   if(TauA1andProd.size()!=4){
     std::cout<<" a1 helper:  Warning!! Size of input vector != 4!   Size = "<< TauA1andProd.size()<<std::endl;
   }
-  Setup(TauA1andProd,RefernceFrame);
+  Setup(TauA1andProd,RefernceFrame, taucharge);
 
 }
 bool
@@ -576,7 +578,8 @@ PolarimetricA1::PolarimetricVector(){
    HADCURC.push_back(Conjugate(TComplex(vec1.Py())*F1 + TComplex(vec2.Py())*F2  +   TComplex(vec3.Py())*F3 ) );
    HADCURC.push_back(Conjugate(TComplex(vec1.Pz())*F1 + TComplex(vec2.Pz())*F2  +   TComplex(vec3.Pz())*F3) );
 
-
+   std::cout<<" HADCUR   " <<   HADCUR.at(0) <<"  " <<HADCUR.at(1) <<"  " <<HADCUR.at(2) <<"  " <<HADCUR.at(3) <<std::endl;
+   N.Print();
    TLorentzVector CLV =  CLVEC(HADCUR,HADCURC,N );
    CLV.Print();
    TLorentzVector CLA =  CLAXI(HADCUR,HADCURC,N );
@@ -653,11 +656,11 @@ TLorentzVector PolarimetricA1::CLAXI(std::vector<TComplex> H, std::vector<TCompl
   double d13 = (a1*b3 - a3*b1).Im();
   double d12 = (a1*b2 - a2*b1).Im();
 
-  double PIAX0 = 2*(-c1*d23 + c2*d13 - c3*d12);
-  double PIAX1 = 2*( c2*d34 - c3*d24 + c4*d23);
-  double PIAX2 = 2*(-c1*d34 + c3*d14 - c4*d13);
-  double PIAX3 = 2*( c1*d24 - c2*d14 + c4*d12);
-  
+  double PIAX0 = SIGN*2*(-c1*d23 + c2*d13 - c3*d12);
+  double PIAX1 = SIGN*2*( c2*d34 - c3*d24 + c4*d23);
+  double PIAX2 = SIGN*2*(-c1*d34 + c3*d14 - c4*d13);
+  double PIAX3 = SIGN*2*( c1*d24 - c2*d14 + c4*d12);
+
   return TLorentzVector( PIAX1,PIAX2,PIAX3,PIAX0);
 }
 
