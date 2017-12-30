@@ -578,13 +578,19 @@ PolarimetricA1::PolarimetricVector(){
    HADCURC.push_back(Conjugate(TComplex(vec1.Py())*F1 + TComplex(vec2.Py())*F2  +   TComplex(vec3.Py())*F3 ) );
    HADCURC.push_back(Conjugate(TComplex(vec1.Pz())*F1 + TComplex(vec2.Pz())*F2  +   TComplex(vec3.Pz())*F3) );
 
-   std::cout<<" HADCUR   " <<   HADCUR.at(0) <<"  " <<HADCUR.at(1) <<"  " <<HADCUR.at(2) <<"  " <<HADCUR.at(3) <<std::endl;
-   N.Print();
+   //   std::cout<<" HADCUR   " <<   HADCUR.at(0) <<"  " <<HADCUR.at(1) <<"  " <<HADCUR.at(2) <<"  " <<HADCUR.at(3) <<std::endl;
+   //   N.Print();
    TLorentzVector CLV =  CLVEC(HADCUR,HADCURC,N );
-   CLV.Print();
+   // CLV.Print();
+   // std::cout<<" former PT tenzor";
+   // PTenzor(q1,q2,q3,a1,N).Print();
    TLorentzVector CLA =  CLAXI(HADCUR,HADCURC,N );
-   CLA.Print();
+   // CLA.Print();
 
+   //  CLV.Print();
+   // CLA.Print();
+   //  std::cout<<"   prod "<< CLA*P <<std::endl;
+   // P.Print();
  // // FORM1:QQ,S1,SDWA   2.4830039       1.4455295      0.77724248    
  // //  FORM1   = (-0.56503093    , -1.3786634    )
 
@@ -600,9 +606,9 @@ PolarimetricA1::PolarimetricVector(){
 
 
 
-   std::cout<<"Polarimetic ----  F3PI1   "<< F3PI(1,  2.2407060   ,   0.64030808  ,     1.1532878        ) <<std::endl;
-   std::cout<<"Polarimetic ----  F3PI2   "<< F3PI(2,  2.2407060   ,    1.1532878   ,   0.64030808      ) <<std::endl;
-   std::cout<<"Polarimetic ----  F3PI3   "<< F3PI(3,   2.2407060  ,    0.50301999   ,   0.64030808      ) <<std::endl;
+   //   std::cout<<"Polarimetic ----  F3PI1   "<< F3PI(1,  2.2407060   ,   0.64030808  ,     1.1532878        ) <<std::endl;
+   //   std::cout<<"Polarimetic ----  F3PI2   "<< F3PI(2,  2.2407060   ,    1.1532878   ,   0.64030808      ) <<std::endl;
+   //   std::cout<<"Polarimetic ----  F3PI3   "<< F3PI(3,   2.2407060  ,    0.50301999   ,   0.64030808      ) <<std::endl;
 
    TComplex BWProd1 = f3(a1.M())*BreitWigner(sqrt(s2),"rho");
    TComplex BWProd2 = f3(a1.M())*BreitWigner(sqrt(s1),"rho");
@@ -610,10 +616,14 @@ PolarimetricA1::PolarimetricVector(){
    double BWProd1Re = BWProd1.Re();   double BWProd1Im = BWProd1.Im();
    double BWProd2Re = BWProd2.Re();   double BWProd2Im = BWProd2.Im();
 
+
+
  
    TLorentzVector PT5 = PTenzor5(JConjRe( q1,  q2,  q3,  a1), JConjIm( q1,  q2,  q3,  a1), JRe( q1,  q2,  q3,  a1), JIm( q1,  q2,  q3,  a1),N);
- 
+   // std::cout<<" former PT5";
+   //   PT5.Print();
    double omega = P*PTenzor(q1,q2,q3,a1,N) - P*PT5;
+   double omega_new = P*CLV - P*CLA;
 
    //    std::cout<<"P  and P5  omega  "<< omega<<std::endl;
    // PTenzor(q1,q2,q3,a1,N).Print();
@@ -621,21 +631,28 @@ PolarimetricA1::PolarimetricVector(){
 
 
    TLorentzVector out =  (P.M()*P.M()*  (PT5 - PTenzor(q1,q2,q3,a1,N))  -  P*(  P*PT5  -  P*PTenzor(q1,q2,q3,a1,N)))*(1/omega/P.M());
+   TLorentzVector out_new =  (P.M()*P.M()*  (CLA - CLV)  -  P*(  P*CLA -  P*CLV))*(1/omega_new/P.M());
+   //std::cout<<"  --- "<< out_new.Vect().Mag()<<std::endl;   out_new.Print();
+
+   //   std::cout<<"former polarimetr and new"<< out.Mag()<<"  "<< out_new.Mag()<<std::endl;
+
 
    // std::cout<<"1st:  "<< P.M()*P.M()*  (PT5 - PTenzor(q1,q2,q3,a1,N))/omega/P.M() <<std::endl;
    // std::cout<<"2nd:  "<< P*(  P*PT5  -  P*PTenzor(q1,q2,q3,a1,N))* (1/omega/P.M()) <<std::endl;
    // ( (P.M()/omega)*(PT5 - PTenzor(q1,q2,q3,a1,N))).Print();
    // (P*(  P*PT5  -  P*PTenzor(q1,q2,q3,a1,N))).Print();
    // out.Vect().Print();
-   return out;
+   return out_new;
 }
 
-TLorentzVector PolarimetricA1::CLVEC(std::vector<TComplex> H, std::vector<TComplex> HC, TLorentzVector N){
-  TComplex HN  = H.at(0)*N.E() - H.at(1)*N.Px()  - H.at(2)*N.Py() - H.at(3)*N.Pz();
-  TComplex HCN = HC.at(0)*N.E() - HC.at(1)*N.Px()  - HC.at(2)*N.Py() - HC.at(3)*N.Pz();
+TLorentzVector 
+PolarimetricA1::CLVEC(std::vector<TComplex> H, std::vector<TComplex> HC, TLorentzVector N){
+
+  TComplex HN  = H.at(0)*N.E()     - H.at(1)*N.Px()    - H.at(2)*N.Py()   - H.at(3)*N.Pz();
+  TComplex HCN = HC.at(0)*N.E()    - HC.at(1)*N.Px()   - HC.at(2)*N.Py()  - HC.at(3)*N.Pz();
   double   HH  = (H.at(0)*HC.at(0) - H.at(1)*HC.at(1)  - H.at(2)*HC.at(2) - H.at(3)*HC.at(3)).Re();
 
-  double PIVEC0 = 2*(   2*(HN*HC.at(0)).Re()  - HH*N.E()  );
+  double PIVEC0 = 2*(   2*(HN*HC.at(0)).Re()  - HH*N.E()   );
   double PIVEC1 = 2*(   2*(HN*HC.at(1)).Re()  - HH*N.Px()  );
   double PIVEC2 = 2*(   2*(HN*HC.at(2)).Re()  - HH*N.Py()  );
   double PIVEC3 = 2*(   2*(HN*HC.at(3)).Re()  - HH*N.Pz()  );
@@ -644,11 +661,12 @@ TLorentzVector PolarimetricA1::CLVEC(std::vector<TComplex> H, std::vector<TCompl
 }
 
 
-TLorentzVector PolarimetricA1::CLAXI(std::vector<TComplex> H, std::vector<TComplex> HC, TLorentzVector N){
+TLorentzVector 
+PolarimetricA1::CLAXI(std::vector<TComplex> H, std::vector<TComplex> HC, TLorentzVector N){
 
-  TComplex a4 = HC.at(0);   TComplex a1 =  HC.at(1);   TComplex a2=  HC.at(2);   TComplex a3=  HC.at(3);
-  TComplex b4 = H.at(0);    TComplex b1 =  H.at(1);   TComplex b2=  H.at(2);   TComplex b3=  H.at(3);
-  double  c4 = N.E();       double  c1 = N.Px();   double  c2 = N.Py();   double  c3 = N.Pz();   
+  TComplex a4 = HC.at(0);   TComplex a1 =  HC.at(1);   TComplex a2 =  HC.at(2);   TComplex a3 =  HC.at(3);
+  TComplex b4 = H.at(0);    TComplex b1 =  H.at(1);    TComplex b2 =  H.at(2);    TComplex b3 =  H.at(3);
+  double   c4 = N.E();      double   c1 =  N.Px();     double   c2 =  N.Py();     double   c3 = N.Pz();   
   double d34 = (a3*b4 - a4*b3).Im();
   double d24 = (a2*b4 - a4*b2).Im();  
   double d23 = (a2*b3 - a3*b2).Im();
@@ -656,7 +674,7 @@ TLorentzVector PolarimetricA1::CLAXI(std::vector<TComplex> H, std::vector<TCompl
   double d13 = (a1*b3 - a3*b1).Im();
   double d12 = (a1*b2 - a2*b1).Im();
 
-  double PIAX0 = SIGN*2*(-c1*d23 + c2*d13 - c3*d12);
+  double PIAX0 = -SIGN*2*(-c1*d23 + c2*d13 - c3*d12);
   double PIAX1 = SIGN*2*( c2*d34 - c3*d24 + c4*d23);
   double PIAX2 = SIGN*2*(-c1*d34 + c3*d14 - c4*d13);
   double PIAX3 = SIGN*2*( c1*d24 - c2*d14 + c4*d12);
@@ -669,9 +687,7 @@ TLorentzVector
 PolarimetricA1::PTenzor5(TLorentzVector aR, TLorentzVector aI, TLorentzVector bR, TLorentzVector bI, TLorentzVector c){ 
   TComplex a4(aR.E(), aI.E());  TComplex a1(aR.Px(),aI.Px());   TComplex a2(aR.Py(),aI.Py());   TComplex a3(aR.Pz(),aI.Pz());
   TComplex b4(bR.E(), bI.E());  TComplex b1(bR.Px(),bI.Px());   TComplex b2(bR.Py(),bI.Py());   TComplex b3(bR.Pz(),bI.Pz());
-  // double  c1 = c.Px();   double  c2 = c.Py();   double  c3 = c.Pz();   double  c4 = c.E();
-  
-  //  TComplex c0(cR.E(), cI.E());  TComplex c1(cR.Px(),cI.Px());   TComplex c2(cR.Py(),cI.Py());   TComplex c3(cR.Pz(),cI.Pz());
+
   double  c1 = c.Px();   double  c2 = c.Py();   double  c3 = c.Pz();   double  c4 = c.E();
 
   double d34 = (a3*b4 - a4*b3).Im();
@@ -686,27 +702,6 @@ PolarimetricA1::PTenzor5(TLorentzVector aR, TLorentzVector aI, TLorentzVector bR
   double PIAX3 = 2*( c1*d24 - c2*d14 + c4*d12);
   double PIAX4 = 2*(-c1*d23 + c2*d13 - c3*d12);
 
-  //std::cout<<" a0, a1, a2, a3  "<< a0<< a1 <<a2<<a3<<std::endl;
-  //0:  (  a1*(b2*c3  - b3*c2) - a2*( b1 * c3   - b3 *c1 )  + a3*( b1* c2   - b2* c1)  )
-  //1: -(  a0*(b2*c3  - b3*c2) - a2*( b0 * c3   - b3 *c0 )  + a3*( b0* c2   - b2* c0)  )
-  //2:  (  a0*(b1*c3  - b3*c1) - a1*( b0 * c3   - b3 *c0 )  + a3*( b0* c1   - b1* c0)  )
-  //3: -(  a0*(b1*c2  - b2*c1) - a1*( b0 * c2   - b2 *c0 )  + a2*( b0* c1   - b1* c0)  )
-
-  // TComplex d0 = (  a1*(b2*c3  - b3*c2) - a2*( b1 * c3   - b3 *c1 )  + a3*( b1* c2   - b2* c1)  );
-  // TComplex d1 =-(  a0*(b2*c3  - b3*c2) - a2*( b0 * c3   - b3 *c0 )  + a3*( b0* c2   - b2* c0)  );
-  // TComplex d2 = (  a0*(b1*c3  - b3*c1) - a1*( b0 * c3   - b3 *c0 )  + a3*( b0* c1   - b1* c0)  );
-  // TComplex d3 =-(  a0*(b1*c2  - b2*c1) - a1*( b0 * c2   - b2 *c0 )  + a2*( b0* c1   - b1* c0)  );
-
-
-  //0:   (  a.Px()*(b.Py()*c.Pz() - b.Pz()*c.Py()) - a.Py()*( b.Px() * c.Pz()  - b.Pz() *c.Px() ) + a.Pz()*( b.Px()* c.Py()   - b.Py()* c.Px())  )
-  //1: - (  a.E()*(b.Py()*c.Pz()  - b.Pz()*c.Py()) - a.Py()*( b.E() * c.Pz()   - b.Pz() *c.E() )  + a.Pz()*( b.E() * c.Py()   - b.Py()* c.E())  )
-  //2:   (  a.E()*(b.Px()*c.Pz()  - b.Pz()*c.Px()) - a.Px()*( b.E() * c.Pz()   - b.Pz() *c.E() )  + a.Pz()*( b.E() * c.Px()   - b.Px()* c.E())  )
-  //3: - (  a.E()*(b.Px()*c.Py()  - b.Py()*c.Px()) - a.Px()*( b.E() * c.Py()   - b.Py() *c.E() )  + a.Py()*( b.E() * c.Px()   - b.Px()* c.E())  )
-  // TLorentzVector d(- (  a.E()*(b.Py()*c.Pz()  - b.Pz()*c.Py()) - a.Py()*( b.E() * c.Pz()   - b.Pz() *c.E() )  + a.Pz()*( b.E() * c.Py()   - b.Py()* c.E())  ),
-  // 	   	      (  a.E()*(b.Px()*c.Pz()  - b.Pz()*c.Px()) - a.Px()*( b.E() * c.Pz()   - b.Pz() *c.E() )  + a.Pz()*( b.E() * c.Px()   - b.Px()* c.E())  ),
-  // 		    - (  a.E()*(b.Px()*c.Py()  - b.Py()*c.Px()) - a.Px()*( b.E() * c.Py()   - b.Py() *c.E() )  + a.Py()*( b.E() * c.Px()   - b.Px()* c.E())  ),
-  // 		      (  a.Px()*(b.Py()*c.Pz() - b.Pz()*c.Py()) - a.Py()*( b.Px() * c.Pz()  - b.Pz() *c.Px() ) + a.Pz()*( b.Px()* c.Py()   - b.Py()* c.Px())  ));
-  // 
   TLorentzVector d(PIAX1,PIAX2,PIAX3,PIAX4);
     //TLorentzVector d(2*d1.Im(),2*d2.Im(),2*d3.Im(),2*d0.Im());
   // d.Print();
@@ -1399,7 +1394,7 @@ PolarimetricA1::F3PI(double IFORM,double QQ,double SA,double SB){
   double M1;
   double M2;
   double M3;
-  int IDK =1;
+  int IDK =2;
   if(IDK ==1){
     M1=mpi0;
     M2=mpi0;

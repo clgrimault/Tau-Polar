@@ -44,7 +44,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents =5000; 
+int NumberOfEvents =10000; 
 int EventsToCheck=5;
 
 // elementary test of HepMC typically executed before
@@ -870,12 +870,13 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
       s2->Fill((a1ospi +a1ss2pi).M() );
       qq->Fill((a1ospi+a1ss1pi+a1ss2pi).M());
       // Polarimetr.PolarimetricVector().Print();
-      omega_a1_minus->Fill(Polarimetr.result(),HelWeightMinus);  omega_a1_plus->Fill(Polarimetr.result(),HelWeightPlus);
+   
+	omega_a1_minus->Fill(Polarimetr.result(),HelWeightMinus);  omega_a1_plus->Fill(Polarimetr.result(),HelWeightPlus);
      //  std::cout<<"Polarimetr.result() "<< Polarimetr.result() <<std::endl;
      //   a1ospi.Print();
      //   a1ss1pi.Print();
      // a1ss2pi.Print();
-      std::cout<<"masses  "<<a1ospi.M() <<"  "<< a1ss1pi.M() << "  "<< a1ss2pi.M() <<std::endl;
+      //      std::cout<<"masses  "<<a1ospi.M() <<"  "<< a1ss1pi.M() << "  "<< a1ss2pi.M() <<std::endl;
       hmag->Fill(Polarimetr.PolarimetricVector().Vect().Mag());
       s1s2->Fill((a1ospi+a1ss2pi).M2(),(a1ospi+a1ss1pi).M2());
       int hel(0);
