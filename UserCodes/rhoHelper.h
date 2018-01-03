@@ -30,19 +30,17 @@ class rhoHelper {
  
  public:
   rhoHelper();
-  rhoHelper(vector<TLorentzVector> TauRhoandProd, int helicity);
-  rhoHelper(vector<TLorentzVector> TauRhoandProd, TLorentzVector RefernceFrame, int helicity);
+  rhoHelper(vector<TLorentzVector> TauRhoandProd);
   ~rhoHelper();
-  void Configure(vector<TLorentzVector> TauRhoandProd, int helicity);
-  void Configure(vector<TLorentzVector> TauRhoandProd, TLorentzVector RefernceFrame, int helicity);
+  void Configure(vector<TLorentzVector> TauRhoandProd);
   bool isConfigured();
-  void Setup(vector<TLorentzVector> TauRhoandProd, TLorentzVector ReferenceFrame, int helicity );
+  void Setup(vector<TLorentzVector> TauRhoandProd, TLorentzVector ReferenceFrame );
   void Initialize(TLorentzVector t, TLorentzVector mu);
   std::vector<TLorentzVector> getBoosted(){return TauRhoandProd_RF;}
   TLorentzVector Boost(TLorentzVector pB, TLorentzVector frame);
   TVector3 Rotate(TVector3 LVec, TVector3 Rot);
 
-  TVector3 RotationVector;
+
   //====================
   double getCosthetaRho(); 
   double getSinthetaRho();
@@ -50,27 +48,17 @@ class rhoHelper {
   double getCosbetaRho();
   double getSinbetaRho();
 
-  double getCosBetaTest();
-  double getSinBetaTest();
-
   double TFK_cosbeta();
   double TFK_sinbeta();
 
   double TFK_costheta();
   double TFK_sintheta();
 
-  bool toplot;
-
 
   double getUltrarel_cospsiLF();
   double getSinpsiLF();
   double DPF_cosalpha(); 
   double DPF_sinalpha(); 
-
-  double DPF_cosalphaTest(); 
-  double DPF_sinalphaTest(); 
-
-
 
   TVector3 nL();
   TVector3 nT();
@@ -90,9 +78,7 @@ class rhoHelper {
   double mtau;
   double coscab;
   double mrho;
-  bool debug;
-  int TauHelicity;
-
+ 
 
   vector<TLorentzVector> TauRhoandProd_RF;
   TLorentzVector TauLV;
@@ -105,6 +91,7 @@ class rhoHelper {
   TLorentzVector DPF_TauLV;
   TLorentzVector DPF_InvisibleLV;
   bool isValid_;
+  bool debug;
   TMatrixT<double> convertToMatrix(TVectorT<double> V);
 };
 #endif
