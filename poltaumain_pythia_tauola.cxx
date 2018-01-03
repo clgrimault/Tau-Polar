@@ -44,7 +44,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents =10000; 
+int NumberOfEvents =5000; 
 int EventsToCheck=5;
 
 // elementary test of HepMC typically executed before
@@ -137,7 +137,7 @@ void redMinus(TauolaParticle *minus)
    for(unsigned int dec=1; dec <23; dec++){
       double br =0.0; 
       //         if( dec == 4) br=0.99;
-      if( dec ==5) br=0.99;
+      if( dec ==5 || dec ==4 || dec==3 || dec ==2) br=0.25;
       //	 if(dec ==5) br=0.99;
    	 // if(dec == 3) br=0.99;
       Tauola::setTauBr(dec, br);
@@ -171,7 +171,8 @@ void redPlus(TauolaParticle *plus)
   for(unsigned int dec=1; dec <23; dec++){
      double br =0.0;
      // if(dec==3 || dec ==4) br=0.49;
-         if(dec==5) br=0.98;
+     if( dec ==5 || dec ==4 || dec==3 || dec ==2) br=0.25;
+       
 	 //    if(dec ==5) br=0.99;
      //if(dec ==4) br=0.99;
      Tauola::setTauBr(dec, br);
@@ -287,8 +288,13 @@ int main(int argc,char **argv){
  TH1F *omegabar_rho_minus= new TH1F("omegabar_rho_minus","#bar{#omega}_{#rho}^{-}",50,-1,1);
 
 
- TH1F *omega_a1_plus= new TH1F("omega_a1_plus","#omega_{a1}^{+}",40,-1.5,1.5);
- TH1F *omega_a1_minus= new TH1F("omega_a1_minus","#omega_{a1}^{-}",40,-1.5,1.5);
+ TH1F *omega_a1_plus= new TH1F("omega_a1_plus","#omega_{a1}^{+}",40,-1.1,1.1);
+ TH1F *omega_a1_minus= new TH1F("omega_a1_minus","#omega_{a1}^{-}",40,-1.1,1.1);
+
+ TH1F *omega_a1p_plus= new TH1F("omega_a1p_plus","#omega_{a1}^{+}",40,-1.1,1.1);
+ TH1F *omega_a1p_minus= new TH1F("omega_a1p_minus","#omega_{a1}^{-}",40,-1.1,1.1);
+
+
 
  TH1F *omegabar_a1_plus= new TH1F("omegabar_a1_plus","#bar{#omega}_{a1}^{+}",50,-1,1);
  TH1F *omegabar_a1_minus= new TH1F("omegabar_a1_minus","#bar{#omega}_{a1}^{-}",50,-1,1);
@@ -449,6 +455,8 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
     HepMC::GenParticle *SecondTau;
     std::vector<HepMC::GenParticle > SecondTauProducts;
     std::vector<HepMC::GenParticle > A1Pions;
+    std::vector<HepMC::GenParticle > A1Pions1;
+    std::vector<HepMC::GenParticle > A1Pions2;
     std::vector<HepMC::GenParticle > SortA1Pions;  //os, ss1, ss2
     for ( HepMC::GenEvent::particle_const_iterator p =HepMCEvt->particles_begin();  p != HepMCEvt->particles_end(); ++p ){  
       if((*p)->pdg_id()==15){
@@ -479,11 +487,17 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 		       
 			FirstTauProducts.push_back(**dd);
 			if(abs((*dd)->pdg_id())==  211)   {
-			  A1Pions.push_back(**dd); npi++;
+			  A1Pions1.push_back(**dd); npi++;
+
 			}
 		      }
 		    }
 		  }
+		  // std::cout<<"pions  JAK1" << A1Pions.size()<<std::endl;
+		  // std::cout<<      A1Pions.at(0).pdg_id()<< "  " <<A1Pions.at(0).momentum().px()<<std::endl;
+		  // std::cout<<      A1Pions.at(1).pdg_id()<< "  " <<A1Pions.at(1).momentum().px()<<std::endl;
+		  // std::cout<<      A1Pions.at(2).pdg_id()<< "  " <<A1Pions.at(2).momentum().px()<<std::endl;
+
 		  if(npi==3) SubJAK1=51; else SubJAK1=52;
 		}
 	    }
@@ -529,11 +543,19 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 		      if((*d)->end_vertex() == (*dd)->production_vertex()){
 			SecondTauProducts.push_back(**dd);
 			if(abs((*dd)->pdg_id())==  211){
-			  A1Pions.push_back(**dd); npi++;
+			  A1Pions2.push_back(**dd); npi++;
 			}
 		      }
 		    }
 		  }
+		  // std::cout<<"pions  JAK2" << A1Pions.size()<<std::endl;
+		  // std::cout<<      A1Pions.at(0).pdg_id()<<"  " << A1Pions.at(0).momentum().px()<<std::endl;
+		  // std::cout<<      A1Pions.at(1).pdg_id()<<"  " << A1Pions.at(1).momentum().px()<<std::endl;
+		  // std::cout<<      A1Pions.at(2).pdg_id()<<"  " << A1Pions.at(2).momentum().px()<<std::endl;
+		  // std::cout<<      A1Pions.at(3).pdg_id()<<"  " << A1Pions.at(3).momentum().px()<<std::endl;
+		  // std::cout<<      A1Pions.at(4).pdg_id()<<"  " << A1Pions.at(4).momentum().px()<<std::endl;
+		  // std::cout<<      A1Pions.at(5).pdg_id()<<"  " << A1Pions.at(5).momentum().px()<<std::endl;
+
 		  if(npi==3) SubJAK2=51; else SubJAK2=52;
 		}
 		
@@ -582,6 +604,7 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
     a1Helper a1h;
     rhoHelper RhoHelp;
     PolarimetricA1 Polarimetr;
+    PolarimetricA1 Polarimetr1;
     TauDecaysHelper RhoTPI;
     TauPolInterface TauPolPi1;
     TauPolInterface TauPolPi2;
@@ -833,22 +856,40 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 
     }
 
+    if(JAK1==5 && SubJAK1==51){
+      vector<TLorentzVector> particles;
+      particles.clear();
+      SortPions(A1Pions1);
+      int taucharge =  (A1Pions1.at(0).pdg_id()+A1Pions1.at(1).pdg_id()+A1Pions1.at(2).pdg_id() > 0) ? 1 : -1;
+      a1ss1pi.SetPxPyPzE(A1Pions1.at(0).momentum().px(), A1Pions1.at(0).momentum().py(), A1Pions1.at(0).momentum().pz(), A1Pions1.at(0).momentum().e());
+      a1ss2pi.SetPxPyPzE(A1Pions1.at(1).momentum().px(), A1Pions1.at(1).momentum().py(), A1Pions1.at(1).momentum().pz(), A1Pions1.at(1).momentum().e());
+      a1ospi.SetPxPyPzE(A1Pions1.at(2).momentum().px(), A1Pions1.at(2).momentum().py(), A1Pions1.at(2).momentum().pz(), A1Pions1.at(2).momentum().e());
+      particles.push_back(tau1);
+      particles.push_back(a1ospi);
+      particles.push_back(a1ss1pi);
+      particles.push_back(a1ss2pi);
+ 
+      Polarimetr1.Configure(particles, particles.at(0),taucharge);
+      omega_a1p_minus->Fill(Polarimetr1.result(),HelWeightMinus);  omega_a1p_plus->Fill(Polarimetr1.result(),HelWeightPlus);
+
+    }
+
+
+
     if(JAK2==5 && SubJAK2==51){
       vector<TLorentzVector> particles;
       particles.clear();
-      SortPions(A1Pions);
-       // std::cout<<"pions " <<std::endl;
-       //   std::cout<<      A1Pions.at(0).pdg_id()<<std::endl;
-       //   std::cout<<      A1Pions.at(1).pdg_id()<<std::endl;
-       //   std::cout<<      A1Pions.at(2).pdg_id()<<std::endl;
+      SortPions(A1Pions2);
+       // std::cout<<"pions  fin" << A1Pions.size()<<std::endl;
+       // std::cout<<      A1Pions.at(0).pdg_id()<<"  " << A1Pions.at(0).momentum().px()<<std::endl;
+       // std::cout<<      A1Pions.at(1).pdg_id()<<"  " << A1Pions.at(1).momentum().px()<<std::endl;
+       // std::cout<<      A1Pions.at(2).pdg_id()<< "  " <<A1Pions.at(2).momentum().px()<<std::endl;
 
-
-
-      int taucharge =  (A1Pions.at(0).pdg_id()+A1Pions.at(1).pdg_id()+A1Pions.at(2).pdg_id() > 0) ? 1 : -1;
-      a1ss1pi.SetPxPyPzE(A1Pions.at(0).momentum().px(), A1Pions.at(0).momentum().py(), A1Pions.at(0).momentum().pz(), A1Pions.at(0).momentum().e());
-      a1ss2pi.SetPxPyPzE(A1Pions.at(1).momentum().px(), A1Pions.at(1).momentum().py(), A1Pions.at(1).momentum().pz(), A1Pions.at(1).momentum().e());
-      a1ospi.SetPxPyPzE(A1Pions.at(2).momentum().px(), A1Pions.at(2).momentum().py(), A1Pions.at(2).momentum().pz(), A1Pions.at(2).momentum().e());
-      particles.push_back(tau1);
+      int taucharge =  (A1Pions2.at(0).pdg_id()+A1Pions2.at(1).pdg_id()+A1Pions2.at(2).pdg_id() > 0) ? 1 : -1;
+      a1ss1pi.SetPxPyPzE(A1Pions2.at(0).momentum().px(), A1Pions2.at(0).momentum().py(), A1Pions2.at(0).momentum().pz(), A1Pions2.at(0).momentum().e());
+      a1ss2pi.SetPxPyPzE(A1Pions2.at(1).momentum().px(), A1Pions2.at(1).momentum().py(), A1Pions2.at(1).momentum().pz(), A1Pions2.at(1).momentum().e());
+      a1ospi.SetPxPyPzE(A1Pions2.at(2).momentum().px(), A1Pions2.at(2).momentum().py(), A1Pions2.at(2).momentum().pz(), A1Pions2.at(2).momentum().e());
+      particles.push_back(tau2);
       particles.push_back(a1ospi);
       particles.push_back(a1ss1pi);
       particles.push_back(a1ss2pi);
