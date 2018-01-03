@@ -143,11 +143,6 @@ void redMinus(TauolaParticle *minus)
       Tauola::setTauBr(dec, br);
    }
 
-     // Tauola::setTauBr(0, 0.0);     Tauola::setTauBr(1, 0.0);      Tauola::setTauBr(2, 1.0);      Tauola::setTauBr(3, 0.0);      Tauola::setTauBr(4, 0.0);
-     // Tauola::setTauBr(5, 0.0);     Tauola::setTauBr(6, 0.0);      Tauola::setTauBr(7, 0.0);      Tauola::setTauBr(8, 0.0);      Tauola::setTauBr(9, 0.0);
-     // Tauola::setTauBr(10, 0.0);   Tauola::setTauBr(11, 0.0);    Tauola::setTauBr(12, 0.0);    Tauola::setTauBr(13, 0.0);    Tauola::setTauBr(14, 0.0);
-     // Tauola::setTauBr(15, 0.0);   Tauola::setTauBr(16, 0.0);    Tauola::setTauBr(17, 0.0);    Tauola::setTauBr(18, 0.0);    Tauola::setTauBr(19, 0.0);
-     // Tauola::setTauBr(20, 0.0);   Tauola::setTauBr(21, 0.0);    Tauola::setTauBr(22, 0.0);
 
 
 }
@@ -178,12 +173,6 @@ void redPlus(TauolaParticle *plus)
      Tauola::setTauBr(dec, br);
    }
 
-
-  // Tauola::setTauBr(0, 0.0);     Tauola::setTauBr(1, 0.0);      Tauola::setTauBr(2, 0.0);      Tauola::setTauBr(3, 0.5);      Tauola::setTauBr(4, 0.5);
-  // Tauola::setTauBr(5, 0.0);     Tauola::setTauBr(6, 0.0);      Tauola::setTauBr(7, 0.0);      Tauola::setTauBr(8, 0.0);      Tauola::setTauBr(9, 0.0);
-  // Tauola::setTauBr(10, 0.0);   Tauola::setTauBr(11, 0.0);    Tauola::setTauBr(12, 0.0);    Tauola::setTauBr(13, 0.0);    Tauola::setTauBr(14, 0.0);
-  // Tauola::setTauBr(15, 0.0);   Tauola::setTauBr(16, 0.0);    Tauola::setTauBr(17, 0.0);    Tauola::setTauBr(18, 0.0);    Tauola::setTauBr(19, 0.0);
-  // Tauola::setTauBr(20, 0.0);   Tauola::setTauBr(21, 0.0);    Tauola::setTauBr(22, 0.0);
 
 
 }
@@ -634,73 +623,7 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
     vector<TLorentzVector> tauandprodMuon1,tauandprodRho,tauandprodRho2,tauandprodA1;
     tau1.SetPxPyPzE(FirstTau->momentum().px(), FirstTau->momentum().py(), FirstTau->momentum().pz(), FirstTau->momentum().e());
     tau2.SetPxPyPzE(SecondTau->momentum().px(), SecondTau->momentum().py(), SecondTau->momentum().pz(), SecondTau->momentum().e());
-    // //------------------------  check frames ------------------------------------
-    // std::cout<<"--------------------"<<std::endl;
-    // std::cout<<"tau1   ";  tau1.Print();
-    // std::cout<<"tau2   ";  tau2.Print();
-    // TLorentzVector Z = tau1+tau2;
-    // std::cout<<"Z "<< "("<< Z.Px() <<" , "<< Z.Py() <<" , "<< Z.Pz() << " , "<< Z.E() <<"  ) "<<std::endl; 
-    // std::cout<<"Rotate to tau1 frame "<<std::endl;
-
-    // TLorentzVector BoostedTau1 = BoostR(tau1,Z);
-    // TLorentzVector BoostedTau2 = BoostR(tau2,Z);
-
-
-
-
-    // TVector3 RotVector1 = BoostedTau1.Vect();
-    // TLorentzVector RotatedTau1 = BoostedTau1;
-    // TLorentzVector RotatedTau2 = BoostedTau2;
-    // TLorentzVector RotatedZ = BoostedTau1+ BoostedTau2;
-    // RotatedTau1.SetVect(Rotate(RotatedTau1.Vect(),RotVector1));
-    // RotatedTau2.SetVect(Rotate(RotatedTau2.Vect(),RotVector1));
-    // RotatedZ.SetVect(Rotate(RotatedZ.Vect(),RotVector1));
-
-    // std::cout<<"tau1   ";  RotatedTau1.Print();
-    // std::cout<<"tau2   ";  RotatedTau2.Print();
-    // std::cout<<"Z "<< "("<< RotatedZ.Px() <<" , "<< RotatedZ.Py() <<" , "<< RotatedZ.Pz() << " , "<< RotatedZ.E() <<"  ) "<<std::endl; 
-
-
-
-
-
-
-
-
-    //   BoostR(tau1,Z).Print();
-    //   BoostR(tau2,Z).Print();
-    //   BoostR(Z,Z).Print();
-    
-     
-     // std::cout<<"boost to tau1 frame "<<std::endl;
-     // std::cout<<"first tau "; BoostR(tau1,tau1).Print();
-     // std::cout<<"second tau ";     BoostR(tau2,tau1).Print();
-     // std::cout<<"second tau ";     BoostR(Z,tau1).Print();
-
-
-
-    // TVector3 RotVector = tau1.Vect();
-    // RotatedTau1.SetVect(Rotate(RotatedTau1.Vect(),RotVector));
-    // RotatedTau2.SetVect(Rotate(RotatedTau2.Vect(),RotVector));
-    // std::cout<<"Rot  tau1   ";  RotatedTau1.Print();
-    // std::cout<<"Rot  tau2   ";  RotatedTau2.Print();
-    // TVector3 BoostVect = tau1.BoostVector();
-    // TLorentzVector RotatedTau1Boost = BoostR(RotatedTau1,RotatedTau1);
-    // TLorentzVector RotatedTau2Boost = BoostR(RotatedTau2,RotatedTau1);
-    // TLorentzVector RotatedTau2Boost_checkRoot = RotatedTau1;
-    // RotatedTau2Boost_checkRoot.Boost(-BoostVect);
-
-    // std::cout<<"Rot boosted  tau1   ";  RotatedTau1Boost.Print();
-    // std::cout<<"Rot boosted  tau2   ";  RotatedTau2Boost.Print();
- 
-    // std::cout<<"Rot boosted  tau1      "<< "("<< RotatedTau1Boost.Px() <<" , "<< RotatedTau1Boost.Py() <<" , "<< RotatedTau1Boost.Pz() << " , "<< RotatedTau1Boost.E() <<"  ) "<<std::endl; 
-    // std::cout<<"Rot boosted  tau2      "<< "("<< RotatedTau2Boost.Px() <<" , "<< RotatedTau2Boost.Py() <<" , "<< RotatedTau2Boost.Pz() << " , "<< RotatedTau2Boost.E() <<"  ) "<<std::endl; 
-    // std::cout<<"Rot boosted  tau2 cc   "<< "("<< RotatedTau2Boost_checkRoot.Px() <<" , "<< RotatedTau2Boost_checkRoot.Py() <<" , "<< RotatedTau2Boost_checkRoot.Pz() << " , "<< RotatedTau2Boost_checkRoot.E() <<"  ) "<<std::endl; 
-
-
-  // vec.RotateZ(0.5*TMath::Pi() - Rot.Phi());  // not 0.5, to avoid warnings about 0 pT
-  // vec.RotateX(Rot.Theta());
-    //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
     if(JAK1==2){
       vector<TLorentzVector> tauandprod;
       tauandprod.push_back(TLorentzVector(FirstTau->momentum().px(), FirstTau->momentum().py(), FirstTau->momentum().pz(), FirstTau->momentum().e()));
