@@ -187,7 +187,7 @@ class PolarimetricA1 {
   float GammaA1(float QQ);
   float gForGammaA1(float QQ);
   float GammaRho(float QQ);
-  float  GammaRhoPrime(float QQ);
+  float GammaRhoPrime(float QQ);
 
 
 
