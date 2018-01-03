@@ -118,31 +118,8 @@ PolarimetricA1::isConfigured(){
   if(TauA1andProd_RF.size()!=4){ std::cout<<"Error:   PolarimetricA1 is not Configured! Check  the size of input vector!  Size =  "<< TauA1andProd_RF.size() <<std::endl; return false;} return true;
 }
 
-
-
-void 
-PolarimetricA1::SetParametersReco(TLorentzVector tau, TLorentzVector mu ){
- Initialize(tau,mu);
-}
-
-void 
-PolarimetricA1::SetFrame(TLorentzVector vec){
-  Boost_ = vec;
-}
-
-
-
 PolarimetricA1::~PolarimetricA1(){
 }
-
-
-
-void 
-PolarimetricA1::Initialize(TLorentzVector t, TLorentzVector mu){
-  RecoMuon_=mu;
-  KFitTau_=t;
-}
-
 
 double 
 PolarimetricA1::lambda(double x, double y, double z){
@@ -157,7 +134,7 @@ PolarimetricA1::Boost(TLorentzVector pB, TLorentzVector frame){
    if(frame.Vect().Mag()==0){ std::cout<<"PolarimetricA1  Boost is not set, perfrom calculation in the Lab Frame   "<<std::endl; return pB;}
     if(frame.E()==0){ std::cout<<" Caution: Please check that you perform boost correctly!  " <<std::endl; return pB;} 
    else   b=frame.Vect()*(1/frame.E());
-   vec(0)  = pB.E();    vec(1)  = pB.Px();
+   vec(0)  = pB.E();    vec(1)  = pB.Px(); 
    vec(2)  = pB.Py();  vec(3)  = pB.Pz();
    double gamma  = 1/sqrt( 1 - b.Mag2());
    transform(0,0)=gamma; transform(0,1) =- gamma*b.X() ;  transform(0,2) =  - gamma*b.Y();  transform(0,3) = - gamma*b.Z(); 
@@ -267,11 +244,8 @@ double PolarimetricA1::K2bar(double ct, double QQ, int hel){
   double cpsi = (ct*(mtau*mtau  + QQ)   + (mtau*mtau  - QQ))/(ct*(mtau*mtau  - QQ)   + (mtau*mtau  + QQ));
   if(debug){if(fabs(cpsi) > 1) std::cout<<"Warning! K1bar: |cpsi| > 1 "<<std::endl;}
   return  K3(ct,QQ,hel)*cpsi  - sqrt(mtau*mtau/QQ/QQ)*sqrt(1-cpsi*cpsi)*sqrt(1-ct*ct)*hel;
-
 }
  
-
-
 double 
 PolarimetricA1::getMoment(double ct, string type, int hel){
   int cells(20);
@@ -292,28 +266,22 @@ PolarimetricA1::getMoment(double ct, string type, int hel){
     atQQa = qqmin + stepqq*(i-1);
     atQQb = qqmin + stepqq*i;
     atQQ = 0.5*(atQQa + atQQb);
-
     if(type=="one") kern = (2*K1(ct,atQQ,hel) + 3*K2(ct,atQQ,hel))*MomentSFunction(atQQ,"WA");
     if(type=="beta") kern = 0.2*K1bar(ct,atQQ,hel)*MomentSFunction(atQQ,"WA");
     if(type=="c2g") kern = -0.5*K1bar(ct,atQQ,hel)*MomentSFunction(atQQ,"WC");
     if(type=="s2g") kern = 0.5*K1bar(ct,atQQ,hel)*MomentSFunction(atQQ,"WD");
     if(type=="cb") kern = K3bar(ct,atQQ,hel)*MomentSFunction(atQQ,"WE");
-
     integral += kern*stepqq;
-
   }
   //  subSetup(set.at(0),set.at(1),set.at(2),set.at(3));
   return integral;
 }
  
 
-
-
-//---------------------------------------  hadronic current ---------------------------
+//---------------------------------------  hadronic structure functions (Kuhn Model) ---------------------------
 double 
 PolarimetricA1::WA(){
    return  VV1()*F1().Rho2() + VV2()*F2().Rho2()  + 2*V1V2()*( F1()*Conjugate(F2()) ).Re();
-
  }
 
  double 
@@ -480,15 +448,13 @@ PolarimetricA1::JJ(){
 }
 
 
-
 TComplex
 PolarimetricA1::f3(double Q){ 
   return  (coscab*2*sqrt(2)/3/fpi)*BreitWigner(Q,"a1");
 }
 
-
 TLorentzVector
-PolarimetricA1::PolarimetricVector(){ 
+PolarimetricA1::PVC(){ 
    TLorentzVector q1= _ss1pionLV;
    TLorentzVector q2= _ss2pionLV;
    TLorentzVector q3= _osPionLV;
@@ -620,8 +586,8 @@ PolarimetricA1::PTenzor(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3,
 
 
 
-  TComplex factor1=ConjJN(q1,q2,q3,a1,N)*L1 + JN(q1,q2,q3,a1,N)*CL1;
-  TComplex factor2=ConjJN(q1,q2,q3,a1,N)*L2 + JN(q1,q2,q3,a1,N)*CL2;
+  TComplex factor1=JCN(q1,q2,q3,a1,N)*L1 + JN(q1,q2,q3,a1,N)*CL1;
+  TComplex factor2=JCN(q1,q2,q3,a1,N)*L2 + JN(q1,q2,q3,a1,N)*CL2;
 
   TLorentzVector  Ptenz= 2*BreitWigner(sqrt(s1),"rho").Rho2()*(vec2*N)*vec2 + 2*BreitWigner(sqrt(s2),"rho").Rho2()*(vec1*N)*vec1 + 2*(BreitWigner(sqrt(s2),"rho")*Conjugate(BreitWigner(sqrt(s1),"rho"))  ).Re() *((vec1*N)*vec2 + (vec2*N)*vec1) - JJ()*N;
 
@@ -649,7 +615,7 @@ PolarimetricA1::JN(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLor
   return out;
 }
 TComplex
-PolarimetricA1::ConjJN(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1, TLorentzVector N){ 
+PolarimetricA1::JCN(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1, TLorentzVector N){ 
   double s1 = (q2+q3).M2();
   double s2 = (q1+q3).M2();
   
@@ -998,7 +964,7 @@ double PolarimetricA1::TRF_vgetA1omega(TString type){
 
 double PolarimetricA1::result(){
   //  PolarimetricVector().Vect().Print();
-   return nTAlongZLabFrame()*PolarimetricVector().Vect();
+   return nTZLFr()*PVC().Vect();
 }
 
 
@@ -1058,7 +1024,7 @@ PolarimetricA1::nT(){
   return   _tauLV.Vect()*(1/_tauLV.Vect().Mag());
 }
 TVector3
-PolarimetricA1::nTAlongZLabFrame(){
+PolarimetricA1::nTZLFr(){
   return _tauAlongZLabFrame.Vect()*(1/_tauAlongZLabFrame.Vect().Mag());
 }
 

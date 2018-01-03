@@ -39,21 +39,13 @@ class PolarimetricA1 {
   void Setup(vector<TLorentzVector> TauA1andProd, TLorentzVector ReferenceFrame, int taucharge );
   void subSetup(double s1, double s2, double s3, double Q);
 
-  void Initialize(TLorentzVector t, TLorentzVector mu);
-  bool OmegaIsValid(){return isValid_;}
+
   std::vector<TLorentzVector> getBoosted(){return TauA1andProd_RF;}
 
 
-  void SetParametersReco(TLorentzVector tau, TLorentzVector mu );
-  void SetFrame(TLorentzVector Vec );
+
   TLorentzVector Boost(TLorentzVector pB, TLorentzVector frame);
 
-  /* double costheta(); */
-  /* double costheta1(); */
-  /* float CosBeta(); */
-  /* double CosBeta1(); */
-  /* std::vector<float> Sin2Cos2Gamma(TLorentzVector p1,TLorentzVector p2, TLorentzVector p3); */
-  /* float CosPsi(); */
 
   //====================
   double costhetaLF(); 
@@ -95,7 +87,6 @@ class PolarimetricA1 {
  double TRF_cosbeta();      double  TRF_cosalpha();   double  TRF_cosgamma();  
  double TRF_sinbeta();        double TRF_sinalpha();    double  TRF_singamma();  
 //========== TRF  =======
-  void debugger();
   double lambda(double x, double y, double z);
   double Scalar(TLorentzVector p1, TLorentzVector p2);
 
@@ -132,17 +123,14 @@ class PolarimetricA1 {
   TLorentzVector JConjRe(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1);
   TLorentzVector JConjIm(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1);
   TComplex JN(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1, TLorentzVector N);
-  TComplex ConjJN(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1, TLorentzVector N);
+  TComplex JCN(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1, TLorentzVector N);
 
   TLorentzVector PTenzor5(TLorentzVector aR, TLorentzVector aI, TLorentzVector bR, TLorentzVector bI, TLorentzVector c);
   TLorentzVector PTenzor(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1, TLorentzVector N); 
-  TLorentzVector PolarimetricVector(); 
+  TLorentzVector PVC(); 
 
   TLorentzVector CLVEC(std::vector<TComplex> H, std::vector<TComplex> HC, TLorentzVector N);
   TLorentzVector CLAXI(std::vector<TComplex> H, std::vector<TComplex> HC, TLorentzVector N);
-
-
-
 
   double result();
   double VV1();
@@ -153,7 +141,7 @@ class PolarimetricA1 {
 
   TVector3 nL();
   TVector3 nT();
-  TVector3 nTAlongZLabFrame();
+  TVector3 nTZLFr();
   TVector3 nPerp();
   TVector3 ns();
   TLorentzVector sLV();
@@ -187,7 +175,7 @@ class PolarimetricA1 {
   float GammaA1(float QQ);
   float gForGammaA1(float QQ);
   float GammaRho(float QQ);
-  float GammaRhoPrime(float QQ);
+  float  GammaRhoPrime(float QQ);
 
 
 
@@ -249,28 +237,6 @@ class PolarimetricA1 {
   TLorentzVector   LFa1LV;
   TLorentzVector   LFtauLV;
 
-  TLorentzVector Boost_;
-
-  TLorentzVector KFitTau_;
-  TLorentzVector RecoMuon_;
-  TLorentzVector Tau1_;
-  TLorentzVector Tau2_;
-
-  TLorentzVector TauMu1_;
-  TLorentzVector TauMu2_;
-
-  bool Flag_;
-
-  TLorentzVector Z_;
-  TLorentzVector TauA1_;
-  TLorentzVector TauMu_;
-
-
-  TLorentzVector A1ZFrame_;
-  TLorentzVector OSPionZFrame_;
-  TLorentzVector SSPion1ZFrame_;
-  TLorentzVector SSPion2ZFrame_;
-  bool isValid_;
 
   TMatrixT<double> convertToMatrix(TVectorT<double> V);
 
