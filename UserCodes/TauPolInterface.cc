@@ -7,7 +7,7 @@ TauPolInterface::TauPolInterface():
   ma1(1.251),
   debug(false)
 { }  
-TauPolInterface::TauPolInterface(vector<TLorentzVector> TauAndProd, string type): 
+TauPolInterface::TauPolInterface(vector<TLorentzVector> TauAndProd, string type, int TauCharge): 
   mrho(0.773),
   mpi(0.13957018),
   mtau(1.776),
@@ -28,10 +28,11 @@ TauPolInterface::TauPolInterface(vector<TLorentzVector> TauAndProd, string type)
     if(TauAndProd.size()!=4){
       std::cout<<" Warning!! Size of 2nd  input vector  !=4 !! "<< " type:  "<<type<<std::endl;
     }
-    Configure(TauAndProd,  type);
   }
+  
+  Configure(TauAndProd,  type,TauCharge);
  }
-TauPolInterface::TauPolInterface(vector<TLorentzVector> TauAndProd1, string type1,vector<TLorentzVector> TauAndProd2, string type2): 
+TauPolInterface::TauPolInterface(vector<TLorentzVector> TauAndProd1, string type1,vector<TLorentzVector> TauAndProd2, string type2,int TauCharge1,int TauCharge2): 
   mrho(0.773),
   mpi(0.13957018),
   mtau(1.776),
@@ -69,11 +70,11 @@ TauPolInterface::TauPolInterface(vector<TLorentzVector> TauAndProd1, string type
     }
   }
   
-  ConfigurePair(TauAndProd1,type1,TauAndProd2,type2);
+  ConfigurePair(TauAndProd1,type1,TauAndProd2,type2,TauCharge1,TauCharge2);
  }
 
 void 
-TauPolInterface::Configure(vector<TLorentzVector> TauAndProd, string type){
+TauPolInterface::Configure(vector<TLorentzVector> TauAndProd, string type,int TauCharge){
   TauLV = TauAndProd.at(0);
   type_=type;
   if(type_ == "lepton" || type_=="pion"){
@@ -91,6 +92,7 @@ TauPolInterface::Configure(vector<TLorentzVector> TauAndProd, string type){
     TauA1SSPi1 = TauAndProd.at(2);
     TauA1SSPi2 = TauAndProd.at(3);
     ProductLV = TauA1OSPi + TauA1SSPi1 + TauA1SSPi2;  
+    taucharge_ = TauCharge;
   }
   InvisibleLV = TauLV - ProductLV;
   DPF_TauLV=  Boost(TauLV,ProductLV);
@@ -100,7 +102,7 @@ TauPolInterface::Configure(vector<TLorentzVector> TauAndProd, string type){
 }
 
 void 
-TauPolInterface::ConfigurePair(vector<TLorentzVector> TauAndProd1, string type1,vector<TLorentzVector> TauAndProd2, string type2){
+TauPolInterface::ConfigurePair(vector<TLorentzVector> TauAndProd1, string type1,  vector<TLorentzVector> TauAndProd2, string type2,int TauCharge1,int TauCharge2){
   TauLV1 = TauAndProd1.at(0);
   type1_=type1;
   if(type1_ == "lepton" || type1_=="pion"){
@@ -119,6 +121,7 @@ TauPolInterface::ConfigurePair(vector<TLorentzVector> TauAndProd1, string type1,
     TauA1SSPi11  = TauAndProd1.at(2);
     TauA1SSPi21  = TauAndProd1.at(3);
     ProductLV1 = TauA1OSPi1 + TauA1SSPi11 + TauA1SSPi21;  
+    taucharge_=TauCharge1;
   }
   InvisibleLV1 = TauLV1 - ProductLV1;
   DPF_TauLV1=  Boost(TauLV1,ProductLV1);
@@ -142,6 +145,7 @@ TauPolInterface::ConfigurePair(vector<TLorentzVector> TauAndProd1, string type1,
     TauA1SSPi12  = TauAndProd2.at(2);
     TauA1SSPi22  = TauAndProd2.at(3);
     ProductLV2 = TauA1OSPi2 + TauA1SSPi12 + TauA1SSPi22;  
+    taucharge_=TauCharge2;
   }
   InvisibleLV2 = TauLV2 - ProductLV2;
   DPF_TauLV2=  Boost(TauLV2,ProductLV2);
@@ -260,7 +264,7 @@ TauPolInterface::getOmega(string which)
 	 particles.push_back(TauRhoPi);
 	 particles.push_back(TauRhoPi0);
 	 rhoHelper rho;
-	 rho.Configure(particles, TauRhoPi+TauRhoPi0,1);
+	 rho.Configure(particles);
 	 omega=rho.getOmegaRho();
        }
      if(type_=="a1")
@@ -270,9 +274,30 @@ TauPolInterface::getOmega(string which)
 	 particles.push_back(TauA1OSPi);
 	 particles.push_back(TauA1SSPi1);
 	 particles.push_back(TauA1SSPi2);
-	 a1Helper a1;
-	 a1.Configure(particles, TauA1OSPi + TauA1SSPi1 + TauA1SSPi2);
-	 omega = a1.getA1omega();
+	 PolarimetricA1 a1;
+	 a1.Configure(particles,taucharge_);
+ 	 omega = a1.getOmegaA1();
+       }
+     return omega;
+   }
+
+double
+TauPolInterface::getVisibleOmega(string which)
+   {  
+     double omega(-999.);
+     SetupLeg(which);
+     if(type_!="rho") {
+       std::cout<<"This observable  is available for rho decay only (beta angle). a1 will be implemented later" << std::endl;
+     }
+     if(type_=="rho")
+       {
+	 std::vector<TLorentzVector> particles; // tau, pi, pi0
+	 particles.push_back(TauLV);
+	 particles.push_back(TauRhoPi);
+	 particles.push_back(TauRhoPi0);
+	 rhoHelper rho;
+	 rho.Configure(particles);
+	 omega=rho.getCosbetaRho();
        }
      return omega;
    }
@@ -293,7 +318,7 @@ TauPolInterface::getOmegabar(string which){
 	particles.push_back(TauRhoPi);
 	particles.push_back(TauRhoPi0);
 	rhoHelper rho;
-	rho.Configure(particles,TauRhoPi+TauRhoPi0,1);
+	rho.Configure(particles);
 	omega=rho.getOmegaRhoBar();
       }
 
@@ -304,79 +329,21 @@ TauPolInterface::getOmegabar(string which){
 	 particles.push_back(TauA1OSPi);
 	 particles.push_back(TauA1SSPi1);
 	 particles.push_back(TauA1SSPi2);
-	 a1Helper a1;
-	 a1.Configure(particles, TauA1OSPi + TauA1SSPi1 + TauA1SSPi2);
-	 omega = a1.TRF_vgetA1omega();
+	 PolarimetricA1 a1;
+	 a1.Configure(particles,taucharge_);
+	 omega = a1.getOmegaA1Bar();
        }
   return omega;
 }
 
 
-
-
 double
 TauPolInterface::getCombOmega(){
-  double omega1=-999;
-  SetupLeg("first");
-  if(type_=="pion" || type_=="lepton")
-    {
-           omega1 = 2*ProductLV.E()/TauLV.E() - 1;
-    }
-  if(type_=="rho")
-    {
-      std::vector<TLorentzVector> particles; // tau, pi, pi0
-      particles.push_back(TauLV);
-      particles.push_back(TauRhoPi);
-      particles.push_back(TauRhoPi0);
-      rhoHelper rho;
-      rho.Configure(particles,TauRhoPi+TauRhoPi0,1);
-      omega1=rho.getOmegaRho();
-    }
-
-     if(type_=="a1")
-       {
-	 std::vector<TLorentzVector> particles;// tau, os,ss1,ss2
-	 particles.push_back(TauLV);
-	 particles.push_back(TauA1OSPi);
-	 particles.push_back(TauA1SSPi1);
-	 particles.push_back(TauA1SSPi2);
-	 a1Helper a1;
-	 a1.Configure(particles, TauA1OSPi + TauA1SSPi1 + TauA1SSPi2);
-	 omega1 = a1.getA1omega();
-       }
-  SetupLeg("second"); 
-  double omega2=-999.;
-  if(type_=="pion" || type_=="lepton")
-    {
-            omega2 = 2*ProductLV.E()/TauLV.E() - 1;
-    }
-  if(type_=="rho")
-    {
-      std::vector<TLorentzVector> particles; // tau, pi, pi0
-      particles.push_back(TauLV);
-      particles.push_back(TauRhoPi);
-      particles.push_back(TauRhoPi0);
-      rhoHelper rho;
-      rho.Configure(particles,TauRhoPi+TauRhoPi0,1);
-      omega2=rho.getCosbetaRho();
-
-    }
-
-  if(type_=="a1")
-    {
-      std::vector<TLorentzVector> particles;// tau, os,ss1,ss2
-      particles.push_back(TauLV);
-      particles.push_back(TauA1OSPi);
-      particles.push_back(TauA1SSPi1);
-      particles.push_back(TauA1SSPi2);
-      a1Helper a1;
-      a1.Configure(particles, TauA1OSPi + TauA1SSPi1 + TauA1SSPi2);
-      omega2 = a1.getA1omega();
-    }
-  
+  double omega1 = getOmega("first");
+  double omega2 = getOmega("second");
   double Omega=999.;
   Omega = (omega1 + omega2)/(1 + omega1*omega2);
-  if(  isinf(fabs(Omega)) ||  isnan(fabs(Omega))) Omega  = -999.;
+  if(  std::isinf(std::fabs(Omega)) ||  std::isnan(std::fabs(Omega))) Omega  = -999.;
   return Omega;
 }
 
@@ -384,63 +351,21 @@ TauPolInterface::getCombOmega(){
 
 double
 TauPolInterface::getCombOmegaBar(){
-  double omega1=-999;
-  SetupLeg("first");
-  if(type_=="pion" || type_=="lepton")
-    {
-            omega1 = 2*ProductLV.E()/TauLV.E() - 1;
-    }
-  if(type_=="rho")
-    {
-      std::vector<TLorentzVector> particles; // tau, pi, pi0
-      particles.push_back(TauLV);
-      particles.push_back(TauRhoPi);
-      particles.push_back(TauRhoPi0);
-      rhoHelper rho;
-      rho.Configure(particles,TauRhoPi+TauRhoPi0,1);
-      omega1=rho.getOmegaRhoBar();
-    }
-  if(type_=="a1")
-    {
-      std::vector<TLorentzVector> particles;// tau, os,ss1,ss2
-      particles.push_back(TauLV);
-      particles.push_back(TauA1OSPi);
-      particles.push_back(TauA1SSPi1);
-      particles.push_back(TauA1SSPi2);
-      a1Helper a1;
-      a1.Configure(particles, TauA1OSPi + TauA1SSPi1 + TauA1SSPi2);
-      omega1 = a1.TRF_vgetA1omega();
-    }
-  SetupLeg("second");
-  double omega2=-999.;
-  if(type_=="pion" || type_=="lepton")
-    {
-            omega2 = 2*ProductLV.E()/TauLV.E() - 1;
-    }
-  if(type_=="rho")
-    {
-      std::vector<TLorentzVector> particles; // tau, pi, pi0
-      particles.push_back(TauLV);
-      particles.push_back(TauRhoPi);
-      particles.push_back(TauRhoPi0);
-      rhoHelper rho;
-      rho.Configure(particles,TauRhoPi+TauRhoPi0,1);
-      omega2=rho.getOmegaRhoBar();
-    }
-  if(type_=="a1")
-    {
-      std::vector<TLorentzVector> particles;// tau, os,ss1,ss2
-      particles.push_back(TauLV);
-      particles.push_back(TauA1OSPi);
-      particles.push_back(TauA1SSPi1);
-      particles.push_back(TauA1SSPi2);
-      a1Helper a1;
-      a1.Configure(particles, TauA1OSPi + TauA1SSPi1 + TauA1SSPi2);
-      omega2 = a1.TRF_vgetA1omega();
-    }
+  double omega1 = getOmegabar("first");
+  double omega2 = getOmegabar("second");
   double Omega=999.;
   Omega = (omega1 + omega2)/(1 + omega1*omega2);
-  if(  isinf(fabs(Omega)) ||  isnan(fabs(Omega))) Omega  = -999.;
+  if(  std::isinf(std::fabs(Omega)) ||  std::isnan(std::fabs(Omega))) Omega  = -999.;
+  return Omega;
+}
+
+double
+TauPolInterface::getCombVisibleOmega(){
+  double omega1 = getVisibleOmega("first");
+  double omega2 = getVisibleOmega("second");
+  double Omega=999.;
+  Omega = (omega1 + omega2)/(1 + omega1*omega2);
+  if(  std::isinf(std::fabs(Omega)) ||  std::isnan(std::fabs(Omega))) Omega  = -999.;
   return Omega;
 }
 
