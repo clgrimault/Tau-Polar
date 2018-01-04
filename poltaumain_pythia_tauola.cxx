@@ -44,7 +44,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents =50000; 
+int NumberOfEvents =2000; 
 int EventsToCheck=5;
 
 // elementary test of HepMC typically executed before
@@ -137,7 +137,7 @@ void redMinus(TauolaParticle *minus)
    for(unsigned int dec=1; dec <23; dec++){
       double br =0.0; 
       //         if( dec == 4) br=0.99;
-      if(dec == 2 || dec ==3 || dec ==4|| dec ==5) br=0.33;
+      if(dec==2 || dec==3|| dec==4 || dec ==5) br=0.25;
       //	 if(dec ==5) br=0.99;
    	 // if(dec == 3) br=0.99;
       Tauola::setTauBr(dec, br);
@@ -171,7 +171,7 @@ void redPlus(TauolaParticle *plus)
   for(unsigned int dec=1; dec <23; dec++){
      double br =0.0;
      // if(dec==3 || dec ==4) br=0.49;
-     if(dec == 2 || dec ==3 || dec ==4|| dec ==5) br=0.33;
+     if(dec==2 || dec==3|| dec==4 || dec ==5) br=0.25;
        
 	 //    if(dec ==5) br=0.99;
      //if(dec ==4) br=0.99;
@@ -263,6 +263,10 @@ int main(int argc,char **argv){
 
   TH1F *pi_plus= new TH1F("pi_plus","#pi^{+}",50,-1.1,1.1);
   TH1F *pi_minus= new TH1F("pi_minus","#pi^{-} ",50,-1.1,1.1);
+
+  TH1F *pip_plus= new TH1F("pip_plus","#pi^{+}",50,-1.1,1.1);
+  TH1F *pip_minus= new TH1F("pip_minus","#pi^{-} ",50,-1.1,1.1);
+
 
   TH1F *mu_plus= new TH1F("mu_plus","#mu^{+}",50,-1.1,1.1);
   TH1F *mu_minus= new TH1F("mu_minus","#mu^{-}",50,-1.1,1.1);
@@ -426,8 +430,12 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 
     Log::LogDebug(true);
 
-    Tauola::setRedefineTauMinus(redMinus);  // activates execution of routine redMinus in TAUOLA interface
-    Tauola::setRedefineTauPlus(redPlus);    // activates execution of routine redPlus  in TAUOLA interface
+      Tauola::setRedefineTauMinus(redMinus);  // activates execution of routine redMinus in TAUOLA interface
+      Tauola::setRedefineTauPlus(redPlus);    // activates execution of routine redPlus  in TAUOLA interface
+      // Tauola::setRedefineTauMinus(redPlus);  // activates execution of routine redMinus in TAUOLA interface
+      // Tauola::setRedefineTauPlus(redMinus);    // activates execution of routine redPlus  in TAUOLA interface
+
+
 
   MC_Initialize();
 
@@ -485,7 +493,9 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 	      FirstTauProducts.push_back(**d);
 	      if(abs((*d)->pdg_id()) ==  12) {JAK1 =1; 
 	      }else if(abs((*d)->pdg_id()) ==  14){ JAK1=2;
-	      }else if(abs((*d)->pdg_id())==  211){ JAK1 = 3;}
+	      }else if(abs((*d)->pdg_id())==  211){ JAK1 = 3;/*std::cout<<"pion of negative tau "<< (*d)->pdg_id() <<std::endl;*/}
+	      
+
 	      if( abs((*d)->pdg_id())==213 ){
 		JAK1 = 4;
 		for ( HepMC::GenEvent::particle_const_iterator dd =HepMCEvt->particles_begin();  dd != HepMCEvt->particles_end(); ++dd ){  
@@ -511,10 +521,11 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 		      }
 		    }
 		  }
-		  // std::cout<<"pions  JAK1" << A1Pions.size()<<std::endl;
-		  // std::cout<<      A1Pions.at(0).pdg_id()<< "  " <<A1Pions.at(0).momentum().px()<<std::endl;
-		  // std::cout<<      A1Pions.at(1).pdg_id()<< "  " <<A1Pions.at(1).momentum().px()<<std::endl;
-		  // std::cout<<      A1Pions.at(2).pdg_id()<< "  " <<A1Pions.at(2).momentum().px()<<std::endl;
+		   // std::cout<<"a1 pions  of negative tau " << A1Pions.size()<<std::endl;
+		   // std::cout<<      A1Pions1.at(2).pdg_id()<< "  " <<A1Pions1.at(2).momentum().px()<<std::endl;
+		   // std::cout<<      A1Pions1.at(0).pdg_id()<< "  " <<A1Pions1.at(0).momentum().px()<<std::endl;
+		   // std::cout<<      A1Pions1.at(1).pdg_id()<< "  " <<A1Pions1.at(1).momentum().px()<<std::endl;
+		   
 
 		  if(npi==3) SubJAK1=51; else SubJAK1=52;
 		}
@@ -529,12 +540,15 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 	for ( HepMC::GenEvent::particle_const_iterator d =HepMCEvt->particles_begin();  d != HepMCEvt->particles_end(); ++d )
 	  {  
 	    if((*d)->pdg_id()!=-15){
+	     
 	      if((*p)->end_vertex() == (*d)->production_vertex()){
 		SecondTauProducts.push_back(**d);
 		if(abs((*d)->pdg_id()) ==  12) {JAK2 =1; 
 		}else if(abs((*d)->pdg_id()) ==  14){ JAK2=2;
-		}else if(abs((*d)->pdg_id())==  211){ JAK2 = 3;}
+		}else if(abs((*d)->pdg_id())==  211){ JAK2 = 3;/*	std::cout<<"pion of positive tau "<< (*d)->pdg_id() <<std::endl;*/}
+	
 		
+ 
 		if( abs((*d)->pdg_id())==213 ){
 		  JAK2 = 4;
 		  for ( HepMC::GenEvent::particle_const_iterator dd =HepMCEvt->particles_begin();  dd != HepMCEvt->particles_end(); ++dd ){  
@@ -566,13 +580,11 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 		      }
 		    }
 		  }
-		  // std::cout<<"pions  JAK2" << A1Pions.size()<<std::endl;
-		  // std::cout<<      A1Pions.at(0).pdg_id()<<"  " << A1Pions.at(0).momentum().px()<<std::endl;
-		  // std::cout<<      A1Pions.at(1).pdg_id()<<"  " << A1Pions.at(1).momentum().px()<<std::endl;
-		  // std::cout<<      A1Pions.at(2).pdg_id()<<"  " << A1Pions.at(2).momentum().px()<<std::endl;
-		  // std::cout<<      A1Pions.at(3).pdg_id()<<"  " << A1Pions.at(3).momentum().px()<<std::endl;
-		  // std::cout<<      A1Pions.at(4).pdg_id()<<"  " << A1Pions.at(4).momentum().px()<<std::endl;
-		  // std::cout<<      A1Pions.at(5).pdg_id()<<"  " << A1Pions.at(5).momentum().px()<<std::endl;
+		   // std::cout<<"a1 pions  of positive tau " << A1Pions.size()<<std::endl;
+		   // std::cout<<      A1Pions2.at(2).pdg_id()<< "  " <<A1Pions2.at(2).momentum().px()<<std::endl;
+		   // std::cout<<      A1Pions2.at(0).pdg_id()<< "  " <<A1Pions2.at(0).momentum().px()<<std::endl;
+		   // std::cout<<      A1Pions2.at(1).pdg_id()<< "  " <<A1Pions2.at(1).momentum().px()<<std::endl;
+		   
 
 		  if(npi==3) SubJAK2=51; else SubJAK2=52;
 		}
@@ -582,19 +594,32 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 	  }
       }
     }
+    // std::cout<<"  JAK 1 "<< JAK1 << "  tau negative "<<  std::endl;
+    // std::cout<<"  JAK 2 "<< JAK2 << "  tau positive "<<  std::endl;
   
     //    Log::Debug(5)<<"helicites =  "<<Tauola::getHelPlus()<<" "<<Tauola::getHelMinus()
     //            <<" electroweak wt= "<<Tauola::getEWwt()<<endl;
+    //    Tauola::setHelicities(1,-1);
 
-
-    //  std::cout<<"helicites =  "<<Tauola::getHelPlus()<<" "<<Tauola::getHelMinus()                <<" electroweak wt= "<<Tauola::getEWwt()<<endl;
+    // std::cout<<"helicites =  "<<Tauola::getHelPlus()<<" "<<Tauola::getHelMinus()                <<" electroweak wt= "<<Tauola::getEWwt()<<endl;
 
     bool HelPlus=false;
     bool HelMinus=false;
-    if(Tauola::getHelPlus() ==1 )HelMinus=true;
+    if(Tauola::getHelPlus() == 1 )HelMinus=true;
     if(Tauola::getHelPlus() ==-1)HelPlus=true;
+
+    bool HelPlus2=false;
+    bool HelMinus2=false;
+    if(Tauola::getHelMinus() == 1 )HelMinus2=true;
+    if(Tauola::getHelMinus() ==-1)HelPlus2=true;
+
+
     int HelWeightPlus = HelPlus;
     int HelWeightMinus = HelMinus;
+
+
+    // std::cout<<"  two helicities  "<< HelMinus <<"  "<<HelPlus <<std::endl;
+    // std::cout<<"  s  "<< HelMinus2 <<"  "<<HelPlus2 <<std::endl;
     int tauHelicity  = Tauola::getHelPlus();
 
    
@@ -681,9 +706,15 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
       vector<TLorentzVector> tauandprod;
       tauandprod.push_back(TLorentzVector(FirstTau->momentum().px(), FirstTau->momentum().py(), FirstTau->momentum().pz(), FirstTau->momentum().e()));
        for(std::vector<HepMC::GenParticle>::const_iterator a = FirstTauProducts.begin(); a!=FirstTauProducts.end(); ++a){
-	 if(abs(a->pdg_id())==211){tauandprod.push_back(TLorentzVector(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e()  ) );} }
+	 if(abs(a->pdg_id())==211){tauandprod.push_back(TLorentzVector(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e()  ) );}}
+       
        tauandprod1 = tauandprod;
        Pi1.Configure(tauandprod1,"pion");
+       pip_plus->Fill(Pi1.getOmega(),HelWeightPlus);
+       pip_minus->Fill(Pi1.getOmega(),HelWeightMinus);
+
+
+
     }
     
 
@@ -721,6 +752,11 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
        SortPions(A1Pions1);
        int taucharge =  (A1Pions1.at(0).pdg_id()+A1Pions1.at(1).pdg_id()+A1Pions1.at(2).pdg_id() > 0) ? 1 : -1;
        taucharge1=taucharge;
+
+       // std::cout<<"os  "<< A1Pions1.at(2).pdg_id() << "  " <<A1Pions1.at(2).momentum().px()<<std::endl;
+       // std::cout<<"ss1  "<< A1Pions1.at(0).pdg_id() << "  " <<A1Pions1.at(0).momentum().px()<<std::endl;
+       // std::cout<<"ss2  "<< A1Pions1.at(1).pdg_id() << "  " <<A1Pions1.at(1).momentum().px()<<std::endl;
+ 
        //      std::cout<<"tau charge  JAK1 "<<taucharge <<std::endl; 
        a1ss1pi.SetPxPyPzE(A1Pions1.at(0).momentum().px(), A1Pions1.at(0).momentum().py(), A1Pions1.at(0).momentum().pz(), A1Pions1.at(0).momentum().e());
        a1ss2pi.SetPxPyPzE(A1Pions1.at(1).momentum().px(), A1Pions1.at(1).momentum().py(), A1Pions1.at(1).momentum().pz(), A1Pions1.at(1).momentum().e());
@@ -791,12 +827,17 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
        vector<TLorentzVector> particles;
        particles.clear();
        SortPions(A1Pions2);
+        // std::cout<<"os  "<< A1Pions2.at(2).pdg_id()<<A1Pions1.at(2).momentum().px()<<std::endl; 
+        // std::cout<<"ss1  "<< A1Pions2.at(0).pdg_id()<<A1Pions1.at(0).momentum().px()<<std::endl;
+        // std::cout<<"ss2  "<< A1Pions2.at(1).pdg_id()<<A1Pions1.at(1).momentum().px()<<std::endl;
+
        int taucharge =  (A1Pions2.at(0).pdg_id()+A1Pions2.at(1).pdg_id()+A1Pions2.at(2).pdg_id() > 0) ? 1 : -1;
        taucharge2=taucharge;
        a1ss1pi.SetPxPyPzE(A1Pions2.at(0).momentum().px(), A1Pions2.at(0).momentum().py(), A1Pions2.at(0).momentum().pz(), A1Pions2.at(0).momentum().e());
        a1ss2pi.SetPxPyPzE(A1Pions2.at(1).momentum().px(), A1Pions2.at(1).momentum().py(), A1Pions2.at(1).momentum().pz(), A1Pions2.at(1).momentum().e());
        a1ospi.SetPxPyPzE(A1Pions2.at(2).momentum().px(), A1Pions2.at(2).momentum().py(), A1Pions2.at(2).momentum().pz(), A1Pions2.at(2).momentum().e());
-       particles.push_back(tau2);
+
+      particles.push_back(tau2);
        particles.push_back(a1ospi);
        particles.push_back(a1ss1pi);
        particles.push_back(a1ss2pi);
@@ -822,7 +863,7 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
        if(HelWeightPlus==1)      a1_mcos2gamma_plus->Fill(a1h.getMoment(a1h.costhetaLF(),"c2g", 1));                 
        if(HelWeightMinus==1)      a1_mcos2gamma_minus->Fill(a1h.getMoment(a1h.costhetaLF(),"c2g", -1));                 
 
-     }
+    }
  
    //----------------------------- pairs -----------------
 
@@ -900,11 +941,11 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
        }
        
 
-       if(JAK2 ==3 && JAK1 == 5 &&   SubJAK1==51){
+       if(JAK1 ==3 && JAK2 == 5 &&   SubJAK2==51){
 	 //    //std::cout<<"  "<<Pi2.isConfigured() <<"  " << Polarimetr1.isConfigured()<<std::endl;
-	 if(Pi2.isConfigured() && A2.isConfigured()){
+	 if(Pi1.isConfigured() && A2.isConfigured()){
 	   //  	//	double OmPiA1=  (Pi1.getOmega() +Polarimetr.() )/(1 + Pi1.getOmega()*a1h.TRF_vgetA1omega());
-	   TauPolPiA1.ConfigurePair(tauandprod2,"pion",tauandprod1,"a1",taucharge1);
+	   TauPolPiA1.ConfigurePair(tauandprod1,"pion",tauandprod2,"a1",taucharge2);
 	   
 	   
 	   omega_a1pi_plus->Fill(TauPolPiA1.getCombOmegaBar(),HelWeightPlus);
