@@ -77,8 +77,8 @@ class PolarimetricA1 {
  double vgetA1omega(TString type="");
  double vgetA1omegascalar(TString type="");
 
- double getA1omega();
- double getA1omegaBar();
+ double getOmegaA1();
+ double getOmegaA1Bar();
 
 //========== TRF  =======
  double TRF_vgetf(TString type="");
@@ -120,13 +120,13 @@ class PolarimetricA1 {
   TLorentzVector JRe(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1);
   TLorentzVector JIm(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1);
 
-  TLorentzVector JConjRe(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1);
-  TLorentzVector JConjIm(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1);
+  TLorentzVector JCRe(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1);
+  TLorentzVector JCIm(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1);
   TComplex JN(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1, TLorentzVector N);
   TComplex JCN(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1, TLorentzVector N);
 
-  TLorentzVector PTenzor5(TLorentzVector aR, TLorentzVector aI, TLorentzVector bR, TLorentzVector bI, TLorentzVector c);
-  TLorentzVector PTenzor(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1, TLorentzVector N); 
+  TLorentzVector PTZ5(TLorentzVector aR, TLorentzVector aI, TLorentzVector bR, TLorentzVector bI, TLorentzVector c);
+  TLorentzVector PTZ(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1, TLorentzVector N); 
   TLorentzVector PVC(); 
 
   TLorentzVector CLVEC(std::vector<TComplex> H, std::vector<TComplex> HC, TLorentzVector N);
@@ -169,13 +169,13 @@ class PolarimetricA1 {
   double WGA1N(double S);
 
 
-  TComplex  BWa1(float QQ);
-  TComplex  BWrho(float QQ);
-  TComplex  BWrhoPrime(float QQ);
-  float GammaA1(float QQ);
-  float gForGammaA1(float QQ);
-  float GammaRho(float QQ);
-  float  GammaRhoPrime(float QQ);
+  TComplex  BWa1(double QQ);
+  TComplex  BWrho(double QQ);
+  TComplex  BWrhoPrime(double QQ);
+  double GammaA1(double QQ);
+  double gForGammaA1(double QQ);
+  double GammaRho(double QQ);
+  double  GammaRhoPrime(double QQ);
 
 
 

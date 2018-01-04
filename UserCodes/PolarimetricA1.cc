@@ -8,9 +8,9 @@ PolarimetricA1::PolarimetricA1(vector<TLorentzVector> TauA1andProd){
   if(TauA1andProd.size()!=4){
     std::cout<<" Warning!! Size of a1 input vector != 4 !! "<<std::endl;
   }
-  TLorentzVector fakeboost(0,0,0,0);
+  TLorentzVector boost = TauA1andProd.at(0);
   int fakecharge = 1;
-  Setup(TauA1andProd,fakeboost,fakecharge);
+  Setup(TauA1andProd,boost,fakecharge);
 }
 
 
@@ -100,8 +100,8 @@ PolarimetricA1::Configure(vector<TLorentzVector> TauA1andProd, int taucharge){
   if(TauA1andProd.size()!=4){
     std::cout<<" Warning!! Size of input vector != 4 !! "<<std::endl;
   }
-  TLorentzVector fakeboost(0,0,0,0);
-  Setup(TauA1andProd,fakeboost,taucharge);
+  TLorentzVector boost = TauA1andProd.at(0);
+  Setup(TauA1andProd,boost,taucharge);
 
 }
 
@@ -113,6 +113,7 @@ PolarimetricA1::Configure(vector<TLorentzVector> TauA1andProd, TLorentzVector Re
   Setup(TauA1andProd,RefernceFrame, taucharge);
 
 }
+
 bool
 PolarimetricA1::isConfigured(){
   if(TauA1andProd_RF.size()!=4){ std::cout<<"Error:   PolarimetricA1 is not Configured! Check  the size of input vector!  Size =  "<< TauA1andProd_RF.size() <<std::endl; return false;} return true;
@@ -214,35 +215,35 @@ PolarimetricA1::MomentSFunction(double s, string type){
 }
 
 double PolarimetricA1::K1(double ct, double QQ, int hel){
-  if(debug){if(fabs(ct) > 1) std::cout<<"Warning! K1: |ct| > 1 "<<std::endl;}
+  if(debug){if(std::fabs(ct) > 1) std::cout<<"Warning! K1: |ct| > 1 "<<std::endl;}
   return   1 - hel*ct - mtau*mtau*(1+hel*ct)/QQ/QQ;
 }
 double PolarimetricA1::K2(double ct, double QQ, int hel){
-  if(debug){if(fabs(ct) > 1) std::cout<<"Warning! K1: |ct| > 1 "<<std::endl;}
+  if(debug){if(std::fabs(ct) > 1) std::cout<<"Warning! K1: |ct| > 1 "<<std::endl;}
   return   mtau*mtau*(1+hel*ct)/QQ/QQ;
 }
 double PolarimetricA1::K3(double ct, double QQ, int hel){
-  if(debug){if(fabs(ct) > 1) std::cout<<"Warning! K1: |ct| > 1 "<<std::endl;}
+  if(debug){if(std::fabs(ct) > 1) std::cout<<"Warning! K1: |ct| > 1 "<<std::endl;}
   return   1 - hel*ct;
 }
 double PolarimetricA1::K1bar(double ct, double QQ, int hel){
-  if(debug){if(fabs(ct) > 1) std::cout<<"Warning! K1bar: |ct| > 1 "<<std::endl;}
+  if(debug){if(std::fabs(ct) > 1) std::cout<<"Warning! K1bar: |ct| > 1 "<<std::endl;}
   double cpsi = (ct*(mtau*mtau  + QQ)   + (mtau*mtau  - QQ))/(ct*(mtau*mtau  - QQ)   + (mtau*mtau  + QQ));
-  if(debug){if(fabs(cpsi) > 1) std::cout<<"Warning! K1bar: |cpsi| > 1 "<<std::endl;}
+  if(debug){if(std::fabs(cpsi) > 1) std::cout<<"Warning! K1bar: |cpsi| > 1 "<<std::endl;}
   return  K1(ct,QQ,hel)*0.5*(3*cpsi*cpsi - 1) - 3*sqrt(mtau*mtau/QQ/QQ)*cpsi*sqrt(1-cpsi*cpsi)*sqrt(1-ct*ct)*hel;
 
 }
 double PolarimetricA1::K2bar(double ct, double QQ, int hel){
-  if(debug){if(fabs(ct) > 1) std::cout<<"Warning! K1bar: |ct| > 1 "<<std::endl;}
+  if(debug){if(std::fabs(ct) > 1) std::cout<<"Warning! K1bar: |ct| > 1 "<<std::endl;}
   double cpsi = (ct*(mtau*mtau  + QQ)   + (mtau*mtau  - QQ))/(ct*(mtau*mtau  - QQ)   + (mtau*mtau  + QQ));
-  if(debug){if(fabs(cpsi) > 1) std::cout<<"Warning! K1bar: |cpsi| > 1 "<<std::endl;}
+  if(debug){if(std::fabs(cpsi) > 1) std::cout<<"Warning! K1bar: |cpsi| > 1 "<<std::endl;}
   return  K2(ct,QQ,hel)*cpsi  + sqrt(mtau*mtau/QQ/QQ)*sqrt(1-cpsi*cpsi)*sqrt(1-ct*ct)*hel;
 
 }
  double PolarimetricA1::K3bar(double ct, double QQ, int hel){
-  if(debug){if(fabs(ct) > 1) std::cout<<"Warning! K1bar: |ct| > 1 "<<std::endl;}
+  if(debug){if(std::fabs(ct) > 1) std::cout<<"Warning! K1bar: |ct| > 1 "<<std::endl;}
   double cpsi = (ct*(mtau*mtau  + QQ)   + (mtau*mtau  - QQ))/(ct*(mtau*mtau  - QQ)   + (mtau*mtau  + QQ));
-  if(debug){if(fabs(cpsi) > 1) std::cout<<"Warning! K1bar: |cpsi| > 1 "<<std::endl;}
+  if(debug){if(std::fabs(cpsi) > 1) std::cout<<"Warning! K1bar: |cpsi| > 1 "<<std::endl;}
   return  K3(ct,QQ,hel)*cpsi  - sqrt(mtau*mtau/QQ/QQ)*sqrt(1-cpsi*cpsi)*sqrt(1-ct*ct)*hel;
 }
  
@@ -417,7 +418,7 @@ PolarimetricA1::cosbetaLF(){
   TVector3 ss1pionVect = LFss1pionLV.Vect();
   TVector3 ss2pionVect = LFss2pionLV.Vect();
   TVector3 ospionVect = LFosPionLV.Vect();
-  float T = 0.5*sqrt(-lambda(B1,B2,B3));
+  double T = 0.5*sqrt(-lambda(B1,B2,B3));
   if(T==0 || LFa1LV.P()==0){if(debug){std::cout<<" Warning!  Can not compute cosbetaLF, denominator =0; return 0; "<<std::endl;} return 0;}
   return ospionVect.Dot(ss1pionVect.Cross(ss2pionVect)) /LFa1LV.P()/T;
 }
@@ -494,17 +495,9 @@ PolarimetricA1::PVC(){
 
    TComplex BWProd1 = f3(a1.M())*BreitWigner(sqrt(s2),"rho");
    TComplex BWProd2 = f3(a1.M())*BreitWigner(sqrt(s1),"rho");
-
  
-   TLorentzVector PT5 = PTenzor5(JConjRe( q1,  q2,  q3,  a1), JConjIm( q1,  q2,  q3,  a1), JRe( q1,  q2,  q3,  a1), JIm( q1,  q2,  q3,  a1),N);
-    double omega = P*PTenzor(q1,q2,q3,a1,N) - P*PT5;
-   double omega_new = P*CLV - P*CLA;
-
-
-   TLorentzVector out =  (P.M()*P.M()*  (PT5 - PTenzor(q1,q2,q3,a1,N))  -  P*(  P*PT5  -  P*PTenzor(q1,q2,q3,a1,N)))*(1/omega/P.M());
-   TLorentzVector out_new =  (P.M()*P.M()*  (CLA - CLV)  -  P*(  P*CLA -  P*CLV))*(1/omega_new/P.M());
-
-   return out_new;
+   double omega = P*CLV - P*CLA;
+   return (P.M()*P.M()*  (CLA - CLV)  -  P*(  P*CLA -  P*CLV))*(1/omega/P.M());
 }
 
 TLorentzVector 
@@ -543,7 +536,7 @@ PolarimetricA1::CLAXI(std::vector<TComplex> H, std::vector<TComplex> HC, TLorent
 
 
 TLorentzVector
-PolarimetricA1::PTenzor5(TLorentzVector aR, TLorentzVector aI, TLorentzVector bR, TLorentzVector bI, TLorentzVector c){ 
+PolarimetricA1::PTZ5(TLorentzVector aR, TLorentzVector aI, TLorentzVector bR, TLorentzVector bI, TLorentzVector c){ 
   TComplex a4(aR.E(), aI.E());  TComplex a1(aR.Px(),aI.Px());   TComplex a2(aR.Py(),aI.Py());   TComplex a3(aR.Pz(),aI.Pz());
   TComplex b4(bR.E(), bI.E());  TComplex b1(bR.Px(),bI.Px());   TComplex b2(bR.Py(),bI.Py());   TComplex b3(bR.Pz(),bI.Pz());
 
@@ -568,7 +561,7 @@ PolarimetricA1::PTenzor5(TLorentzVector aR, TLorentzVector aI, TLorentzVector bR
 
 
 TLorentzVector
-PolarimetricA1::PTenzor(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1, TLorentzVector N){ 
+PolarimetricA1::PTZ(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1, TLorentzVector N){ 
   double s1 = (q2+q3).M2();
   double s2 = (q1+q3).M2();
   //  double s3 = (q2+q3).M2();
@@ -661,7 +654,7 @@ TLorentzVector PolarimetricA1::JIm(TLorentzVector q1, TLorentzVector q2, TLorent
   return out;
 }
 
-TLorentzVector PolarimetricA1::JConjRe(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1){
+TLorentzVector PolarimetricA1::JCRe(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1){
 
   double s1 = (q2+q3).M2();
   double s2 = (q1+q3).M2();
@@ -675,7 +668,7 @@ TLorentzVector PolarimetricA1::JConjRe(TLorentzVector q1, TLorentzVector q2, TLo
   TLorentzVector out = vec1*BWProd1.Re() + vec2*BWProd2.Re();
   return out;
 }
-TLorentzVector PolarimetricA1::JConjIm(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1){
+TLorentzVector PolarimetricA1::JCIm(TLorentzVector q1, TLorentzVector q2, TLorentzVector q3, TLorentzVector a1){
 
   double s1 = (q2+q3).M2();
   double s2 = (q1+q3).M2();
@@ -830,7 +823,7 @@ double PolarimetricA1::ppi(double QQ){  if(QQ < 4*mpi*mpi) std::cout<<"Warning! 
  double PolarimetricA1::vgetf(TString type){
    double QQ=_Q*_Q;
    double RR  = mtau*mtau/QQ; 
-   float U = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 - RR);
+   double U = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 - RR);
    double B = 0.5*(3*cosbeta()*cosbeta() - 1);
 
    double fA =  WA()*(2+RR + B*U)/3;
@@ -847,14 +840,14 @@ double PolarimetricA1::ppi(double QQ){  if(QQ < 4*mpi*mpi) std::cout<<"Warning! 
  double PolarimetricA1::vgetg(TString type){
    double QQ=_Q*_Q;
    double RR  = mtau*mtau/QQ; double R = sqrt(RR);
-   //float U = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 - RR);
-   float V = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 + RR)*costhetaLF() + 0.5*3*2*cospsiLF()* sinpsiLF()*sinthetaLF()*R;
+   //double U = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 - RR);
+   double V = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 + RR)*costhetaLF() + 0.5*3*2*cospsiLF()* sinpsiLF()*sinthetaLF()*R;
    double B = 0.5*(3*cosbeta()*cosbeta() - 1);
    double fact =0;
    if(type == "bar") fact =1;
-   double gA =  WA()*(costhetaLF()*(RR - 2)   - B*V)/3                                                               +     fact*WA()*0.5*R*sinthetaLF()*cosalpha()*2*sinbeta()*cosbeta();
-   double gC =  WC()*0.5*V*sinbeta()*sinbeta()* cos2gamma()                                                 -      fact*WC()*R*sinthetaLF()*sinbeta()*(sinalpha()*sin2gamma()  -  cos2gamma()*cosalpha()*cosbeta() ) ;
-   double gD = -WD()*0.5*V*sinbeta()*sinbeta()* sin2gamma()                                                 -      fact*WD()*R*sinthetaLF()*sinbeta()*(sinalpha()*cos2gamma() + sin2gamma()* cosalpha()*cosbeta()  );
+   double gA =  WA()*(costhetaLF()*(RR - 2)   - B*V)/3                                             +     fact*WA()*0.5*R*sinthetaLF()*cosalpha()*2*sinbeta()*cosbeta();
+   double gC =  WC()*0.5*V*sinbeta()*sinbeta()* cos2gamma()                                        -     fact*WC()*R*sinthetaLF()*sinbeta()*(sinalpha()*sin2gamma()  -  cos2gamma()*cosalpha()*cosbeta() ) ;
+   double gD = -WD()*0.5*V*sinbeta()*sinbeta()* sin2gamma()                                        -     fact*WD()*R*sinthetaLF()*sinbeta()*(sinalpha()*cos2gamma() + sin2gamma()* cosalpha()*cosbeta()  );
    double gE = - WE()*cosbeta()*( costhetaLF()*cospsiLF() + R*sinthetaLF()*sinpsiLF())             +     fact*WE()*R*sinthetaLF()*sinbeta()*cosalpha();
 
 
@@ -865,8 +858,8 @@ double PolarimetricA1::ppi(double QQ){  if(QQ < 4*mpi*mpi) std::cout<<"Warning! 
  double PolarimetricA1::vgetfscalar(TString type){
    double QQ=_Q*_Q;
    double RR  = mtau*mtau/QQ; 
-   float U = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 - RR);
-   // float V = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 + RR)*costhetaLF() + 0.5*3*2*cospsiLF()* sinpsiLF()*sinthetaLF()*R;
+   double U = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 - RR);
+   // double V = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 + RR)*costhetaLF() + 0.5*3*2*cospsiLF()* sinpsiLF()*sinthetaLF()*R;
    double B = 0.5*(3*cosbeta()*cosbeta() - 1);
 
    double fA =  WA()*(2+RR + B*U)/3;
@@ -886,22 +879,17 @@ double PolarimetricA1::ppi(double QQ){  if(QQ < 4*mpi*mpi) std::cout<<"Warning! 
  double PolarimetricA1::vgetgscalar(TString type){
    double QQ=_Q*_Q;
    double RR  = mtau*mtau/QQ; double R = sqrt(RR);
-   //   float U = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 - RR);
-   float V = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 + RR)*costhetaLF() + 0.5*3*2*cospsiLF()* sinpsiLF()*sinthetaLF()*R;
+   //   double U = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 - RR);
+   double V = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 + RR)*costhetaLF() + 0.5*3*2*cospsiLF()* sinpsiLF()*sinthetaLF()*R;
    double B = 0.5*(3*cosbeta()*cosbeta() - 1);
    double fact =0;
    if(type == "bar") fact =1;
 
   
-   double gA =  WA()*(costhetaLF()*(RR - 2)   - B*V)/3                                                               +     fact*WA()*0.5*R*sinthetaLF()*cosalpha()*2*sinbeta()*cosbeta();
-   double gC =  WC()*0.5*V*sinbeta()*sinbeta()* cos2gamma()                                                 -      fact*WC()*R*sinthetaLF()*sinbeta()*(sinalpha()*sin2gamma()  -  cos2gamma()*cosalpha()*cosbeta() ) ;
-   double gD = -WD()*0.5*V*sinbeta()*sinbeta()* sin2gamma()                                                 -      fact*WD()*R*sinthetaLF()*sinbeta()*(sinalpha()*cos2gamma() + sin2gamma()* cosalpha()*cosbeta()  );
+   double gA =  WA()*(costhetaLF()*(RR - 2)   - B*V)/3                                             +     fact*WA()*0.5*R*sinthetaLF()*cosalpha()*2*sinbeta()*cosbeta();
+   double gC =  WC()*0.5*V*sinbeta()*sinbeta()* cos2gamma()                                        -     fact*WC()*R*sinthetaLF()*sinbeta()*(sinalpha()*sin2gamma()  -  cos2gamma()*cosalpha()*cosbeta() ) ;
+   double gD = -WD()*0.5*V*sinbeta()*sinbeta()* sin2gamma()                                        -     fact*WD()*R*sinthetaLF()*sinbeta()*(sinalpha()*cos2gamma() + sin2gamma()* cosalpha()*cosbeta()  );
    double gE = - WE()*cosbeta()*( costhetaLF()*cospsiLF() + R*sinthetaLF()*sinpsiLF())             +     fact*WE()*R*sinthetaLF()*sinbeta()*cosalpha();
-   // double gSA =WSA()*RR*costhetaLF();
-   // double gSB =WSB()*R*(R*cospsiLF()*costhetaLF()*sinbeta()*cosgamma() + sinthetaLF()* ( sinpsiLF()*sinbeta()*cosgamma()  -  cosbeta()* cosalpha()* cosgamma() + sinalpha()*singamma())   );
-   // double gSC = WSC()*R*sinthetaLF()*(cosbeta()*sinalpha()*cosgamma() + cosalpha()*singamma());
-   // double gSD = WSD()*R*(sinthetaLF()*(cosbeta()*cosalpha()*singamma() + sinalpha()*cosgamma() - sinpsiLF()*sinbeta()*singamma()  )      - R*costhetaLF()*cospsiLF()*sinbeta()*singamma() );
-   // double gSE = -WSE()*R*sinthetaLF()*(cosbeta()*sinalpha()*singamma() -  cosalpha()*cosgamma());
    double res = gA+gC+gD+gE;
 
    return res;
@@ -976,23 +964,24 @@ double PolarimetricA1::vgetA1omega(TString type){
   if(vgetf(type)==0){ if(debug){std::cout<<"Warning!  Can not return vomega; f(0)=0; return -5;  "<<std::endl; }return -5;}
   return vgetg(type)/vgetf(type);
 }
-double PolarimetricA1::getA1omegaBar(){
-  if(getf()==0){ if(debug){std::cout<<"Warning!  Can not return omega; f(0)=0; return -5;  "<<std::endl;} return -5;}
-  return getg()/getf();
+double PolarimetricA1::getOmegaA1Bar(){
+  // if(getf()==0){ if(debug){std::cout<<"Warning!  Can not return omega; f(0)=0; return -5;  "<<std::endl;} return -5;}
+  // return getg()/getf();
+  return nTZLFr()*PVC().Vect();
 }
 double
-PolarimetricA1::getA1omega(){
+PolarimetricA1::getOmegaA1(){
   double QQ=_Q*_Q;
   double RR  = mtau*mtau/QQ;
-  float U = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 - RR);
-  float V = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 + RR)*costhetaLF() + 0.5*3*2*cospsiLF()* sinpsiLF()*sinthetaLF()*sqrt(RR);
+  double U = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 - RR);
+  double V = 0.5*(3*cospsiLF()*cospsiLF() - 1)*(1 + RR)*costhetaLF() + 0.5*3*2*cospsiLF()* sinpsiLF()*sinthetaLF()*sqrt(RR);
   
-  float fa1 = (2  + RR + 0.5*(3*cosbeta()*cosbeta()- 1)*U)*WA()/3 - 0.5*sinbeta()*sinbeta()*cos2gamma()*U*WC() + 0.5*sinbeta()*sinbeta()*sin2gamma()*U*WD() + cospsiLF()*cosbeta()*WE();
-  float ga1 = (costhetaLF()*(RR -2) - 0.5*(3*cosbeta()*cosbeta() - 1)*V)*WA()/3 + 0.5*sinbeta()*sinbeta()*cos2gamma()*V*WC() - 0.5*sinbeta()*sinbeta()*sin2gamma()*V*WD() -cosbeta()*(costhetaLF()*cospsiLF() + sinthetaLF()*sinpsiLF()*sqrt(RR))*WE();
+  double fa1 = (2  + RR + 0.5*(3*cosbeta()*cosbeta()- 1)*U)*WA()/3 - 0.5*sinbeta()*sinbeta()*cos2gamma()*U*WC() + 0.5*sinbeta()*sinbeta()*sin2gamma()*U*WD() + cospsiLF()*cosbeta()*WE();
+  double ga1 = (costhetaLF()*(RR -2) - 0.5*(3*cosbeta()*cosbeta() - 1)*V)*WA()/3 + 0.5*sinbeta()*sinbeta()*cos2gamma()*V*WC() - 0.5*sinbeta()*sinbeta()*sin2gamma()*V*WD() -cosbeta()*(costhetaLF()*cospsiLF() + sinthetaLF()*sinpsiLF()*sqrt(RR))*WE();
 
   double omega = ga1/fa1;
-  if(omega > 0 or omega < 0) 	return omega;
-  return -999;
+  if(isinf(std::fabs(omega)) || isnan(std::fabs(omega))) omega  = -999.;
+  return omega;
 }
 TLorentzVector
 PolarimetricA1::sLV(){
@@ -1136,8 +1125,8 @@ PolarimetricA1::BWIGML(double S, double M,  double G, double m1, double m2, int 
   double WGS =0.0;
   double QS,QM;
   if(W > m1+m2){
-    QS = sqrt(fabs( (S  - MP)*(S  - MM)))/W;
-    QM = sqrt(fabs( (MSQ - MP)*(MSQ - MM)))/M;
+    QS = sqrt(std::fabs( (S  - MP)*(S  - MM)))/W;
+    QM = sqrt(std::fabs( (MSQ - MP)*(MSQ - MM)))/M;
     IPOW = 2*L +1;
     WGS=G*(MSQ/W)*pow(QS/QM, IPOW);
   }

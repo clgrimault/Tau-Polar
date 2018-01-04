@@ -44,7 +44,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents =200000; 
+int NumberOfEvents =2000; 
 int EventsToCheck=5;
 
 // elementary test of HepMC typically executed before
@@ -143,6 +143,11 @@ void redMinus(TauolaParticle *minus)
       Tauola::setTauBr(dec, br);
    }
 
+     // Tauola::setTauBr(0, 0.0);     Tauola::setTauBr(1, 0.0);      Tauola::setTauBr(2, 1.0);      Tauola::setTauBr(3, 0.0);      Tauola::setTauBr(4, 0.0);
+     // Tauola::setTauBr(5, 0.0);     Tauola::setTauBr(6, 0.0);      Tauola::setTauBr(7, 0.0);      Tauola::setTauBr(8, 0.0);      Tauola::setTauBr(9, 0.0);
+     // Tauola::setTauBr(10, 0.0);   Tauola::setTauBr(11, 0.0);    Tauola::setTauBr(12, 0.0);    Tauola::setTauBr(13, 0.0);    Tauola::setTauBr(14, 0.0);
+     // Tauola::setTauBr(15, 0.0);   Tauola::setTauBr(16, 0.0);    Tauola::setTauBr(17, 0.0);    Tauola::setTauBr(18, 0.0);    Tauola::setTauBr(19, 0.0);
+     // Tauola::setTauBr(20, 0.0);   Tauola::setTauBr(21, 0.0);    Tauola::setTauBr(22, 0.0);
 
 
 }
@@ -166,13 +171,19 @@ void redPlus(TauolaParticle *plus)
   for(unsigned int dec=1; dec <23; dec++){
      double br =0.0;
      // if(dec==3 || dec ==4) br=0.49;
-     if(dec ==3 || dec ==4|| dec ==5) br=0.33;
+     if(dec == 2 || dec ==3 || dec ==4|| dec ==5) br=0.33;
        
 	 //    if(dec ==5) br=0.99;
      //if(dec ==4) br=0.99;
      Tauola::setTauBr(dec, br);
    }
 
+
+  // Tauola::setTauBr(0, 0.0);     Tauola::setTauBr(1, 0.0);      Tauola::setTauBr(2, 0.0);      Tauola::setTauBr(3, 0.5);      Tauola::setTauBr(4, 0.5);
+  // Tauola::setTauBr(5, 0.0);     Tauola::setTauBr(6, 0.0);      Tauola::setTauBr(7, 0.0);      Tauola::setTauBr(8, 0.0);      Tauola::setTauBr(9, 0.0);
+  // Tauola::setTauBr(10, 0.0);   Tauola::setTauBr(11, 0.0);    Tauola::setTauBr(12, 0.0);    Tauola::setTauBr(13, 0.0);    Tauola::setTauBr(14, 0.0);
+  // Tauola::setTauBr(15, 0.0);   Tauola::setTauBr(16, 0.0);    Tauola::setTauBr(17, 0.0);    Tauola::setTauBr(18, 0.0);    Tauola::setTauBr(19, 0.0);
+  // Tauola::setTauBr(20, 0.0);   Tauola::setTauBr(21, 0.0);    Tauola::setTauBr(22, 0.0);
 
 
 }
@@ -324,7 +335,13 @@ int main(int argc,char **argv){
  TH1F *omega_rhorho_minus= new TH1F("omega_rhorho_minus","#omega_{#rho#rho}^{-}",50,-1.1,1.1);
   
 
+ TH1F *mass_pirho_plus= new TH1F("mass_pirho_plus","M_{#pi#rho}^{+}",60,20,80);
+ TH1F *mass_pirho_minus= new TH1F("mass_pirho_minus","M_{#pi#rho}^{-}",60,20,80);
 
+ TH1F *mass_murho_plus= new TH1F("mass_murho_plus","M_{#mu#rho}^{+}",60,20,80);
+ TH1F *mass_murho_minus= new TH1F("mass_murho_minus","M_{#mu#rho}^{-}",60,20,80);
+
+ 
 
  TH1F *a1_mcos2gamma_plus= new TH1F("a1_mcos2gamma_plus"," <cos2#gamma>^{+}",50,-0.5,0.5);
  TH1F *a1_mcos2gamma_minus= new TH1F("a1_mcos2gamma_minus"," <cos2#gamma>^{-}",50,-0.5,0.5);
@@ -619,11 +636,77 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
     TauPolInterface TauPolPiA1;
     TauPolInterface TauPolMuA1;
 
-    vector<TLorentzVector> tauandprod1,tauandprod2 ;
+    vector<TLorentzVector> tauandprod1,tauandprod2, tauandprodMuon2;
     vector<TLorentzVector> tauandprodMuon1,tauandprodRho,tauandprodRho2,tauandprodA1;
     tau1.SetPxPyPzE(FirstTau->momentum().px(), FirstTau->momentum().py(), FirstTau->momentum().pz(), FirstTau->momentum().e());
     tau2.SetPxPyPzE(SecondTau->momentum().px(), SecondTau->momentum().py(), SecondTau->momentum().pz(), SecondTau->momentum().e());
-   //---------------------------------------------------------------------------
+    // //------------------------  check frames ------------------------------------
+    // std::cout<<"--------------------"<<std::endl;
+    // std::cout<<"tau1   ";  tau1.Print();
+    // std::cout<<"tau2   ";  tau2.Print();
+    // TLorentzVector Z = tau1+tau2;
+    // std::cout<<"Z "<< "("<< Z.Px() <<" , "<< Z.Py() <<" , "<< Z.Pz() << " , "<< Z.E() <<"  ) "<<std::endl; 
+    // std::cout<<"Rotate to tau1 frame "<<std::endl;
+
+    // TLorentzVector BoostedTau1 = BoostR(tau1,Z);
+    // TLorentzVector BoostedTau2 = BoostR(tau2,Z);
+
+
+
+
+    // TVector3 RotVector1 = BoostedTau1.Vect();
+    // TLorentzVector RotatedTau1 = BoostedTau1;
+    // TLorentzVector RotatedTau2 = BoostedTau2;
+    // TLorentzVector RotatedZ = BoostedTau1+ BoostedTau2;
+    // RotatedTau1.SetVect(Rotate(RotatedTau1.Vect(),RotVector1));
+    // RotatedTau2.SetVect(Rotate(RotatedTau2.Vect(),RotVector1));
+    // RotatedZ.SetVect(Rotate(RotatedZ.Vect(),RotVector1));
+
+    // std::cout<<"tau1   ";  RotatedTau1.Print();
+    // std::cout<<"tau2   ";  RotatedTau2.Print();
+    // std::cout<<"Z "<< "("<< RotatedZ.Px() <<" , "<< RotatedZ.Py() <<" , "<< RotatedZ.Pz() << " , "<< RotatedZ.E() <<"  ) "<<std::endl; 
+
+
+
+
+
+
+
+
+    //   BoostR(tau1,Z).Print();
+    //   BoostR(tau2,Z).Print();
+    //   BoostR(Z,Z).Print();
+    
+     
+     // std::cout<<"boost to tau1 frame "<<std::endl;
+     // std::cout<<"first tau "; BoostR(tau1,tau1).Print();
+     // std::cout<<"second tau ";     BoostR(tau2,tau1).Print();
+     // std::cout<<"second tau ";     BoostR(Z,tau1).Print();
+
+
+
+    // TVector3 RotVector = tau1.Vect();
+    // RotatedTau1.SetVect(Rotate(RotatedTau1.Vect(),RotVector));
+    // RotatedTau2.SetVect(Rotate(RotatedTau2.Vect(),RotVector));
+    // std::cout<<"Rot  tau1   ";  RotatedTau1.Print();
+    // std::cout<<"Rot  tau2   ";  RotatedTau2.Print();
+    // TVector3 BoostVect = tau1.BoostVector();
+    // TLorentzVector RotatedTau1Boost = BoostR(RotatedTau1,RotatedTau1);
+    // TLorentzVector RotatedTau2Boost = BoostR(RotatedTau2,RotatedTau1);
+    // TLorentzVector RotatedTau2Boost_checkRoot = RotatedTau1;
+    // RotatedTau2Boost_checkRoot.Boost(-BoostVect);
+
+    // std::cout<<"Rot boosted  tau1   ";  RotatedTau1Boost.Print();
+    // std::cout<<"Rot boosted  tau2   ";  RotatedTau2Boost.Print();
+ 
+    // std::cout<<"Rot boosted  tau1      "<< "("<< RotatedTau1Boost.Px() <<" , "<< RotatedTau1Boost.Py() <<" , "<< RotatedTau1Boost.Pz() << " , "<< RotatedTau1Boost.E() <<"  ) "<<std::endl; 
+    // std::cout<<"Rot boosted  tau2      "<< "("<< RotatedTau2Boost.Px() <<" , "<< RotatedTau2Boost.Py() <<" , "<< RotatedTau2Boost.Pz() << " , "<< RotatedTau2Boost.E() <<"  ) "<<std::endl; 
+    // std::cout<<"Rot boosted  tau2 cc   "<< "("<< RotatedTau2Boost_checkRoot.Px() <<" , "<< RotatedTau2Boost_checkRoot.Py() <<" , "<< RotatedTau2Boost_checkRoot.Pz() << " , "<< RotatedTau2Boost_checkRoot.E() <<"  ) "<<std::endl; 
+
+
+  // vec.RotateZ(0.5*TMath::Pi() - Rot.Phi());  // not 0.5, to avoid warnings about 0 pT
+  // vec.RotateX(Rot.Theta());
+    //---------------------------------------------------------------------------
     if(JAK1==2){
       vector<TLorentzVector> tauandprod;
       tauandprod.push_back(TLorentzVector(FirstTau->momentum().px(), FirstTau->momentum().py(), FirstTau->momentum().pz(), FirstTau->momentum().e()));
@@ -637,6 +720,13 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 
       mu_plus->Fill(TauPolMu1.getOmega(),HelWeightPlus);
       mu_minus->Fill(TauPolMu1.getOmega(),HelWeightMinus);
+    }
+    if(JAK2==2){
+      vector<TLorentzVector> tauandprodmu2;
+      tauandprodmu2.push_back(TLorentzVector(SecondTau->momentum().px(), SecondTau->momentum().py(), SecondTau->momentum().pz(), SecondTau->momentum().e()));
+      for(std::vector<HepMC::GenParticle>::const_iterator a = SecondTauProducts.begin(); a!=SecondTauProducts.end(); ++a){
+	if(abs(a->pdg_id())==13){tauandprodmu2.push_back(TLorentzVector(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e()  ) );} }
+      tauandprodMuon2=tauandprodmu2;
     }
 
 
@@ -738,6 +828,17 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
      cosbetacosthetarho_minus->Fill(Rho2.getCosbetaRho(),Rho2.getCosthetaRho(),HelWeightMinus);
 
     }
+    if(JAK1==4 &&JAK2==3 ){
+	mass_pirho_plus->Fill( (tauandprodRho.at(1) + tauandprodRho.at(2) + tauandprod2.at(1)).M(), HelWeightPlus);
+	mass_pirho_minus->Fill((tauandprodRho.at(1) + tauandprodRho.at(2) + tauandprod2.at(1)).M(),HelWeightMinus);
+
+
+    }
+    if(JAK1==4 &&JAK2==2 ){
+	mass_murho_plus->Fill( (tauandprodRho.at(1) + tauandprodRho.at(2) + tauandprodMuon2.at(1)).M(), HelWeightPlus);
+	mass_murho_minus->Fill((tauandprodRho.at(1) + tauandprodRho.at(2) + tauandprodMuon2.at(1)).M(),HelWeightMinus);
+    }
+
 
     if(JAK1==5 && SubJAK1==51){
       vector<TLorentzVector> particles;
@@ -753,9 +854,11 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
       particles.push_back(a1ss1pi);
       particles.push_back(a1ss2pi);
  
+
+
       Polarimetr1.Configure(particles, taucharge);
       omega_a1p_minus->Fill(Polarimetr1.getOmegaA1Bar(),HelWeightMinus);  omega_a1p_plus->Fill(Polarimetr1.getOmegaA1Bar(),HelWeightPlus);
-
+      //  std::cout<<"omegabar   "<<Polarimetr1.getOmegaA1Bar() <<std::endl;
       a1hh.Configure(particles, a1ospi+a1ss1pi+a1ss2pi);
       TauPolA1.Configure(particles,"a1");
       tauandprodA1=particles;
@@ -837,13 +940,13 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
       Omegapipi_plus->Fill(OmPiPi,HelWeightPlus);
       Omegapipi_minus->Fill(OmPiPi,HelWeightMinus);       
 	    
-      //      std::cout<<" ----  "<<std::endl;
+      std::cout<<" ----  "<<(tauandprod1.at(1)+tauandprod2.at(1)).M() <<std::endl;
       //      tauandprod1.at(1).Print();
       //      tauandprod2.at(1).Print();
       // Omegapipi_plus->Fill(TauPolPiPi.getCombOmega(),HelWeightPlus);
       // Omegapipi_minus->Fill(TauPolPiPi.getCombOmega(),HelWeightMinus);       
-      pipi_mass_plus->Fill(TauPolPiPi.getVisiblePairLV().M(),HelWeightPlus);
-      pipi_mass_minus->Fill(TauPolPiPi.getVisiblePairLV().M(),HelWeightMinus);
+      pipi_mass_plus->Fill((tauandprod1.at(1)+tauandprod2.at(1)).M(),HelWeightPlus);
+      pipi_mass_minus->Fill((tauandprod1.at(1)+tauandprod2.at(1)).M(),HelWeightMinus);
 
       }
     }
