@@ -946,9 +946,6 @@ double PolarimetricA1::TRF_vgetA1omega(TString type){
   return TRF_vgetg(type)/TRF_vgetf(type);
 }
 
-double PolarimetricA1::result(){
-   return nTZLFr()*PVC().Vect();
-}
 
 
 double PolarimetricA1::vgetA1omegascalar(TString type){

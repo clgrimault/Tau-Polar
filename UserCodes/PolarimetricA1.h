@@ -132,7 +132,6 @@ class PolarimetricA1 {
   TLorentzVector CLVEC(std::vector<TComplex> H, std::vector<TComplex> HC, TLorentzVector N);
   TLorentzVector CLAXI(std::vector<TComplex> H, std::vector<TComplex> HC, TLorentzVector N);
 
-  double result();
   double VV1();
   double VV2();
   double V1V2();

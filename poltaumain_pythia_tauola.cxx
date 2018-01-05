@@ -44,7 +44,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents =2000; 
+int NumberOfEvents =15000; 
 int EventsToCheck=5;
 
 // elementary test of HepMC typically executed before
@@ -116,7 +116,7 @@ Rotate(TVector3 LVec, TVector3 Rot){
 }
 
 
-void redMinus(TauolaParticle *minus)
+void redMinus(TauolaParticle *minus) // this is JAK1
 {
   //   
   // this method can be used to redefine branching ratios in decay of tau-
@@ -136,23 +136,13 @@ void redMinus(TauolaParticle *minus)
 
    for(unsigned int dec=1; dec <23; dec++){
       double br =0.0; 
-      //         if( dec == 4) br=0.99;
-      if(dec==2 || dec==3|| dec==4 || dec ==5) br=0.25;
-      //	 if(dec ==5) br=0.99;
-   	 // if(dec == 3) br=0.99;
+      if(dec ==2 || dec==3 || dec ==4 || dec ==5) br=0.25;
       Tauola::setTauBr(dec, br);
    }
 
-     // Tauola::setTauBr(0, 0.0);     Tauola::setTauBr(1, 0.0);      Tauola::setTauBr(2, 1.0);      Tauola::setTauBr(3, 0.0);      Tauola::setTauBr(4, 0.0);
-     // Tauola::setTauBr(5, 0.0);     Tauola::setTauBr(6, 0.0);      Tauola::setTauBr(7, 0.0);      Tauola::setTauBr(8, 0.0);      Tauola::setTauBr(9, 0.0);
-     // Tauola::setTauBr(10, 0.0);   Tauola::setTauBr(11, 0.0);    Tauola::setTauBr(12, 0.0);    Tauola::setTauBr(13, 0.0);    Tauola::setTauBr(14, 0.0);
-     // Tauola::setTauBr(15, 0.0);   Tauola::setTauBr(16, 0.0);    Tauola::setTauBr(17, 0.0);    Tauola::setTauBr(18, 0.0);    Tauola::setTauBr(19, 0.0);
-     // Tauola::setTauBr(20, 0.0);   Tauola::setTauBr(21, 0.0);    Tauola::setTauBr(22, 0.0);
-
-
 }
 
-void redPlus(TauolaParticle *plus)
+void redPlus(TauolaParticle *plus) // this is JAK2
 {
   //   
   // this method can be used to redefine branching ratios in decay of tau+
@@ -170,23 +160,11 @@ void redPlus(TauolaParticle *plus)
   // can be called here 
   for(unsigned int dec=1; dec <23; dec++){
      double br =0.0;
-     // if(dec==3 || dec ==4) br=0.49;
-     if(dec==2 || dec==3|| dec==4 || dec ==5) br=0.25;
-       
-	 //    if(dec ==5) br=0.99;
-     //if(dec ==4) br=0.99;
+     if(dec ==2 || dec==3 || dec ==4 || dec ==5) br=0.25;
      Tauola::setTauBr(dec, br);
    }
-
-
-  // Tauola::setTauBr(0, 0.0);     Tauola::setTauBr(1, 0.0);      Tauola::setTauBr(2, 0.0);      Tauola::setTauBr(3, 0.5);      Tauola::setTauBr(4, 0.5);
-  // Tauola::setTauBr(5, 0.0);     Tauola::setTauBr(6, 0.0);      Tauola::setTauBr(7, 0.0);      Tauola::setTauBr(8, 0.0);      Tauola::setTauBr(9, 0.0);
-  // Tauola::setTauBr(10, 0.0);   Tauola::setTauBr(11, 0.0);    Tauola::setTauBr(12, 0.0);    Tauola::setTauBr(13, 0.0);    Tauola::setTauBr(14, 0.0);
-  // Tauola::setTauBr(15, 0.0);   Tauola::setTauBr(16, 0.0);    Tauola::setTauBr(17, 0.0);    Tauola::setTauBr(18, 0.0);    Tauola::setTauBr(19, 0.0);
-  // Tauola::setTauBr(20, 0.0);   Tauola::setTauBr(21, 0.0);    Tauola::setTauBr(22, 0.0);
-
-
 }
+
 void SortPions(std::vector<HepMC::GenParticle > pionsvec)
 {
 
@@ -280,9 +258,11 @@ int main(int argc,char **argv){
   TH1F *pipi_mass_plus= new TH1F("pipi_mass_plus","M_{#pi#pi}^{+}",60,20,80);
   TH1F *pipi_mass_minus= new TH1F("pipi_mass_minus","M_{#pi#pi}^{-}",60,20,80);
   
+  TH1F *mupi_mass_plus= new TH1F("mupi_mass_plus","M_{#mu#pi}^{+}",60,20,80);
+  TH1F *mupi_mass_minus= new TH1F("mupi_mass_minus","M_{#mu#pi}^{-}",60,20,80);
  
- TH1F *omega_murho_plus= new TH1F("omega_murho_plus","#omega_{#mu#rho}^{+}",50,-1.1,1.1);
- TH1F *omega_murho_minus= new TH1F("omega_murho_minus","#omega_{#mu#rho}^{-}",50,-1.1,1.1);
+  TH1F *omega_murho_plus= new TH1F("omega_murho_plus","#omega_{#mu#rho}^{+}",50,-1.1,1.1);
+  TH1F *omega_murho_minus= new TH1F("omega_murho_minus","#omega_{#mu#rho}^{-}",50,-1.1,1.1);
 
 
  TH1F *omega_rho_plus= new TH1F("omega_rho_plus","#omega_{#rho}^{+}",50,-1.1,1.1);
@@ -878,7 +858,10 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
      	mass_murho_minus->Fill((tauandprod1.at(1) + tauandprod1.at(2) + tauandprod2.at(1)).M(),HelWeightMinus);
      }
 
-
+     if(JAK1==3 &&JAK2==2 ){
+       mupi_mass_plus->Fill( (tauandprod1.at(1)  + tauandprod2.at(1)).M(), HelWeightPlus);
+       mupi_mass_minus->Fill( (tauandprod1.at(1)  + tauandprod2.at(1)).M(),HelWeightMinus );
+     }
 
 
      if(JAK1 ==3 && JAK2 == 3){
@@ -927,8 +910,6 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
         }
       }
 
-
-
        if(JAK1 ==3 && JAK2 == 4){
          if(Pi1.isConfigured() && Rho2.isConfigured()){
 	   double OmPiRho=  (Pi1.getOmega() +Rho2.getOmega() )/(1 + Pi1.getOmega()*Rho2.getOmega());
@@ -940,7 +921,6 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
          }
        }
        
-
        if(JAK1 ==3 && JAK2 == 5 &&   SubJAK2==51){
 	 //    //std::cout<<"  "<<Pi2.isConfigured() <<"  " << Polarimetr1.isConfigured()<<std::endl;
 	 if(Pi1.isConfigured() && A2.isConfigured()){
@@ -966,8 +946,7 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 	   omega_a1mu_minus->Fill(TauPolMuA1.getCombOmegaBar(),HelWeightMinus);       
          }
        }
-       
-       
+              
        if(JAK1 ==4 && JAK2 == 4){
          if(Rho1.isConfigured() && Rho2.isConfigured()){
 	   TauPolRhoRho.ConfigurePair(tauandprod1,"rho",tauandprod2,"rho");
@@ -975,9 +954,6 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 	   omega_rhorho_minus->Fill(TauPolRhoRho.getCombVisibleOmega(),HelWeightMinus);       
 	   mass_rhorho_plus->Fill((tauandprod1.at(1) + tauandprod1.at(2) + tauandprod2.at(1)+ tauandprod2.at(2)).M(),HelWeightPlus  );
 	   mass_rhorho_minus->Fill((tauandprod1.at(1) + tauandprod1.at(2) + tauandprod2.at(1)+ tauandprod2.at(2)).M(),HelWeightMinus );
-
-
-
          }
        }
        
