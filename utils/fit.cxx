@@ -10,14 +10,16 @@
 #include "TMath.h"
 #include "TMinuit.h"
 
-static int NUMBER_OF_BINS=50;
+static int NUMBER_OF_BINS=40;
+static int FirstBin =  1;
+static int LastBin  =  NUMBER_OF_BINS ;
 static int Min =-1.1;
 static int Max = 1.1;
 double NMC;
 
 
-  TString HPlusN = "pi_plus";
-  TString HMinsN = "pi_minus";
+  TString HPlusN = "omega_a1_plus";
+  TString HMinsN = "omega_a1_minus";
 
 TString File = "MixedTemplates.root";
 TFile *datafile = TFile::Open(File);
@@ -31,9 +33,9 @@ double HMins(0);
 double sigmap(0);
 
 void PerformHisto(){
-  for(unsigned int i=0; i< NUMBER_OF_BINS; i++){HPlus+=plus->GetBinContent(i);}
-  for(unsigned int i=0; i< NUMBER_OF_BINS; i++){HMins+=mins->GetBinContent(i);}
-  NMC = data->Integral();
+  for(unsigned int i=FirstBin; i< LastBin; i++){HPlus+=plus->GetBinContent(i);}
+  for(unsigned int i=FirstBin; i< LastBin; i++){HMins+=mins->GetBinContent(i);}
+  NMC = data->Integral(FirstBin,LastBin);
 }
 
 
@@ -59,34 +61,34 @@ void fit(string type, string ScanOrFit = "f"){
 
   gStyle->SetOptStat(0000);
   Double_t par[1],dpar[1];
-  TMinuit *myMin = new TMinuit(1);
+  TMinuit *fitter = new TMinuit(1);
 
-  if(type == 'c')   myMin->SetFCN(Chi2); myMin->SetErrorDef(1);
-  //if(type == 'l')   myMin->SetFCN(Likelihood); myMin->SetErrorDef(0.5);
-  if(type == 'l')   myMin->SetFCN(LikelihoodAdv); myMin->SetErrorDef(0.5);
+  if(type == 'c')   fitter->SetFCN(Chi2); fitter->SetErrorDef(1);
+  //if(type == 'l')   fitter->SetFCN(Likelihood); fitter->SetErrorDef(0.5);
+  if(type == 'l')   fitter->SetFCN(LikelihoodAdv); fitter->SetErrorDef(0.5);
  
   Double_t arglist[2];
   Int_t ierflg = 1;
 
-  myMin->mnparm( 0, "polarization",  -0.15,   0.005,   -0.99, 0.99, ierflg);
-  myMin->SetPrintLevel(2);
+  fitter->mnparm( 0, "polarization",  -0.15,   0.005,   -0.99, 0.99, ierflg);
+  fitter->SetPrintLevel(2);
 
-  arglist[0]=2;
-  arglist[1]=2;
+  arglist[0]=500;
+  arglist[1]=500;
  
-  myMin->mnexcm("SET STR", arglist ,1,ierflg);
+  fitter->mnexcm("SET STR", arglist ,1,ierflg);
 
 
- myMin->Migrad();
- // myMin->Simplex();  
- myMin->mnhess();
- myMin->mnhess();
- myMin->mnhess();
- myMin->mnmnos();
+ fitter->Migrad();
+ //fitter->Simplex();  
+ fitter->mnhess();
+ fitter->mnhess();
+ fitter->mnhess();
+ fitter->mnmnos();
   
-  get_parameters(myMin,par,dpar);
+  get_parameters(fitter,par,dpar);
  
-  TH1F *Sum = new TH1F("Sum","Sum",50,-1.1,1.1);
+  TH1F *Sum = new TH1F("Sum","Sum",NUMBER_OF_BINS,-1.1,1.1);
   Sum->Sumw2();
   plus->SetLineColor(3);
   mins->SetLineColor(2);
@@ -106,7 +108,7 @@ void fit(string type, string ScanOrFit = "f"){
    minsClone->Scale(NMC*(1-p)/2/HMins);
 
   double  llcheck =0;
-  for(int ib = 1; ib <50 + 1; ib++ ){
+  for(int ib = FirstBin; ib <= LastBin; ib++ ){
     
         Sum->SetBinContent(ib, NMC*(plus->GetBinContent(ib)*(1+p)/2/HPlus + mins->GetBinContent(ib)*(1-p)/2/HMins)   );
     
@@ -122,7 +124,7 @@ void fit(string type, string ScanOrFit = "f"){
    data->SetStats(0);
    data->SetLineWidth(2);
    data->SetMarkerStyle(20);
-   data->SetMarkerSize(1.1);
+   data->SetMarkerSize(0.8);
    
    data->SetTitle("");
    data->SetYTitle("");
@@ -245,8 +247,8 @@ void fit(string type, string ScanOrFit = "f"){
    TCanvas *c2 = new TCanvas("c2","Scan POlarization",100,100,500,500);
    // if(ScanOrFit == "s")
    {
-     myMin->Command("SCAn 1");
-     TGraph *gr = (TGraph*)myMin->GetPlot();
+     fitter->Command("SCAn 1");
+     TGraph *gr = (TGraph*)fitter->GetPlot();
      gr->GetXaxis()->SetTitle("P_{#tau}");
      gr->GetYaxis()->SetTitle("#chi^{2}");
      
@@ -257,11 +259,11 @@ void fit(string type, string ScanOrFit = "f"){
    
    //       //     if(ScanOrFit == "s")
    // {
-   //   //  myMin->mnimpr() ;
-   //    myMin->Command("SCAn 2");
+   //   //  fitter->mnimpr() ;
+   //    fitter->Command("SCAn 2");
    
-   //    //   myMin->Comman("IMProve");
-   //    TGraph *gr = (TGraph*)myMin->GetPlot();
+   //    //   fitter->Comman("IMProve");
+   //    TGraph *gr = (TGraph*)fitter->GetPlot();
    //    gr->GetXaxis()->SetTitle("backgound p");
    //    gr->GetYaxis()->SetTitle("#chi^{2}");
    
@@ -271,9 +273,9 @@ void fit(string type, string ScanOrFit = "f"){
    // // if(type == 'f')
    // //   {
    // 	 TCanvas *c4 = new TCanvas("c4","contour",100,100,500,500);
-   // 	 // myMin->Command("SCAn 1");
-   // 	 myMin->SetErrorDef(0.5);
-   // 	 TGraph *gr = (TGraph*)myMin->Contour(10,0,1);
+   // 	 // fitter->Command("SCAn 1");
+   // 	 fitter->SetErrorDef(0.5);
+   // 	 TGraph *gr = (TGraph*)fitter->Contour(10,0,1);
    // 	 gr->GetXaxis()->SetTitle("P_{#tau}");
    // 	 gr->GetYaxis()->SetTitle("p_bkg");
    
@@ -380,9 +382,9 @@ void Chi2(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag)
   double LL=0;
   double LLtot=0;
   int count =0;
-  for ( int i = 3; i< 48 + 1; i++){
+  for ( int i = FirstBin; i<=LastBin; i++){
     double  mc = N_mc(i, par);
-    int scale = 1;
+    if(mc ==0 || N_data(i)==0) continue;
     LL+= (mc -N_data(i))*(mc - N_data(i))/N_data(i);
   }
   //f= LL;    
