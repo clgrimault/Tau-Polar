@@ -18,7 +18,7 @@ double Sensetivityrho(Double_t *x, Double_t *par)
   TH1F *hg = (TH1F*)plus->Clone("hg");
   hf->Add(minus,1);
   hg->Add(minus,-1); 
- hf->Add(hg,pol);
+  hf->Add(hg,pol);
   hg->Multiply(hg);
  
   hg->Divide(hf);
@@ -96,7 +96,7 @@ double Sensetivitymu(Double_t *x, Double_t *par)
   TH1F *hg = (TH1F*)plus->Clone("hg");
   hf->Add(minus,1);
   hg->Add(minus,-1);
- hf->Add(hg,pol);
+  hf->Add(hg,pol);
   hg->Multiply(hg);
  
   hg->Divide(hf);
