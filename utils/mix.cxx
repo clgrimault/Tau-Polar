@@ -1,10 +1,10 @@
 
 void mix(){
-  double pol=-0.23456789;
+  double pol=-0.454545454545;
 
   TString fileName="Draw.root";
-  TString HPlus = "omega_a1_plus";
-  TString HMins = "omega_a1_minus";
+  TString HPlus = "pi_plus";
+  TString HMins = "pi_minus";
 
 
   double wplus = 0.5*(1+pol);

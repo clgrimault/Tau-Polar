@@ -10,16 +10,16 @@
 #include "TMath.h"
 #include "TMinuit.h"
 
-static int NUMBER_OF_BINS=40;
+static int NUMBER_OF_BINS=50;
 static int FirstBin =  1;
 static int LastBin  =  NUMBER_OF_BINS ;
-static int Min =-1.1;
-static int Max = 1.1;
+static double Min = -1.1;
+static double Max =  1.1;
 double NMC;
 
 
-  TString HPlusN = "omega_a1_plus";
-  TString HMinsN = "omega_a1_minus";
+  TString HPlusN = "pi_plus";
+  TString HMinsN = "pi_minus";
 
 TString File = "MixedTemplates.root";
 TFile *datafile = TFile::Open(File);
@@ -33,8 +33,8 @@ double HMins(0);
 double sigmap(0);
 
 void PerformHisto(){
-  for(unsigned int i=FirstBin; i< LastBin; i++){HPlus+=plus->GetBinContent(i);}
-  for(unsigned int i=FirstBin; i< LastBin; i++){HMins+=mins->GetBinContent(i);}
+  for(unsigned int i=FirstBin; i<= LastBin; i++){HPlus+=plus->GetBinContent(i);}
+  for(unsigned int i=FirstBin; i<= LastBin; i++){HMins+=mins->GetBinContent(i);}
   NMC = data->Integral(FirstBin,LastBin);
 }
 
@@ -88,7 +88,7 @@ void fit(string type, string ScanOrFit = "f"){
   
   get_parameters(fitter,par,dpar);
  
-  TH1F *Sum = new TH1F("Sum","Sum",NUMBER_OF_BINS,-1.1,1.1);
+  TH1F *Sum = new TH1F("Sum","Sum",NUMBER_OF_BINS,Min,Max);
   Sum->Sumw2();
   plus->SetLineColor(3);
   mins->SetLineColor(2);
@@ -125,11 +125,17 @@ void fit(string type, string ScanOrFit = "f"){
    data->SetLineWidth(2);
    data->SetMarkerStyle(20);
    data->SetMarkerSize(0.8);
+
+   TString XTitle="#omega_{#pi}";
+
    
    data->SetTitle("");
    data->SetYTitle("");
-   data->SetXTitle("E_{#mu}/E_{#tau}");
+   data->SetXTitle(XTitle);
    
+
+
+
    Sum->SetLineWidth(2);
    Sum->SetLineColor(4);
    // TCanvas *c = new TCanvas("c","PolFit",100,100,600,600);
@@ -139,7 +145,7 @@ void fit(string type, string ScanOrFit = "f"){
    minsClone->SetLineWidth(2);
    minsClone->SetMarkerStyle(20);
    minsClone->SetMarkerSize(1.2);
-   minsClone->GetXaxis()->SetTitle("#omega_{a1}");
+   minsClone->GetXaxis()->SetTitle(XTitle);
    minsClone->GetXaxis()->SetLabelFont(42);
    minsClone->GetXaxis()->SetLabelSize(0.05);
    minsClone->GetXaxis()->SetTitleSize(0.05);
@@ -244,12 +250,13 @@ void fit(string type, string ScanOrFit = "f"){
      // leg->Draw();
    
    
-   TCanvas *c2 = new TCanvas("c2","Scan POlarization",100,100,500,500);
+   TCanvas *c2 = new TCanvas("c2","Scan Polarization",600,600,700,700);
    // if(ScanOrFit == "s")
    {
      fitter->Command("SCAn 1");
      TGraph *gr = (TGraph*)fitter->GetPlot();
      gr->GetXaxis()->SetTitle("P_{#tau}");
+     gr->SetTitle("#chi^{2} scan over P_{#tau}");
      gr->GetYaxis()->SetTitle("#chi^{2}");
      
      gr->Draw(""); 
