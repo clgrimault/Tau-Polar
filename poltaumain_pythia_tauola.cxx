@@ -44,7 +44,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents =15000; 
+int NumberOfEvents =1000000; 
 int EventsToCheck=5;
 
 // elementary test of HepMC typically executed before
@@ -107,6 +107,7 @@ BoostR(TLorentzVector pB, TLorentzVector frame){
    result=transform*convertToMatrix(vec);
    return TLorentzVector(result(1,0), result(2,0) ,result(3,0), result(0,0));
 }
+
 TVector3
 Rotate(TVector3 LVec, TVector3 Rot){
   TVector3 vec = LVec;
@@ -136,7 +137,7 @@ void redMinus(TauolaParticle *minus) // this is JAK1
 
    for(unsigned int dec=1; dec <23; dec++){
       double br =0.0; 
-      if(dec ==2 || dec==3 || dec ==4 || dec ==5) br=0.25;
+      if(dec==3 || dec ==4 || dec ==5) br=0.33;
       Tauola::setTauBr(dec, br);
    }
 
@@ -160,7 +161,7 @@ void redPlus(TauolaParticle *plus) // this is JAK2
   // can be called here 
   for(unsigned int dec=1; dec <23; dec++){
      double br =0.0;
-     if(dec ==2 || dec==3 || dec ==4 || dec ==5) br=0.25;
+     if( dec==3 || dec ==4 || dec ==5) br=0.33;
      Tauola::setTauBr(dec, br);
    }
 }
@@ -255,11 +256,11 @@ int main(int argc,char **argv){
   TH1F *Omegapipi_plus= new TH1F("Omegapipi_plus","#omega_{#pi#pi}^{+}",50,-1.1,1.1);
   TH1F *Omegapipi_minus= new TH1F("Omegapipi_minus","#omega_{#pi#pi}^{-}",50,-1.1,1.1);
   
-  TH1F *pipi_mass_plus= new TH1F("pipi_mass_plus","M_{#pi#pi}^{+}",60,20,80);
-  TH1F *pipi_mass_minus= new TH1F("pipi_mass_minus","M_{#pi#pi}^{-}",60,20,80);
+  TH1F *pipi_mass_plus= new TH1F("pipi_mass_plus","M_{#pi#pi}^{+}",60,0,120);
+  TH1F *pipi_mass_minus= new TH1F("pipi_mass_minus","M_{#pi#pi}^{-}",60,0,120);
   
-  TH1F *mupi_mass_plus= new TH1F("mupi_mass_plus","M_{#mu#pi}^{+}",60,20,80);
-  TH1F *mupi_mass_minus= new TH1F("mupi_mass_minus","M_{#mu#pi}^{-}",60,20,80);
+  TH1F *mupi_mass_plus= new TH1F("mupi_mass_plus","M_{#mu#pi}^{+}",60,0,120);
+  TH1F *mupi_mass_minus= new TH1F("mupi_mass_minus","M_{#mu#pi}^{-}",60,0,120);
  
   TH1F *omega_murho_plus= new TH1F("omega_murho_plus","#omega_{#mu#rho}^{+}",50,-1.1,1.1);
   TH1F *omega_murho_minus= new TH1F("omega_murho_minus","#omega_{#mu#rho}^{-}",50,-1.1,1.1);
@@ -272,14 +273,14 @@ int main(int argc,char **argv){
  TH1F *omegabar_rho_minus= new TH1F("omegabar_rho_minus","#bar{#omega}_{#rho}^{-}",50,-1.1,1.1);
 
 
- TH1F *omega_a1_plus= new TH1F("omega_a1_plus","#omega_{a1}^{+}",40,-1.1,1.1);
- TH1F *omega_a1_minus= new TH1F("omega_a1_minus","#omega_{a1}^{-}",40,-1.1,1.1);
+ TH1F *omega_a1_plus= new TH1F("omega_a1_plus","#omega_{a1}^{+}",50,-1.1,1.1);
+ TH1F *omega_a1_minus= new TH1F("omega_a1_minus","#omega_{a1}^{-}",50,-1.1,1.1);
 
  // TH1F *omega_a1_plustest= new TH1F("omega_a1_plustest","#omega_{a1}^{+}",40,-1.1,1.1);
  // TH1F *omega_a1_minustest= new TH1F("omega_a1_minustest","#omega_{a1}^{+}",40,-1.1,1.1);
 
- TH1F *omega_a1p_plus= new TH1F("omega_a1p_plus","#omega_{a1}^{+}",40,-1.1,1.1);
- TH1F *omega_a1p_minus= new TH1F("omega_a1p_minus","#omega_{a1}^{-}",40,-1.1,1.1);
+ TH1F *omega_a1p_plus= new TH1F("omega_a1p_plus","#omega_{a1}^{+}",50,-1.1,1.1);
+ TH1F *omega_a1p_minus= new TH1F("omega_a1p_minus","#omega_{a1}^{-}",50,-1.1,1.1);
 
 
 
@@ -322,14 +323,14 @@ int main(int argc,char **argv){
  TH1F *omega_rhorho_minus= new TH1F("omega_rhorho_minus","#omega_{#rho#rho}^{-}",50,-1.1,1.1);
   
 
- TH1F *mass_pirho_plus= new TH1F("mass_pirho_plus","M_{#pi#rho}^{+}",60,20,80);
- TH1F *mass_pirho_minus= new TH1F("mass_pirho_minus","M_{#pi#rho}^{-}",60,20,80);
+ TH1F *mass_pirho_plus= new TH1F("mass_pirho_plus","M_{#pi#rho}^{+}",60,0,120);
+ TH1F *mass_pirho_minus= new TH1F("mass_pirho_minus","M_{#pi#rho}^{-}",60,0,120);
 
- TH1F *mass_murho_plus= new TH1F("mass_murho_plus","M_{#mu#rho}^{+}",60,20,80);
- TH1F *mass_murho_minus= new TH1F("mass_murho_minus","M_{#mu#rho}^{-}",60,20,80);
+ TH1F *mass_murho_plus= new TH1F("mass_murho_plus","M_{#mu#rho}^{+}",60,0,120);
+ TH1F *mass_murho_minus= new TH1F("mass_murho_minus","M_{#mu#rho}^{-}",60,0,120);
 
- TH1F *mass_rhorho_plus= new TH1F("mass_rhorho_plus","M_{#rho#rho}^{+}",60,20,80);
- TH1F *mass_rhorho_minus= new TH1F("mass_rhorho_minus","M_{#rho#rho}^{-}",60,20,80);
+ TH1F *mass_rhorho_plus= new TH1F("mass_rhorho_plus","M_{#rho#rho}^{+}",60,0,120);
+ TH1F *mass_rhorho_minus= new TH1F("mass_rhorho_minus","M_{#rho#rho}^{-}",60,0,120);
 
 
 
