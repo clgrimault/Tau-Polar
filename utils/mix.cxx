@@ -1,6 +1,6 @@
 
 void mix(){
-  double pol=-0.454545454545;
+  double pol=0.5123456789;
 
   TString fileName="Draw.root";
   TString HPlus = "pi_plus";

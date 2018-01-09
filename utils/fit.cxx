@@ -18,8 +18,8 @@ static double Max =  1.1;
 double NMC;
 
 
-  TString HPlusN = "pi_plus";
-  TString HMinsN = "pi_minus";
+TString HPlusN = "pi_plus";
+TString HMinsN = "pi_minus";
 
 TString File = "MixedTemplates.root";
 TFile *datafile = TFile::Open(File);
@@ -64,8 +64,8 @@ void fit(string type, string ScanOrFit = "f"){
   TMinuit *fitter = new TMinuit(1);
 
   if(type == 'c')   fitter->SetFCN(Chi2); fitter->SetErrorDef(1);
-  //if(type == 'l')   fitter->SetFCN(Likelihood); fitter->SetErrorDef(0.5);
-  if(type == 'l')   fitter->SetFCN(LikelihoodAdv); fitter->SetErrorDef(0.5);
+  if(type == 'l')   fitter->SetFCN(Likelihood); fitter->SetErrorDef(0.5);
+  // if(type == 'l')   fitter->SetFCN(LikelihoodAdv); fitter->SetErrorDef(0.5);
  
   Double_t arglist[2];
   Int_t ierflg = 1;
@@ -76,7 +76,7 @@ void fit(string type, string ScanOrFit = "f"){
   arglist[0]=500;
   arglist[1]=500;
  
-  fitter->mnexcm("SET STR", arglist ,1,ierflg);
+  fitter->mnexcm("SET STR", arglist ,1, ierflg);
 
 
  fitter->Migrad();
@@ -86,208 +86,194 @@ void fit(string type, string ScanOrFit = "f"){
  fitter->mnhess();
  fitter->mnmnos();
   
-  get_parameters(fitter,par,dpar);
+ get_parameters(fitter,par,dpar);
  
-  TH1F *Sum = new TH1F("Sum","Sum",NUMBER_OF_BINS,Min,Max);
-  Sum->Sumw2();
-  plus->SetLineColor(3);
-  mins->SetLineColor(2);
-  data->SetLineWidth(2);
-  
-  plus->Clone("plusClone");
-  mins->Clone("minsClone");
-  
-  
-  
-  plusClone->SetName("plusClone");
-  minsClone->SetName("minsClone");
-  double er=1;
-  double p = (er-(1-par[0])/(1+par[0]))/(er+(1-par[0])/(1+par[0]));
-
-   plusClone->Scale(NMC*(1+p)/2/HPlus);
-   minsClone->Scale(NMC*(1-p)/2/HMins);
-
-  double  llcheck =0;
-  for(int ib = FirstBin; ib <= LastBin; ib++ ){
-    
-        Sum->SetBinContent(ib, NMC*(plus->GetBinContent(ib)*(1+p)/2/HPlus + mins->GetBinContent(ib)*(1-p)/2/HMins)   );
-    
-    double binerr1 = NMC*sqrt(plus->GetBinContent(ib)*(1+par[0])/2 + mins->GetBinContent(ib)*(1-par[0])/2 )/(HMins+HPlus);
+ TH1F *Sum = new TH1F("Sum","Sum",NUMBER_OF_BINS,Min,Max);
+ Sum->Sumw2();
+ plus->SetLineColor(3);
+ mins->SetLineColor(2);
+ data->SetLineWidth(2);
  
-
-
-    Sum->SetBinError(ib, sqrt(Sum->GetBinContent(ib)) );
-     if(Sum->GetBinContent(ib)!=0)  llcheck+= (data->GetBinContent(ib) - Sum->GetBinContent(ib))*(data->GetBinContent(ib) - Sum->GetBinContent(ib))/Sum->GetBinContent(ib);
-  }
-  
-  
-   data->SetStats(0);
-   data->SetLineWidth(2);
-   data->SetMarkerStyle(20);
-   data->SetMarkerSize(0.8);
-
-   TString XTitle="#omega_{#pi}";
-
-   
-   data->SetTitle("");
-   data->SetYTitle("");
-   data->SetXTitle(XTitle);
-   
-
-
-
-   Sum->SetLineWidth(2);
-   Sum->SetLineColor(4);
-   // TCanvas *c = new TCanvas("c","PolFit",100,100,600,600);
-
-   minsClone->SetLineColor(2);
-   minsClone->SetLineStyle(7);
-   minsClone->SetLineWidth(2);
-   minsClone->SetMarkerStyle(20);
-   minsClone->SetMarkerSize(1.2);
-   minsClone->GetXaxis()->SetTitle(XTitle);
-   minsClone->GetXaxis()->SetLabelFont(42);
-   minsClone->GetXaxis()->SetLabelSize(0.05);
-   minsClone->GetXaxis()->SetTitleSize(0.05);
-   minsClone->GetXaxis()->SetTitleOffset(1.4);
-   minsClone->GetXaxis()->SetTitleFont(42);
-   minsClone->GetYaxis()->SetLabelFont(42);
-   minsClone->GetYaxis()->SetLabelSize(0.05);
-   minsClone->GetYaxis()->SetTitleSize(0.05);
-   minsClone->GetYaxis()->SetTitleOffset(1.4);
-   minsClone->GetYaxis()->SetTitleFont(42);
-   minsClone->GetZaxis()->SetLabelFont(42);
-   minsClone->GetZaxis()->SetLabelSize(0.05);
-   minsClone->GetZaxis()->SetTitleSize(0.05);
-   minsClone->GetZaxis()->SetTitleFont(42);
-   plusClone->SetLineColor(3);
-   plusClone->SetLineStyle(7);
-   plusClone->SetLineWidth(2);
-   plusClone->SetMarkerStyle(20);
-   plusClone->SetMarkerSize(1.2);
-   plusClone->GetXaxis()->SetTitle("#omega_{a1}");
-   plusClone->GetXaxis()->SetLabelFont(42);
-   plusClone->GetXaxis()->SetLabelSize(0.05);
-   plusClone->GetXaxis()->SetTitleSize(0.05);
-   plusClone->GetXaxis()->SetTitleOffset(1.4);
-   plusClone->GetXaxis()->SetTitleFont(42);
-   plusClone->GetYaxis()->SetLabelFont(42);
-   plusClone->GetYaxis()->SetLabelSize(0.05);
-   plusClone->GetYaxis()->SetTitleSize(0.05);
-   plusClone->GetYaxis()->SetTitleOffset(1.4);
-   plusClone->GetYaxis()->SetTitleFont(42);
-   plusClone->GetZaxis()->SetLabelFont(42);
-   plusClone->GetZaxis()->SetLabelSize(0.05);
-   plusClone->GetZaxis()->SetTitleSize(0.05);
-   plusClone->GetZaxis()->SetTitleFont(42);
-   Sum->SetStats(0);
-   Sum->SetFillColor(5);
-   Sum->SetLineWidth(2);
-   Sum->GetXaxis()->SetTitle("#omega_{a_{1}}");
-   Sum->GetXaxis()->SetTitleSize(0.05);
-   Sum->GetXaxis()->SetTitleOffset(0.8);
-   Sum->GetYaxis()->SetRange(1,1);
-
-   Sum->Draw("E2");
-   data->Draw("SAME");
-   minsClone->Draw("HISTSAME");
-   plusClone->Draw("HISTSAME");
-      // TFile *out = new TFile("outhistos.root","RECREATE");
-      // data->SetName("data");
-      // TH1F *data1  = (TH1F*) data->Clone("data1");
-      // data1->Write();
-      // Sum->Write();
-      // TH1F *minsClone1=(TH1F*)minsClone->Clone("minsClone1");
-      // minsClone1->Write();
-      // background->Write();
-      // TH1F *plusClone1=(TH1F*)plusClone->Clone("plusClone1");
-      // plusClone1->Write();
-      // out->Write();
-      // out->Close();
-
+ plus->Clone("plusClone");
+ mins->Clone("minsClone");
+ 
+ plusClone->SetName("plusClone");
+ minsClone->SetName("minsClone");
+ double er=1;
+ double p = (er-(1-par[0])/(1+par[0]))/(er+(1-par[0])/(1+par[0]));
+ 
+ plusClone->Scale(NMC*(1+p)/2/HPlus);
+ minsClone->Scale(NMC*(1-p)/2/HMins);
+ 
+ double  llcheck =0;
+ for(int ib = FirstBin; ib <= LastBin; ib++ ){
+   Sum->SetBinContent(ib, NMC*(plus->GetBinContent(ib)*(1+p)/2/HPlus + mins->GetBinContent(ib)*(1-p)/2/HMins)   );
+   double binerr1 = NMC*sqrt(plus->GetBinContent(ib)*(1+par[0])/2 + mins->GetBinContent(ib)*(1-par[0])/2 )/(HMins+HPlus);
+   Sum->SetBinError(ib, sqrt(Sum->GetBinContent(ib)) );
+   if(Sum->GetBinContent(ib)!=0)  llcheck+= (data->GetBinContent(ib) - Sum->GetBinContent(ib))*(data->GetBinContent(ib) - Sum->GetBinContent(ib))/Sum->GetBinContent(ib);
+ }
+ 
+ data->SetStats(0);
+ data->SetLineWidth(2);
+ data->SetMarkerStyle(20);
+ data->SetMarkerSize(0.8);
+ 
+ TString XTitle="#omega_{#pi}";
+ 
+ data->SetTitle("");
+ data->SetYTitle("");
+ data->SetXTitle(XTitle);
+ 
+ Sum->SetLineWidth(2);
+ Sum->SetLineColor(4);
+ // TCanvas *c = new TCanvas("c","PolFit",100,100,600,600);
+ 
+ minsClone->SetLineColor(2);
+ minsClone->SetLineStyle(7);
+ minsClone->SetLineWidth(2);
+ minsClone->SetMarkerStyle(20);
+ minsClone->SetMarkerSize(1.2);
+ minsClone->GetXaxis()->SetTitle(XTitle);
+ minsClone->GetXaxis()->SetLabelFont(42);
+ minsClone->GetXaxis()->SetLabelSize(0.05);
+ minsClone->GetXaxis()->SetTitleSize(0.05);
+ minsClone->GetXaxis()->SetTitleOffset(1.4);
+ minsClone->GetXaxis()->SetTitleFont(42);
+ minsClone->GetYaxis()->SetLabelFont(42);
+ minsClone->GetYaxis()->SetLabelSize(0.05);
+ minsClone->GetYaxis()->SetTitleSize(0.05);
+ minsClone->GetYaxis()->SetTitleOffset(1.4);
+ minsClone->GetYaxis()->SetTitleFont(42);
+ minsClone->GetZaxis()->SetLabelFont(42);
+ minsClone->GetZaxis()->SetLabelSize(0.05);
+ minsClone->GetZaxis()->SetTitleSize(0.05);
+ minsClone->GetZaxis()->SetTitleFont(42);
+ plusClone->SetLineColor(3);
+ plusClone->SetLineStyle(7);
+ plusClone->SetLineWidth(2);
+ plusClone->SetMarkerStyle(20);
+ plusClone->SetMarkerSize(1.2);
+ plusClone->GetXaxis()->SetTitle("#omega_{a1}");
+ plusClone->GetXaxis()->SetLabelFont(42);
+ plusClone->GetXaxis()->SetLabelSize(0.05);
+ plusClone->GetXaxis()->SetTitleSize(0.05);
+ plusClone->GetXaxis()->SetTitleOffset(1.4);
+ plusClone->GetXaxis()->SetTitleFont(42);
+ plusClone->GetYaxis()->SetLabelFont(42);
+ plusClone->GetYaxis()->SetLabelSize(0.05);
+ plusClone->GetYaxis()->SetTitleSize(0.05);
+ plusClone->GetYaxis()->SetTitleOffset(1.4);
+ plusClone->GetYaxis()->SetTitleFont(42);
+ plusClone->GetZaxis()->SetLabelFont(42);
+ plusClone->GetZaxis()->SetLabelSize(0.05);
+ plusClone->GetZaxis()->SetTitleSize(0.05);
+ plusClone->GetZaxis()->SetTitleFont(42);
+ Sum->SetStats(0);
+ Sum->SetFillColor(5);
+ Sum->SetLineWidth(2);
+ Sum->GetXaxis()->SetTitle("#omega_{a_{1}}");
+ Sum->GetXaxis()->SetTitleSize(0.05);
+ Sum->GetXaxis()->SetTitleOffset(0.8);
+ Sum->GetYaxis()->SetRange(1,1);
+ 
+ Sum->Draw("E2");
+ data->Draw("SAME");
+ minsClone->Draw("HISTSAME");
+ plusClone->Draw("HISTSAME");
+ // TFile *out = new TFile("outhistos.root","RECREATE");
+ // data->SetName("data");
+ // TH1F *data1  = (TH1F*) data->Clone("data1");
+ // data1->Write();
+ // Sum->Write();
+ // TH1F *minsClone1=(TH1F*)minsClone->Clone("minsClone1");
+ // minsClone1->Write();
+ // background->Write();
+ // TH1F *plusClone1=(TH1F*)plusClone->Clone("plusClone1");
+ // plusClone1->Write();
+ // out->Write();
+ // out->Close();
+ 
    
     
-   TLegend *leg = new TLegend(0.5401149,0.4957627,0.9465517,0.8432203,NULL,"brNDC");
-   leg->SetBorderSize(0);
-   leg->SetTextFont(82);
-   leg->SetLineColor(0);
-   leg->SetLineStyle(1);
-   leg->SetLineWidth(1);
-   leg->SetFillColor(0);
-   leg->SetFillStyle(0);
-   TLegendEntry *entry=leg->AddEntry("NULL","Data","lpf");
-   entry->SetLineColor(1);
-   entry->SetLineStyle(1);
-   entry->SetLineWidth(1);
-   entry->SetMarkerColor(1);
-   entry->SetMarkerStyle(20);
-   entry->SetMarkerSize(1);
-   entry=leg->AddEntry("Sum","Fit","f");
-   entry->SetFillStyle(1001);
-   entry->SetLineColor(4);
-   entry->SetLineStyle(1);
-   entry->SetLineWidth(2);
-   entry->SetMarkerColor(1);
-   entry->SetMarkerStyle(21);
-   entry->SetMarkerSize(1);
-   entry=leg->AddEntry("plusClone","h_{#tau}  = +1","f");
-   entry->SetFillStyle(1001);
-   entry->SetLineColor(3);
-   entry->SetLineStyle(1);
-   entry->SetLineWidth(1);
-   entry->SetMarkerColor(1);
-   entry->SetMarkerStyle(21);
-   entry->SetMarkerSize(1);
-   entry=leg->AddEntry("minsClone","h_{#tau}  = -1","f");
-   entry->SetFillStyle(1001);
-   entry->SetLineColor(2);
-   entry->SetLineStyle(1);
-   entry->SetLineWidth(1);
-   entry->SetMarkerColor(1);
-   entry->SetMarkerStyle(21);
-   entry->SetMarkerSize(1);
+ TLegend *leg = new TLegend(0.5401149,0.4957627,0.9465517,0.8432203,NULL,"brNDC");
+ leg->SetBorderSize(0);
+ leg->SetTextFont(82);
+ leg->SetLineColor(0);
+ leg->SetLineStyle(1);
+ leg->SetLineWidth(1);
+ leg->SetFillColor(0);
+ leg->SetFillStyle(0);
+ TLegendEntry *entry=leg->AddEntry("NULL","Data","lpf");
+ entry->SetLineColor(1);
+ entry->SetLineStyle(1);
+ entry->SetLineWidth(1);
+ entry->SetMarkerColor(1);
+ entry->SetMarkerStyle(20);
+ entry->SetMarkerSize(1);
+ entry=leg->AddEntry("Sum","Fit","f");
+ entry->SetFillStyle(1001);
+ entry->SetLineColor(4);
+ entry->SetLineStyle(1);
+ entry->SetLineWidth(2);
+ entry->SetMarkerColor(1);
+ entry->SetMarkerStyle(21);
+ entry->SetMarkerSize(1);
+ entry=leg->AddEntry("plusClone","h_{#tau}  = +1","f");
+ entry->SetFillStyle(1001);
+ entry->SetLineColor(3);
+ entry->SetLineStyle(1);
+ entry->SetLineWidth(1);
+ entry->SetMarkerColor(1);
+ entry->SetMarkerStyle(21);
+ entry->SetMarkerSize(1);
+ entry=leg->AddEntry("minsClone","h_{#tau}  = -1","f");
+ entry->SetFillStyle(1001);
+ entry->SetLineColor(2);
+ entry->SetLineStyle(1);
+ entry->SetLineWidth(1);
+ entry->SetMarkerColor(1);
+ entry->SetMarkerStyle(21);
+ entry->SetMarkerSize(1);
+ 
+ // leg->Draw();
+ TCanvas *c2 = new TCanvas("c2","Scan Polarization",600,600,700,700);
+ // if(ScanOrFit == "s")
+ {
+   fitter->Command("SCAn 1");
+   TGraph *gr = (TGraph*)fitter->GetPlot();
+   gr->GetXaxis()->SetTitle("P_{#tau}");
+   gr->SetTitle("#chi^{2} scan over P_{#tau}");
+   gr->GetYaxis()->SetTitle("#chi^{2}");
    
-     // leg->Draw();
-   
-   
-   TCanvas *c2 = new TCanvas("c2","Scan Polarization",600,600,700,700);
-   // if(ScanOrFit == "s")
-   {
-     fitter->Command("SCAn 1");
-     TGraph *gr = (TGraph*)fitter->GetPlot();
-     gr->GetXaxis()->SetTitle("P_{#tau}");
-     gr->SetTitle("#chi^{2} scan over P_{#tau}");
-     gr->GetYaxis()->SetTitle("#chi^{2}");
-     
-     gr->Draw(""); 
-   }
-   
-   //       TCanvas *c3 = new TCanvas("c3","Scan p",100,100,500,500);
-   
-   //       //     if(ScanOrFit == "s")
-   // {
-   //   //  fitter->mnimpr() ;
-   //    fitter->Command("SCAn 2");
-   
-   //    //   fitter->Comman("IMProve");
-   //    TGraph *gr = (TGraph*)fitter->GetPlot();
-   //    gr->GetXaxis()->SetTitle("backgound p");
-   //    gr->GetYaxis()->SetTitle("#chi^{2}");
-   
-   //    gr->Draw("alp"); 
-   //  }
-   
-   // // if(type == 'f')
-   // //   {
-   // 	 TCanvas *c4 = new TCanvas("c4","contour",100,100,500,500);
-   // 	 // fitter->Command("SCAn 1");
-   // 	 fitter->SetErrorDef(0.5);
-   // 	 TGraph *gr = (TGraph*)fitter->Contour(10,0,1);
-   // 	 gr->GetXaxis()->SetTitle("P_{#tau}");
-   // 	 gr->GetYaxis()->SetTitle("p_bkg");
-   
-   // 	 gr->Draw("alp"); 
-   // 	 //}
+   gr->Draw(""); 
+ }
+ 
+ //       TCanvas *c3 = new TCanvas("c3","Scan p",100,100,500,500);
+ 
+ //       //     if(ScanOrFit == "s")
+ // {
+ //   //  fitter->mnimpr() ;
+ //    fitter->Command("SCAn 2");
+ 
+ //    //   fitter->Comman("IMProve");
+ //    TGraph *gr = (TGraph*)fitter->GetPlot();
+ //    gr->GetXaxis()->SetTitle("backgound p");
+ //    gr->GetYaxis()->SetTitle("#chi^{2}");
+ 
+ //    gr->Draw("alp"); 
+ //  }
+ 
+ // // if(type == 'f')
+ // //   {
+ // 	 TCanvas *c4 = new TCanvas("c4","contour",100,100,500,500);
+ // 	 // fitter->Command("SCAn 1");
+ // 	 fitter->SetErrorDef(0.5);
+ // 	 TGraph *gr = (TGraph*)fitter->Contour(10,0,1);
+ // 	 gr->GetXaxis()->SetTitle("P_{#tau}");
+ // 	 gr->GetYaxis()->SetTitle("p_bkg");
+ 
+ // 	 gr->Draw("alp"); 
+ // 	 //}
 }
 
 void get_parameters(TMinuit * minuit,double *par, double *par_err ){
@@ -301,30 +287,15 @@ void Likelihood(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t if
 {
    double LL=0;
    double LLtot=0;
-   int bin[1]={0};
-   double mu = ScaleBackground;
-   double B_i(0);
-   double N_i(0);
-   double S_i(0);
-   double Sum(0);
-   //  printf("---------------- \n");
-  for ( int i = 1; i< 20 + 1; i++){
-
-     bin[0] = i;
-     //     B_i = N_bkgns(i);
+   for ( int i = FirstBin; i< LastBin; i++){
+     if(N_mc(i, par)==0 || N_data(i)==0) continue;
      N_i = N_data(i);
      S_i = N_sig(i, par); 
-
      double  mc = N_mc(i, par);
-  
-     int scale = 1;
-     if(mc==0){ scale =0; mc =1;}
-     else scale = 1;
-     LL+= log(TMath::Poisson(N_i, mc))* TMath::Poisson(B_i,N_bkg(i)*ScaleBackground );// (N_data(i)*log(mc)  - scale*mc) + N_bkgns(i)*log(N_bkg(i)*ScaleBackground) - N_bkg(i)*ScaleBackground;
-     //  cout<<" =========================================================================================================================  i " << i << "  " << LL <<endl;
+     if(  !(TMath::Poisson(N_i, mc) < pow(10.,-318))  )   LL+= TMath::Log(TMath::Poisson(N_i, mc));
    }
 
-  LL =( LL) - (par[1]-1)*(par[1]-1)/2/0.1/0.1;
+  LL =( LL);
   f= -LL;
  }
 
@@ -343,7 +314,7 @@ void LikelihoodAdv(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t
   
   for ( int i = 1; i< 20 + 1; i++){
     bin[0] = i;
-    B_i = 0.99*N_bkgns(i);
+    B_i = 0;
     N_i = N_data(i);
     S_i = N_sig(i, par);
     double s(0);
