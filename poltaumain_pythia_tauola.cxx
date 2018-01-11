@@ -44,8 +44,8 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents =200000; 
-bool ApplyCut(true);
+int NumberOfEvents =5000; 
+bool ApplyCut(false);
 double pt_cut = 30;  // GeV - approximately correspond to CMS trigger
 double eta_cut = 10; // - very large value, all events pass - at the moment switched off at all
 int EventsToCheck=5;
@@ -160,7 +160,7 @@ void redPlus(TauolaParticle *plus) // this is JAK2
   // can be called here 
   for(unsigned int dec=1; dec <23; dec++){
      double br =0.0;
-     if( dec==3 || dec ==4 || dec ==5) br=0.33;
+     if( dec==3  || dec ==5) br=0.50;
      Tauola::setTauBr(dec, br);
    }
 }
@@ -229,7 +229,7 @@ int main(int argc,char **argv){
   // Initialization of pythia
   Pythia pythia;
   Event& event = pythia.event;
-  TFile *file = new TFile("HelicityVals.root","RECREATE");
+  TFile *file = new TFile("HelicityVals_up.root","RECREATE");
 
 
   TH1F *rhobeta_plus= new TH1F("rhobeta_plus","#rho^{+}",50,-1.1,1.1);
@@ -241,7 +241,7 @@ int main(int argc,char **argv){
   TH1F *pi_pt= new TH1F("pi_pt","#pi^{-} ",100,0,100);
   TH1F *pi_ptcut= new TH1F("pi_ptcut","#pi^{-} ",100,0,100);
  
-
+  //BT2  (-0.11994077    , 3.76959657E-03)   0.0000000 
 
   TH1F *pip_plus= new TH1F("pip_plus","#pi^{+}",50,-1.1,1.1);
   TH1F *pip_minus= new TH1F("pip_minus","#pi^{-} ",50,-1.1,1.1);
