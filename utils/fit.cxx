@@ -13,20 +13,18 @@
 static int NUMBER_OF_BINS=50;
 static int FirstBin =  1;
 static int LastBin  =  NUMBER_OF_BINS ;
-static double Min = -1.1;
+static double Min =  -1.1;
 static double Max =  1.1;
 double NMC;
 
-
-TString HPlusN = "pi_plus";
-TString HMinsN = "pi_minus";
+TString HPlusN = "omega_a1_plus";
+TString HMinsN = "omega_a1_minus";
 
 TString File = "MixedTemplates.root";
 TFile *datafile = TFile::Open(File);
 TH1F *data  = (TH1F *)datafile->Get("mixed");
 TH1F *mins = (TH1F *)datafile->Get(HMinsN);
 TH1F *plus= (TH1F *)datafile->Get(HPlusN);
-
   
 double HPlus(0);
 double HMins(0);
@@ -118,7 +116,7 @@ void fit(string type, string ScanOrFit = "f"){
  data->SetMarkerStyle(20);
  data->SetMarkerSize(0.8);
  
- TString XTitle="#omega_{#pi}";
+ TString XTitle="M_{#pi#rho} , GeV";
  
  data->SetTitle("");
  data->SetYTitle("");
@@ -129,8 +127,8 @@ void fit(string type, string ScanOrFit = "f"){
  // TCanvas *c = new TCanvas("c","PolFit",100,100,600,600);
  
  minsClone->SetLineColor(2);
- minsClone->SetLineStyle(7);
- minsClone->SetLineWidth(2);
+ minsClone->SetLineStyle(1);
+ minsClone->SetLineWidth(1);
  minsClone->SetMarkerStyle(20);
  minsClone->SetMarkerSize(1.2);
  minsClone->GetXaxis()->SetTitle(XTitle);
@@ -149,11 +147,11 @@ void fit(string type, string ScanOrFit = "f"){
  minsClone->GetZaxis()->SetTitleSize(0.05);
  minsClone->GetZaxis()->SetTitleFont(42);
  plusClone->SetLineColor(3);
- plusClone->SetLineStyle(7);
- plusClone->SetLineWidth(2);
+ plusClone->SetLineStyle(1);
+ plusClone->SetLineWidth(1);
  plusClone->SetMarkerStyle(20);
  plusClone->SetMarkerSize(1.2);
- plusClone->GetXaxis()->SetTitle("#omega_{a1}");
+ plusClone->GetXaxis()->SetTitle(XTitle);
  plusClone->GetXaxis()->SetLabelFont(42);
  plusClone->GetXaxis()->SetLabelSize(0.05);
  plusClone->GetXaxis()->SetTitleSize(0.05);
@@ -171,7 +169,7 @@ void fit(string type, string ScanOrFit = "f"){
  Sum->SetStats(0);
  Sum->SetFillColor(5);
  Sum->SetLineWidth(2);
- Sum->GetXaxis()->SetTitle("#omega_{a_{1}}");
+ Sum->GetXaxis()->SetTitle(XTitle);
  Sum->GetXaxis()->SetTitleSize(0.05);
  Sum->GetXaxis()->SetTitleOffset(0.8);
  Sum->GetYaxis()->SetRange(1,1);
@@ -235,7 +233,7 @@ void fit(string type, string ScanOrFit = "f"){
  entry->SetMarkerStyle(21);
  entry->SetMarkerSize(1);
  
- // leg->Draw();
+ leg->Draw();
  TCanvas *c2 = new TCanvas("c2","Scan Polarization",600,600,700,700);
  // if(ScanOrFit == "s")
  {
