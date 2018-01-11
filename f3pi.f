@@ -44,7 +44,7 @@ C.......................................................................
       CHARACTER*(*) CRNAME
       PARAMETER(    CRNAME = 'F3PI' )
 *
-      INTEGER IFIRST,IDK,ISYST
+      INTEGER IFIRST,IDK,SYST
       REAL MRO,GRO,MRP,GRP,MF2,GF2,MF0,GF0,MSG,GSG
       REAL M1,M2,M3,M1SQ,M2SQ,M3SQ,MPIZ,MPIC
       REAL S1,S2,S3,R,PI
