@@ -161,7 +161,7 @@ C so the above switch is just what we need!
         S1 = SA
         S2 = SB
         S3 = QQ-SA-SB+M1SQ+M2SQ+M3SQ
-        PRINT *,' BT2 ', BT2,SYST
+C        PRINT *,' BT2 ', BT2,SYST
         IF (S3.LE.0..OR.S2.LE.0.) RETURN
 
         IF (IDK.EQ.1) THEN
