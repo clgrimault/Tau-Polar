@@ -236,7 +236,8 @@ class PolarimetricA1 {
   TLorentzVector   LFa1LV;
   TLorentzVector   LFtauLV;
 
-
+  bool doSystematic;
+  TString systType;
   TMatrixT<double> convertToMatrix(TVectorT<double> V);
 
 

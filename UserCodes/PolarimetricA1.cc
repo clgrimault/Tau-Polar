@@ -46,7 +46,8 @@ PolarimetricA1::Setup(vector<TLorentzVector> TauA1andProd, TLorentzVector Refere
    COEF2 =-2.0*sqrt(2.)/3.0;
    COEF3 = 2.0*sqrt(2.)/3.0; //C AJW 2/98: Add in the D-wave and I=0 3pi substructure:
    SIGN = -taucharge;
-
+   doSystematic = false;
+   systType="UP";
 
    debug  = false;
 
@@ -1175,14 +1176,38 @@ PolarimetricA1::F3PI(double IFORM,double QQ,double SA,double SB){
   double M2SQ = M2*M2;
   double M3SQ = M3*M3;
   
-  
+  // parameter varioation for
+  // systematics   from, https://arxiv.org/pdf/hep-ex/9902022.pdf
+
+  double db2 = 0.094;   double dph2 = 0.253;
+  double db3 = 0.094;   double dph3 = 0.104;
+  double db4 = 0.296;   double dph4 = 0.170;
+  double db5 = 0.167;   double dph5 = 0.104;
+  double db6 = 0.284;   double dph6 = 0.036;
+  double db7 = 0.148;   double dph7 = 0.063;
+
+  double scale(0.);
+  if(doSystematic)
+    {
+      if(systType=="UP")
+	{
+	  scale =  1;
+	}
+      
+      
+      if(systType=="DOWN")
+	{
+	  scale = -1;
+	}
+    } 
+      
   TComplex  BT1 = TComplex(1.,0.);
-  TComplex  BT2 = TComplex(0.12,0.)*TComplex(1, 0.99*TMath::Pi(), true);//  TComplex(1, 0.99*TMath::Pi(), true);   Real part must be equal to one, stupid polar implemenation in root
-  TComplex  BT3 = TComplex(0.37,0.)*TComplex(1, -0.15*TMath::Pi(), true);
-  TComplex  BT4 = TComplex(0.87,0.)*TComplex(1, 0.53*TMath::Pi(), true);
-  TComplex  BT5 = TComplex(0.71,0.)*TComplex(1, 0.56*TMath::Pi(), true);
-  TComplex  BT6 = TComplex(2.10,0.)*TComplex(1, 0.23*TMath::Pi(), true);
-  TComplex  BT7 = TComplex(0.77,0.)*TComplex(1, -0.54*TMath::Pi(), true);
+  TComplex  BT2 = TComplex(0.12  + scale*db2,0.)*TComplex(1, (0.99   +  scale*dph2)*TMath::Pi(), true);//  TComplex(1, 0.99*TMath::Pi(), true);   Real part must be equal to one, stupid polar implemenation in root
+  TComplex  BT3 = TComplex(0.37  + scale*db3,0.)*TComplex(1, (-0.15  +  scale*dph3)*TMath::Pi(), true);
+  TComplex  BT4 = TComplex(0.87  + scale*db4,0.)*TComplex(1, (0.53   +  scale*dph4)*TMath::Pi(), true);
+  TComplex  BT5 = TComplex(0.71  + scale*db5,0.)*TComplex(1, (0.56   +  scale*dph5)*TMath::Pi(), true);
+  TComplex  BT6 = TComplex(2.10  + scale*db6,0.)*TComplex(1, (0.23   +  scale*dph6)*TMath::Pi(), true);
+  TComplex  BT7 = TComplex(0.77  + scale*db7,0.)*TComplex(1, (-0.54  +  scale*dph7)*TMath::Pi(), true);
 
   TComplex  F3PIFactor(0.,0.); // initialize to zero
   if(IDK == 2){
