@@ -574,8 +574,10 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
     if(Tauola::getHelMinus() ==-1)HelPlus2=true;
 
 
-    int HelWeightPlus = HelPlus;
-    int HelWeightMinus = HelMinus;
+    // int HelWeightPlus = HelPlus;
+    // int HelWeightMinus = HelMinus;
+    int HelWeightPlus = 0;
+    int HelWeightMinus = 0;
 
 
     // std::cout<<"  two helicities  "<< HelMinus <<"  "<<HelPlus <<std::endl;
