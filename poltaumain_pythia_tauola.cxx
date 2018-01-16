@@ -395,7 +395,7 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
   //  Tauola::setHiggsScalarPseudoscalarPDG(25);
 
   Tauola::initialize();
-
+  Tauola::setSeed(time(NULL), 0, 0);
   tauola_print_parameters(); // Prints TAUOLA  parameters (residing inside its library): e.g. to test user interface
 
   // Our default units are GEV and MM, that will be outcome  units after TAUOLA
