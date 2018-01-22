@@ -25,6 +25,8 @@
 #include "TMatrixT.h"
 #include "TVectorT.h"
 #include "TMatrixTSym.h"
+#include "TMath.h"
+
 //pythia header files
 #ifdef PYTHIA8180_OR_LATER
 #include "Pythia8/Pythia.h" 
@@ -44,7 +46,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents =5000; 
+int NumberOfEvents =150000; 
 bool ApplyCut(false);
 double pt_cut = 30;  // GeV - approximately correspond to CMS trigger
 double eta_cut = 10; // - very large value, all events pass - at the moment switched off at all
@@ -136,7 +138,7 @@ void redMinus(TauolaParticle *minus) // this is JAK1
 
    for(unsigned int dec=1; dec <23; dec++){
       double br =0.0; 
-      if(dec==3 || dec ==4 || dec ==5) br=0.33;
+      if(dec ==2|| dec ==3|| dec ==4|| dec ==5) br=0.25;
       Tauola::setTauBr(dec, br);
    }
 
@@ -160,7 +162,7 @@ void redPlus(TauolaParticle *plus) // this is JAK2
   // can be called here 
   for(unsigned int dec=1; dec <23; dec++){
      double br =0.0;
-     if( dec==3  || dec ==5) br=0.50;
+      if(dec ==2|| dec ==3|| dec ==4|| dec ==5) br=0.25;
      Tauola::setTauBr(dec, br);
    }
 }
@@ -401,7 +403,13 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
   //  Tauola::setHiggsScalarPseudoscalarPDG(25);
 
   Tauola::initialize();
-  Tauola::setSeed(time(NULL), 0, 0);
+  //  const char* str="hhu1";
+  std::cout<<"  "<< TMath::Hash(argv[1])<<std::endl;
+  std::cout<<" ---------------  "<< time(NULL)<<std::endl;
+ 
+
+  //  Tauola::setSeed(time(NULL), 0, 0);
+  Tauola::setSeed(TMath::Hash(argv[1]), 0, 0);
   tauola_print_parameters(); // Prints TAUOLA  parameters (residing inside its library): e.g. to test user interface
 
   // Our default units are GEV and MM, that will be outcome  units after TAUOLA
@@ -580,10 +588,10 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
     if(Tauola::getHelMinus() ==-1)HelPlus2=true;
 
 
-    // int HelWeightPlus = HelPlus;
-    // int HelWeightMinus = HelMinus;
-    int HelWeightPlus = 0;
-    int HelWeightMinus = 0;
+    int HelWeightPlus = HelPlus;
+    int HelWeightMinus = HelMinus;
+    // int HelWeightPlus = 0;
+    // int HelWeightMinus = 0;
 
 
     // std::cout<<"  two helicities  "<< HelMinus <<"  "<<HelPlus <<std::endl;
