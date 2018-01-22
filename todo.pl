@@ -74,6 +74,7 @@ for($l=0;$l<$numArgs; $l++){
 #	$l++;
 	$currentdir=getcwd;
 	$s1_par='\$(pwd)';
+	$SP='\$outfile';
 
 	system(sprintf("cernlib-use --version 5.34.18 root \n"));
 
@@ -189,7 +190,7 @@ for($l=0;$l<$numArgs; $l++){
 	system(sprintf("echo \"export HOME=$s1_par     \">> qsub_submit.sh"));
 	system(sprintf("echo \"cd $PWD/$tauoladir/tauola++/1.1.5/examples/;    \">> qsub_submit.sh"));
 	system(sprintf("echo \"source $PWD/Install_TauolaEnvironment_$time   \">> qsub_submit.sh"));
-	system(sprintf("echo \"$PWD/$tauoladir/tauola++/1.1.5/examples/poltaumain_pythia_tauola.exe $outfile  \">> qsub_submit.sh"));
+	system(sprintf("echo \"$PWD/$tauoladir/tauola++/1.1.5/examples/poltaumain_pythia_tauola.exe $SP  \">> qsub_submit.sh"));
 	system(sprintf("echo \"echo 'Completed Job'    \">> qsub_submit.sh"));
 	system(sprintf("mv qsub_submit.sh $PWD/$tauoladir/tauola++/1.1.5/examples/; "));
 
