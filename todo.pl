@@ -129,6 +129,7 @@ for($l=0;$l<$numArgs; $l++){
 	printf("|                                                                                               |\n");
 	printf("\n ___________________User Codes_______ _____________________\n\n\n");
 	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/examples;  mkdir UserCodes;"));
+	system(sprintf("cd $PWD/$tauoladir/tauola++/1.1.5/examples;  mkdir output;"));
 
 
 	system(sprintf("cp UserCodes/Makefile.shared $PWD/$tauoladir/tauola++/1.1.5/examples/UserCodes; "));
@@ -181,13 +182,14 @@ for($l=0;$l<$numArgs; $l++){
 
        # Setting up qsub submitter
         system(sprintf("cp submit $PWD/$tauoladir/tauola++/1.1.5/examples/; "));
+        system(sprintf("cp Submit.sh $PWD/$tauoladir/tauola++/1.1.5/examples/; "));
 	system(sprintf("echo \"#! /bin/bash     \">> qsub_submit.sh"));
 	system(sprintf("echo \"echo 'Starting Job'       \">> qsub_submit.sh"));
 	system(sprintf("echo \"export workdir=$s1_par     \">> qsub_submit.sh"));
 	system(sprintf("echo \"export HOME=$s1_par     \">> qsub_submit.sh"));
 	system(sprintf("echo \"cd $PWD/$tauoladir/tauola++/1.1.5/examples/;    \">> qsub_submit.sh"));
 	system(sprintf("echo \"source $PWD/Install_TauolaEnvironment_$time   \">> qsub_submit.sh"));
-	system(sprintf("echo \"$PWD/$tauoladir/tauola++/1.1.5/examples/poltaumain_pythia_tauola.exe   \">> qsub_submit.sh"));
+	system(sprintf("echo \"$PWD/$tauoladir/tauola++/1.1.5/examples/poltaumain_pythia_tauola.exe $outfile  \">> qsub_submit.sh"));
 	system(sprintf("echo \"echo 'Completed Job'    \">> qsub_submit.sh"));
 	system(sprintf("mv qsub_submit.sh $PWD/$tauoladir/tauola++/1.1.5/examples/; "));
 

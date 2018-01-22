@@ -229,7 +229,13 @@ int main(int argc,char **argv){
   // Initialization of pythia
   Pythia pythia;
   Event& event = pythia.event;
-  TFile *file = new TFile("HelicityVals_up.root","RECREATE");
+
+  TString path= (TString)std::getenv("PWD") +"/output/";
+  TString FileName  = path+"TauolaHelicity_DefaultSyst_" + TString(argv[1]) + ".root";
+  TFile *file = new TFile(FileName,"RECREATE");
+
+
+  //TFile *file = new TFile("HelicityVals_up.root","RECREATE");
 
 
   TH1F *rhobeta_plus= new TH1F("rhobeta_plus","#rho^{+}",50,-1.1,1.1);

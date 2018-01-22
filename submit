@@ -23,14 +23,16 @@ for var in $@ ; do
         fi		 
        done
 export HOME=$(pwd)
-#jName=${1}
-output="out_qsub.o"
-error="err_qsub.e"
+jName=${1}
+var=${1}
+output="out_${1}.o"
+error="err_${1}.e"
 echo "Print out system variables:    "
 echo "Working dir: $HOME"
 echo "Job name:  ${jName} "
 echo "que type:  ${que} "
 echo "output:    ${output}    "
 echo "error:     ${error}    "
-qsub -q ${que}  -o ${output} -e ${error} qsub_submit.sh
+qsub -q ${que}  -o ${output} -e ${error} -N ${jName} -v outfile=${jName}   qsub_submit.sh 
 fi
+#-v FOO="hello",BAR="world"
