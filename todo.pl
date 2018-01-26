@@ -196,7 +196,7 @@ for($l=0;$l<$numArgs; $l++){
 
 
 	printf("\nInstruction:   \n    ");
-	printf(" cd $PWD/$tauoladir/tauola++/1.1.5/examples/; ./poltaumain_pythia_tauola.exe | tee log.out;   \n\n\n");
+	printf(" cd $PWD/$tauoladir/tauola++/1.1.5/examples/; ./poltaumain_pythia_tauola.exe default_output | tee log.out;   \n\n\n");
     }
 
     

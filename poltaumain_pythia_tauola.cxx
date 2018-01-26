@@ -233,7 +233,7 @@ int main(int argc,char **argv){
   Event& event = pythia.event;
 
   TString path= (TString)std::getenv("PWD") +"/output/";
-  TString FileName  = path+"TauolaHelicity_DefaultSyst_" + TString(argv[1]) + ".root";
+  TString FileName  = path+"TauolaHelicity_" + TString(argv[1]) + ".root";
   TFile *file = new TFile(FileName,"RECREATE");
 
 
