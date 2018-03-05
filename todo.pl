@@ -20,18 +20,18 @@ $PWD=getcwd;
 
 #printf("\n ---> Your user ID is:   $UserID \n");
 if($ARGV[0] eq "--help" || $ARGV[0] eq ""){
-#    printf("\n\n\n ========================================================================================");
-#    printf("\nWelcome to tauola installer, please look at the instruction below.");
-#    printf("\nThis code requires one input option. The syntax is: ./todo.pl [OPTION]");
-#    printf("\n First of all setup the environment: \n\n");
-#    printf("\n./todo.pl --setup  <tauoladir>                              For example: ./todo.pl --setup  install\n");
-#    printf("\n\nAfter this step is completed prcoceed further and  ");
-#    printf("\nchoose from the following options:\n");
-#    printf("\n./todo.pl --help                                             Prints this message");
-#    printf("\n./todo.pl --tauola  <tauoladir>                              Install tauola and user codes; <tauoladir> must be the same as was set with setup option ");
-#    printf("\n./todo.pl --tauoladefault  <tauoladir>                       Install default  tauola; <tauoladir> must be the same as was set with setup option  ");
-#    printf("\n  ========================================================================================\n");
-#    exit(0);  
+    printf("\n\n\n ========================================================================================");
+    printf("\nWelcome to tauola installer, please look at the instruction below.");
+    printf("\nThis code requires one input option. The syntax is: ./todo.pl [OPTION]");
+    printf("\n First of all setup the environment: \n\n");
+    printf("\n./todo.pl --setup  <tauoladir>                              For example: ./todo.pl --setup  install\n");
+    printf("\n\nAfter this step is completed prcoceed further and  ");
+    printf("\nchoose from the following options:\n");
+    printf("\n./todo.pl --help                                             Prints this message");
+    printf("\n./todo.pl --tauola  <tauoladir>                              Install tauola and user codes; <tauoladir> must be the same as was set with setup option ");
+    printf("\n./todo.pl --tauoladefault  <tauoladir>                       Install default  tauola; <tauoladir> must be the same as was set with setup option  ");
+    printf("\n  ========================================================================================\n");
+    exit(0);  
 }
 my $dir = getcwd;
 $time= strftime("%h_%d_%Y",localtime);
@@ -66,7 +66,7 @@ for($l=0;$l<$numArgs; $l++){
 
 	printf("\n\nInstructions:");
 	printf("\nTo complete this step do:  \n\n");
-	printf("\n    1)   Install_TauolaEnvironment_$time \n");
+	printf("\n    1) source  Install_TauolaEnvironment_$time \n");
 	printf("\n    2)  ./todo.pl --tauola $setdir \n\n");
     }
     if($ARGV[$l] eq "--tauola"){
@@ -196,7 +196,7 @@ for($l=0;$l<$numArgs; $l++){
 
 
 	printf("\nInstruction:   \n    ");
-	printf(" cd $PWD/$tauoladir/tauola++/1.1.5/examples/; ./poltaumain_pythia_tauola.exe default_output | tee log.out;   \n\n\n");
+	printf(" cd $PWD/$tauoladir/tauola++/1.1.5/examples/; ./poltaumain_pythia_tauola.exe <OutputFileName> default_output | tee log.out;   \n\n\n");
     }
 
     

@@ -10,21 +10,32 @@
 #include "TMath.h"
 #include "TMinuit.h"
 
-static int NUMBER_OF_BINS=50;
+static int NUMBER_OF_BINS=25;
 static int FirstBin =  1;
 static int LastBin  =  NUMBER_OF_BINS ;
 static double Min =  -1.1;
 static double Max =  1.1;
 double NMC;
 
-TString HPlusN = "omega_a1_plus";
-TString HMinsN = "omega_a1_minus";
+TString HPlusN = "omega_a1p_plus";
+TString HMinsN = "omega_a1p_minus";
+
+TString HPlusNup = "omega_a1p_plus_up";
+TString HMinsNup = "omega_a1p_minus_up";
+
+TString HPlusNdown = "omega_a1p_plus_down";
+TString HMinsNdown = "omega_a1p_minus_down";
+
+
+
+
 
 TString File = "MixedTemplates.root";
+
 TFile *datafile = TFile::Open(File);
 TH1F *data  = (TH1F *)datafile->Get("mixed");
-TH1F *mins = (TH1F *)datafile->Get(HMinsN);
-TH1F *plus= (TH1F *)datafile->Get(HPlusN);
+TH1F *mins = (TH1F *)datafile->Get(HMinsNup);
+TH1F *plus= (TH1F *)datafile->Get(HPlusNup);
   
 double HPlus(0);
 double HMins(0);
@@ -61,10 +72,11 @@ void fit(string type, string ScanOrFit = "f"){
   Double_t par[1],dpar[1];
   TMinuit *fitter = new TMinuit(1);
 
-  if(type == 'c')   fitter->SetFCN(Chi2); fitter->SetErrorDef(1);
-  if(type == 'l')   fitter->SetFCN(Likelihood); fitter->SetErrorDef(0.5);
+  if(type == 'c') {  fitter->SetFCN(Chi2); fitter->SetErrorDef(1);}
+  if(type == 'l') {  fitter->SetFCN(Likelihood); fitter->SetErrorDef(0.5);}
   // if(type == 'l')   fitter->SetFCN(LikelihoodAdv); fitter->SetErrorDef(0.5);
- 
+  //  fitter->SetErrorDef(1);
+  //fitter->SetErrorDef(1);
   Double_t arglist[2];
   Int_t ierflg = 1;
 
@@ -78,11 +90,11 @@ void fit(string type, string ScanOrFit = "f"){
 
 
  fitter->Migrad();
- //fitter->Simplex();  
- fitter->mnhess();
- fitter->mnhess();
- fitter->mnhess();
- fitter->mnmnos();
+ // fitter->mnsimp();  
+ // fitter->mnhess();
+ // fitter->mnhess();
+ // fitter->mnhess();
+ // fitter->mnmnos();
   
  get_parameters(fitter,par,dpar);
  
@@ -237,7 +249,7 @@ void fit(string type, string ScanOrFit = "f"){
  TCanvas *c2 = new TCanvas("c2","Scan Polarization",600,600,700,700);
  // if(ScanOrFit == "s")
  {
-   fitter->Command("SCAn 1");
+   fitter->Command("SCAn 1 1000 -0.16 -0.145");
    TGraph *gr = (TGraph*)fitter->GetPlot();
    gr->GetXaxis()->SetTitle("P_{#tau}");
    gr->SetTitle("#chi^{2} scan over P_{#tau}");
@@ -358,7 +370,7 @@ void Chi2(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag)
   double LL=0;
   double LLtot=0;
   int count =0;
-  for ( int i = FirstBin; i<=LastBin; i++){
+  for ( int i = FirstBin+2; i<=LastBin-2; i++){
     double  mc = N_mc(i, par);
     if(mc ==0 || N_data(i)==0) continue;
     LL+= (mc -N_data(i))*(mc - N_data(i))/N_data(i);

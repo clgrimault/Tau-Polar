@@ -1,10 +1,11 @@
 
 void mix(){
-  double pol=-0.156789;
+  double pol=-0.156789123;
 
-  TString fileName="A1Decay1M_default.root";
-  TString HPlus = "omega_a1_plus";
-  TString HMins = "omega_a1_minus";
+  //  TString fileName="A1Decay1M_default.root";
+  TString fileName="Combined100M_Default.root";
+  TString HPlus = "omega_a1p_plus";
+  TString HMins = "omega_a1p_minus";
 
 
   double wplus = 0.5*(1+pol);
@@ -27,6 +28,9 @@ void mix(){
   mixed->Add(hm,(1-pol)/(1+pol));
   mixed->Scale(1./mixed->Integral());
   mixed->Scale(Integral);
+  mixed->Rebin(2);
+  hp->Rebin(2);
+  hm->Rebin(2);
   mixed->Write();
   hp->Write();
   hm->Write();
