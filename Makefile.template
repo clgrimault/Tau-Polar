@@ -57,6 +57,7 @@ am__append_11 = -R $(MCTESTER_DIR)/lib
 am__append_12 = -I$(PYTHIA8_DIR)/include -I$(MCTESTER_DIR)/include -I$(ROOTINC) -I$(USERINC)  
 am__append_13 = -L$(MCTESTER_DIR)/lib -lHEPEvent -lHepMCEvent -lMCTester $(ROOTLIBS) $(USERLIBS)
 am__append_14 = poltaumain_pythia_tauola.exe
+am__append_15 = A1KinameticStudy.exe
 subdir = examples
 DIST_COMMON = README $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -71,7 +72,8 @@ am__EXEEXT_1 =  \
 	taumain_stand_alone_example.exe$(EXEEXT)
 am__EXEEXT_2 = single_tau_gun_example.exe$(EXEEXT) \
 	taummk_pythia_example.exe$(EXEEXT)
-am__EXEEXT_3 = poltaumain_pythia_tauola.exe$(EXEEXT)
+am__EXEEXT_3 = poltaumain_pythia_tauola.exe$(EXEEXT) \
+	A1KinameticStudy.exe$(EXEEXT)
 am__installdirs = "$(DESTDIR)$(exampledir)"
 PROGRAMS = $(example_PROGRAMS)
 am__single_tau_gun_example_exe_SOURCES_DIST =  \
@@ -104,6 +106,17 @@ poltaumain_pythia_tauola_exe_OBJECTS =  \
 	$(am_poltaumain_pythia_tauola_exe_OBJECTS)
 poltaumain_pythia_tauola_exe_LDADD = $(LDADD)
 poltaumain_pythia_tauola_exe_DEPENDENCIES =  \
+	$(prefix)/lib/libTauolaCxxInterface.so \
+	$(prefix)/lib/libTauolaFortran.so $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_2)
+am__A1KinameticStudy_exe_SOURCES_DIST =  \
+	A1KinameticStudy.cxx
+am_A1KinameticStudy_exe_OBJECTS = A1KinameticStudy.$(OBJEXT)
+A1KinameticStudy_exe_OBJECTS =  \
+	$(am_A1KinameticStudy_exe_OBJECTS)
+A1KinameticStudy_exe_LDADD = $(LDADD)
+A1KinameticStudy_exe_DEPENDENCIES =  \
 	$(prefix)/lib/libTauolaCxxInterface.so \
 	$(prefix)/lib/libTauolaFortran.so $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
@@ -147,11 +160,13 @@ CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 SOURCES = $(single_tau_gun_example_exe_SOURCES) \
 	$(taumain_hepevt_example_exe_SOURCES) \
 	$(poltaumain_pythia_tauola_exe_SOURCES) \
+	$(A1KinameticStudy_exe_SOURCES) \
 	$(taumain_stand_alone_example_exe_SOURCES) \
 	$(taummk_pythia_example_exe_SOURCES)
 DIST_SOURCES = $(am__single_tau_gun_example_exe_SOURCES_DIST) \
 	$(taumain_hepevt_example_exe_SOURCES) \
 	$(am__poltaumain_pythia_tauola_exe_SOURCES_DIST) \
+	$(am__A1KinameticStudy_exe_SOURCES_DIST) \
 	$(am__taumain_stand_alone_example_exe_SOURCES_DIST) \
 	$(am__taummk_pythia_example_exe_SOURCES_DIST)
 ETAGS = etags
@@ -296,6 +311,7 @@ taumain_stand_alone_example_exe_SOURCES = taumain_stand_alone_example.cxx
 single_tau_gun_example_exe_SOURCES = single_tau_gun_example.cxx
 taummk_pythia_example_exe_SOURCES = taummk_pythia_example.cxx
 poltaumain_pythia_tauola_exe_SOURCES = poltaumain_pythia_tauola.cxx
+A1KinameticStudy_exe_SOURCES = A1KinameticStudy.cxx
 all: all-am
 
 .SUFFIXES:
@@ -382,6 +398,9 @@ taumain_hepevt_example.exe$(EXEEXT): $(taumain_hepevt_example_exe_OBJECTS) $(tau
 poltaumain_pythia_tauola.exe$(EXEEXT): $(poltaumain_pythia_tauola_exe_OBJECTS) $(poltaumain_pythia_tauola_exe_DEPENDENCIES) 
 	@rm -f poltaumain_pythia_tauola.exe$(EXEEXT)
 	$(CXXLINK) $(poltaumain_pythia_tauola_exe_OBJECTS) $(poltaumain_pythia_tauola_exe_LDADD) $(LIBS)
+A1KinameticStudy.exe$(EXEEXT): $(A1KinameticStudy_exe_OBJECTS) $(A1KinameticStudy_exe_DEPENDENCIES) 
+	@rm -f A1KinameticStudy.exe$(EXEEXT)
+	$(CXXLINK) $(A1KinameticStudy_exe_OBJECTS) $(A1KinameticStudy_exe_LDADD) $(LIBS)
 taumain_stand_alone_example.exe$(EXEEXT): $(taumain_stand_alone_example_exe_OBJECTS) $(taumain_stand_alone_example_exe_DEPENDENCIES) 
 	@rm -f taumain_stand_alone_example.exe$(EXEEXT)
 	$(CXXLINK) $(taumain_stand_alone_example_exe_OBJECTS) $(taumain_stand_alone_example_exe_LDADD) $(LIBS)
@@ -398,6 +417,7 @@ distclean-compile:
 include ./$(DEPDIR)/single_tau_gun_example.Po
 include ./$(DEPDIR)/taumain_hepevt_example.Po
 include ./$(DEPDIR)/poltaumain_pythia_tauola.Po
+include ./$(DEPDIR)/A1KinameticStudy.Po
 include ./$(DEPDIR)/taumain_stand_alone_example.Po
 include ./$(DEPDIR)/taummk_pythia_example.Po
 
