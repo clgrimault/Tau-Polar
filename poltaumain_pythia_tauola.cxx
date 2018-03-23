@@ -46,7 +46,7 @@ using namespace std;
 using namespace Pythia8; 
 using namespace Tauolapp;
 
-int NumberOfEvents =150000; 
+int NumberOfEvents =20000; 
 bool ApplyCut(false);
 double pt_cut = 30;  // GeV - approximately correspond to CMS trigger
 double eta_cut = 10; // - very large value, all events pass - at the moment switched off at all
@@ -257,6 +257,10 @@ int main(int argc,char **argv){
 
   TH1F *mu_plus= new TH1F("mu_plus","#mu^{+}",50,-1.1,1.1);
   TH1F *mu_minus= new TH1F("mu_minus","#mu^{-}",50,-1.1,1.1);
+
+  TH1F *mu_polar_plus= new TH1F("mu_polar_plus","#mu^{+}",50,-1.1,1.1);
+  TH1F *mu_polar_minus= new TH1F("mu_polar_minus","#mu^{-}",50,-1.1,1.1);
+
   
   TH1F *OmegaMuPi_plus= new TH1F("OmegaMuPi_plus","#omega_{#pi#mu}^{+}",50,-1.1,1.1);
   TH1F *OmegaMuPi_minus= new TH1F("OmegaMuPi_minus","#omega_{#pi#mu}^{-}",50,-1.1,1.1);
@@ -745,8 +749,12 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
     //--------------------  tau-
     if(JAK1==2){
       vector<TLorentzVector> tauandprod;
+      vector<TLorentzVector> tauandprod_neutrinos; // first goes tau neutrino
       tauandprod.push_back(TLorentzVector(FirstTau->momentum().px(), FirstTau->momentum().py(), FirstTau->momentum().pz(), FirstTau->momentum().e()));
       for(std::vector<HepMC::GenParticle>::const_iterator a = FirstTauProducts.begin(); a!=FirstTauProducts.end(); ++a){
+	
+	if(abs(a->pdg_id())==16){tauandprod_neutrinos.push_back(TLorentzVector(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e()  ) );} 
+	if(abs(a->pdg_id())==14){tauandprod_neutrinos.push_back(TLorentzVector(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e()  ) );} 
 	if(abs(a->pdg_id())==13){tauandprod.push_back(TLorentzVector(a->momentum().px(), a->momentum().py(), a->momentum().pz(), a->momentum().e()  ) );} }
       
       tauandprod1=tauandprod;
@@ -754,6 +762,60 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
       
       mu_plus->Fill(Mu1.getOmega(),HelWeightPlus);
       mu_minus->Fill(Mu1.getOmega(),HelWeightMinus);
+
+
+      //-------------- muon polarimetric vector 
+
+
+      TLorentzVector PLab = tauandprod.at(0);
+      TLorentzVector q1Lab= tauandprod.at(1);
+      TLorentzVector q2Lab = tauandprod_neutrinos.at(1);
+      TLorentzVector NLab = tauandprod_neutrinos.at(0);
+
+     
+      TVector3 Rot1 = PLab.Vect();
+
+      TLorentzVector PLabR1    = PLab;
+      TLorentzVector q1LabR1     = q1Lab;
+      TLorentzVector q2LabR1     = q2Lab;
+      TLorentzVector NLabR1     = NLab;
+
+
+      PLabR1.SetVect(Rotate(PLabR1.Vect(),Rot1));
+      q1LabR1.SetVect(Rotate(q1LabR1.Vect(),Rot1));
+      q2LabR1.SetVect(Rotate(q2LabR1.Vect(),Rot1));
+      NLabR1.SetVect(Rotate(NLabR1.Vect(),Rot1));
+      //
+      // PLabR1.Print();
+      TLorentzVector PTau = BoostR(PLabR1,PLabR1);
+      TLorentzVector q1Tau= BoostR(q1LabR1,PLabR1);
+      TLorentzVector q2Tau =BoostR(q2LabR1,PLabR1);
+      TLorentzVector NTau = BoostR(NLabR1,PLabR1);
+
+
+
+      // PTau.Print();
+      // q2Tau.Print();
+      //std::cout<<" Pq2  "<< q2Tau*PTau << std::endl;
+      TVector3 TauLabDir = PLabR1.Vect()*(1/PLabR1.Vect().Mag());
+      //denom = 
+      TVector3 MuPolar   =-PTau.M()* q2Tau.Vect()* (1/(q2Tau*PTau));
+      // MuPolar.Print();
+      // TauLabDir.Print();
+      // double denom = (tauTau*q1Tau)*(q2Tau*muTau);
+      // TVector3 muTauDir =-tauTau.M()* q1Tau.Vect()*(muTau*q2Tau) * (1/denom);
+
+
+
+
+      mu_polar_plus->Fill(MuPolar*TauLabDir,HelWeightPlus);
+      mu_polar_minus->Fill(MuPolar*TauLabDir,HelWeightMinus);
+
+
+    
+      //-------------- muon polarimetric vector 
+
+
     }
     
     if(JAK1==3){

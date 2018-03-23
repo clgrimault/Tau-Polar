@@ -173,6 +173,8 @@ for($l=0;$l<$numArgs; $l++){
 	system(sprintf("cp A1KinematicStudy.cxx  $PWD/$tauoladir/tauola++/1.1.5/examples;"));
 	system(sprintf("cp A1KinematicStudy.Po  $PWD/$tauoladir/tauola++/1.1.5/examples/.deps/;"));
 
+	system(sprintf("cp -r utils  $PWD/$tauoladir/tauola++/1.1.5/examples;"));
+
 #	system(sprintf("echo \"\#dummy\">> $PWD/$tauoladir/tauola++/1.1.5/examples/.deps/poltaumain_pythia_tauola.Po"));
 
 
