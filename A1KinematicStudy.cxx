@@ -49,7 +49,7 @@ using namespace Pythia8;
 using namespace Tauolapp;
 
 
-int NumberOfEvents = 20000; 
+int NumberOfEvents = 50000; 
 bool ApplyCut(false);
 double pt_cut = 30;  // GeV - approximately correspond to CMS trigger, a cut on the visible decay products
 double eta_cut = 10; // - very large value, all events pass - at the moment switched off at all; eta - pseudorapidity;
@@ -310,40 +310,68 @@ int main(int argc,char **argv){
   theta_CM_vs_tau_momentum_gen->GetXaxis()->SetTitle("#theta^{*} (rad)");
   theta_CM_vs_tau_momentum_gen->SetOption("COLZ");
   //
-  TH2F *theta_CM_vs_tau_momentum_rec_pa1_20 = new TH2F("theta_CM_vs_tau_momentum_rec_pa1_20","#theta^{*} vs p_{#tau}(rec)",100,0,4,100,0,50);
-  theta_CM_vs_tau_momentum_rec_pa1_20->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
-  theta_CM_vs_tau_momentum_rec_pa1_20->GetXaxis()->SetTitle("#theta^{*} (rad)");
-  theta_CM_vs_tau_momentum_rec_pa1_20->SetOption("COLZ");
+  TH2F *theta_CM_pos_vs_tau_momentum_rec_pa1_20 = new TH2F("theta_CM_pos_vs_tau_momentum_rec_pa1_20","p_{#tau}(rec) vs #theta_{GJ} (#theta^{*} > #pi/2)",100,0,0.04,100,0,50);
+  theta_CM_pos_vs_tau_momentum_rec_pa1_20->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  theta_CM_pos_vs_tau_momentum_rec_pa1_20->GetXaxis()->SetTitle("#theta_{GJ} (rad)");
+  theta_CM_pos_vs_tau_momentum_rec_pa1_20->SetOption("COLZ");
+  TH2F *theta_CM_neg_vs_tau_momentum_rec_pa1_20 = new TH2F("theta_CM_neg_vs_tau_momentum_rec_pa1_20","p_{#tau}(rec) vs #theta_{GJ} (#theta^{*} < #pi/2)",100,0,0.04,100,0,50);
+  theta_CM_neg_vs_tau_momentum_rec_pa1_20->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  theta_CM_neg_vs_tau_momentum_rec_pa1_20->GetXaxis()->SetTitle("#theta_{GJ} (rad)");
+  theta_CM_neg_vs_tau_momentum_rec_pa1_20->SetOption("COLZ");
   
-  TH2F *theta_CM_vs_tau_momentum_rec_pa1_23 = new TH2F("theta_CM_vs_tau_momentum_rec_pa1_23","#theta^{*} vs p_{#tau}(rec)",100,0,4,100,0,50);
-  theta_CM_vs_tau_momentum_rec_pa1_23->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
-  theta_CM_vs_tau_momentum_rec_pa1_23->GetXaxis()->SetTitle("#theta^{*} (rad)");
-  theta_CM_vs_tau_momentum_rec_pa1_23->SetOption("COLZ");
+  TH2F *theta_CM_pos_vs_tau_momentum_rec_pa1_23 = new TH2F("theta_CM_pos_vs_tau_momentum_rec_pa1_23","p_{#tau}(rec) vs #theta_{GJ} (#theta^{*} > #pi/2)",100,0,0.04,100,0,50);
+  theta_CM_pos_vs_tau_momentum_rec_pa1_23->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  theta_CM_pos_vs_tau_momentum_rec_pa1_23->GetXaxis()->SetTitle("#theta_{GJ} (rad)");
+  theta_CM_pos_vs_tau_momentum_rec_pa1_23->SetOption("COLZ");
+  TH2F *theta_CM_neg_vs_tau_momentum_rec_pa1_23 = new TH2F("theta_CM_neg_vs_tau_momentum_rec_pa1_23","p_{#tau}(rec) vs #theta_{GJ} (#theta^{*} < #pi/2)",100,0,0.04,100,0,50);
+  theta_CM_neg_vs_tau_momentum_rec_pa1_23->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  theta_CM_neg_vs_tau_momentum_rec_pa1_23->GetXaxis()->SetTitle("#theta_{GJ} (rad)");
+  theta_CM_neg_vs_tau_momentum_rec_pa1_23->SetOption("COLZ");
   
-  TH2F *theta_CM_vs_tau_momentum_rec_pa1_25 = new TH2F("theta_CM_vs_tau_momentum_rec_pa1_25","#theta^{*} vs p_{#tau}(rec)",100,0,4,100,0,50);
-  theta_CM_vs_tau_momentum_rec_pa1_25->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
-  theta_CM_vs_tau_momentum_rec_pa1_25->GetXaxis()->SetTitle("#theta^{*} (rad)");
-  theta_CM_vs_tau_momentum_rec_pa1_25->SetOption("COLZ");
+  TH2F *theta_CM_pos_vs_tau_momentum_rec_pa1_25 = new TH2F("theta_CM_pos_vs_tau_momentum_rec_pa1_25","p_{#tau}(rec) vs #theta_{GJ} (#theta^{*} > #pi/2)",100,0,0.04,100,0,50);
+  theta_CM_pos_vs_tau_momentum_rec_pa1_25->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  theta_CM_pos_vs_tau_momentum_rec_pa1_25->GetXaxis()->SetTitle("#theta_{GJ} (rad)");
+  theta_CM_pos_vs_tau_momentum_rec_pa1_25->SetOption("COLZ");
+  TH2F *theta_CM_neg_vs_tau_momentum_rec_pa1_25 = new TH2F("theta_CM_neg_vs_tau_momentum_rec_pa1_25","p_{#tau}(rec) vs #theta_{GJ} (#theta^{*} < #pi/2)",100,0,0.04,100,0,50);
+  theta_CM_neg_vs_tau_momentum_rec_pa1_25->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  theta_CM_neg_vs_tau_momentum_rec_pa1_25->GetXaxis()->SetTitle("#theta_{GJ} (rad)");
+  theta_CM_neg_vs_tau_momentum_rec_pa1_25->SetOption("COLZ");
   
-  TH2F *theta_CM_vs_tau_momentum_rec_pa1_27 = new TH2F("theta_CM_vs_tau_momentum_rec_pa1_27","#theta^{*} vs p_{#tau}(rec)",100,0,4,100,0,50);
-  theta_CM_vs_tau_momentum_rec_pa1_27->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
-  theta_CM_vs_tau_momentum_rec_pa1_27->GetXaxis()->SetTitle("#theta^{*} (rad)");
-  theta_CM_vs_tau_momentum_rec_pa1_27->SetOption("COLZ");
+  TH2F *theta_CM_pos_vs_tau_momentum_rec_pa1_27 = new TH2F("theta_CM_pos_vs_tau_momentum_rec_pa1_27","p_{#tau}(rec) vs #theta_{GJ} (#theta^{*} > #pi/2)",100,0,0.04,100,0,50);
+  theta_CM_pos_vs_tau_momentum_rec_pa1_27->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  theta_CM_pos_vs_tau_momentum_rec_pa1_27->GetXaxis()->SetTitle("#theta_{GJ} (rad)");
+  theta_CM_pos_vs_tau_momentum_rec_pa1_27->SetOption("COLZ");
+  TH2F *theta_CM_neg_vs_tau_momentum_rec_pa1_27 = new TH2F("theta_CM_neg_vs_tau_momentum_rec_pa1_27","p_{#tau}(rec) vs #theta_{GJ} (#theta^{*} < #pi/2)",100,0,0.04,100,0,50);
+  theta_CM_neg_vs_tau_momentum_rec_pa1_27->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  theta_CM_neg_vs_tau_momentum_rec_pa1_27->GetXaxis()->SetTitle("#theta_{GJ} (rad)");
+  theta_CM_neg_vs_tau_momentum_rec_pa1_27->SetOption("COLZ");
   
-  TH2F *theta_CM_vs_tau_momentum_rec_pa1_30 = new TH2F("theta_CM_vs_tau_momentum_rec_pa1_30","#theta^{*} vs p_{#tau}(rec)",100,0,4,100,0,50);
-  theta_CM_vs_tau_momentum_rec_pa1_30->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
-  theta_CM_vs_tau_momentum_rec_pa1_30->GetXaxis()->SetTitle("#theta^{*} (rad)");
-  theta_CM_vs_tau_momentum_rec_pa1_30->SetOption("COLZ");
+  TH2F *theta_CM_pos_vs_tau_momentum_rec_pa1_30 = new TH2F("theta_CM_pos_vs_tau_momentum_rec_pa1_30","p_{#tau}(rec) vs #theta_{GJ} (#theta^{*} > #pi/2)",100,0,0.04,100,0,50);
+  theta_CM_pos_vs_tau_momentum_rec_pa1_30->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  theta_CM_pos_vs_tau_momentum_rec_pa1_30->GetXaxis()->SetTitle("#theta_{GJ} (rad)");
+  theta_CM_pos_vs_tau_momentum_rec_pa1_30->SetOption("COLZ");
+  TH2F *theta_CM_neg_vs_tau_momentum_rec_pa1_30 = new TH2F("theta_CM_neg_vs_tau_momentum_rec_pa1_30","p_{#tau}(rec) vs #theta_{GJ} (#theta^{*} < #pi/2)",100,0,0.04,100,0,50);
+  theta_CM_neg_vs_tau_momentum_rec_pa1_30->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  theta_CM_neg_vs_tau_momentum_rec_pa1_30->GetXaxis()->SetTitle("#theta_{GJ} (rad)");
+  theta_CM_neg_vs_tau_momentum_rec_pa1_30->SetOption("COLZ");
   
-  TH2F *theta_CM_vs_tau_momentum_rec_pa1_35 = new TH2F("theta_CM_vs_tau_momentum_rec_pa1_35","#theta^{*} vs p_{#tau}(rec)",100,0,4,100,0,50);
-  theta_CM_vs_tau_momentum_rec_pa1_35->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
-  theta_CM_vs_tau_momentum_rec_pa1_35->GetXaxis()->SetTitle("#theta^{*} (rad)");
-  theta_CM_vs_tau_momentum_rec_pa1_35->SetOption("COLZ");
+  TH2F *theta_CM_pos_vs_tau_momentum_rec_pa1_35 = new TH2F("theta_CM_pos_vs_tau_momentum_rec_pa1_35","p_{#tau}(rec) vs #theta_{GJ} (#theta^{*} > #pi/2)",100,0,0.04,100,0,50);
+  theta_CM_pos_vs_tau_momentum_rec_pa1_35->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  theta_CM_pos_vs_tau_momentum_rec_pa1_35->GetXaxis()->SetTitle("#theta_{GJ} (rad)");
+  theta_CM_pos_vs_tau_momentum_rec_pa1_35->SetOption("COLZ");
+  TH2F *theta_CM_neg_vs_tau_momentum_rec_pa1_35 = new TH2F("theta_CM_neg_vs_tau_momentum_rec_pa1_35","p_{#tau}(rec) vs #theta_{GJ} (#theta^{*} < #pi/2)",100,0,0.04,100,0,50);
+  theta_CM_neg_vs_tau_momentum_rec_pa1_35->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  theta_CM_neg_vs_tau_momentum_rec_pa1_35->GetXaxis()->SetTitle("#theta_{GJ} (rad)");
+  theta_CM_neg_vs_tau_momentum_rec_pa1_35->SetOption("COLZ");
   
-  TH2F *theta_CM_vs_tau_momentum_rec_pa1_40 = new TH2F("theta_CM_vs_tau_momentum_rec_pa1_40","#theta^{*} vs p_{#tau}(rec)",100,0,4,100,0,50);
-  theta_CM_vs_tau_momentum_rec_pa1_40->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
-  theta_CM_vs_tau_momentum_rec_pa1_40->GetXaxis()->SetTitle("#theta^{*} (rad)");
-  theta_CM_vs_tau_momentum_rec_pa1_40->SetOption("COLZ");
+  TH2F *theta_CM_pos_vs_tau_momentum_rec_pa1_40 = new TH2F("theta_CM_pos_vs_tau_momentum_rec_pa1_40","p_{#tau}(rec) vs #theta_{GJ} (#theta^{*} > #pi/2)",100,0,0.04,100,0,50);
+  theta_CM_pos_vs_tau_momentum_rec_pa1_40->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  theta_CM_pos_vs_tau_momentum_rec_pa1_40->GetXaxis()->SetTitle("#theta_{GJ} (rad)");
+  theta_CM_pos_vs_tau_momentum_rec_pa1_40->SetOption("COLZ");
+  TH2F *theta_CM_neg_vs_tau_momentum_rec_pa1_40 = new TH2F("theta_CM_neg_vs_tau_momentum_rec_pa1_40","p_{#tau}(rec) vs #theta_{GJ} (#theta^{*} < #pi/2)",100,0,0.04,100,0,50);
+  theta_CM_neg_vs_tau_momentum_rec_pa1_40->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  theta_CM_neg_vs_tau_momentum_rec_pa1_40->GetXaxis()->SetTitle("#theta_{GJ} (rad)");
+  theta_CM_neg_vs_tau_momentum_rec_pa1_40->SetOption("COLZ");
   //
   TH2F *costheta_CM_vs_a1_momentum = new TH2F("costheta_CM_vs_a1_momentum","cos(#theta^{*}) vs p_{a_{1}}",100,-1.1,1.1,100,0,50);
   costheta_CM_vs_a1_momentum->GetYaxis()->SetTitle("p_{a_{1}} (GeV/c)"); 
@@ -355,40 +383,68 @@ int main(int argc,char **argv){
   costheta_CM_vs_tau_momentum_gen->GetXaxis()->SetTitle("cos(#theta^{*}) (rad)");
   costheta_CM_vs_tau_momentum_gen->SetOption("COLZ");
   //
-  TH2F *costheta_CM_vs_tau_momentum_rec_pa1_20 = new TH2F("costheta_CM_vs_tau_momentum_rec_pa1_20","cos(#theta^{*}) vs p_{#tau}(rec)",100,-1.1,1.1,100,0,50);
-  costheta_CM_vs_tau_momentum_rec_pa1_20->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
-  costheta_CM_vs_tau_momentum_rec_pa1_20->GetXaxis()->SetTitle("cos(#theta^{*}) (rad)");
-  costheta_CM_vs_tau_momentum_rec_pa1_20->SetOption("COLZ");
+  TH2F *costheta_CM_pos_vs_tau_momentum_rec_pa1_20 = new TH2F("costheta_CM_pos_vs_tau_momentum_rec_pa1_20","cos(#theta^{*}) vs p_{#tau}(rec)",100,0.8,1.1,100,0,50);
+  costheta_CM_pos_vs_tau_momentum_rec_pa1_20->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  costheta_CM_pos_vs_tau_momentum_rec_pa1_20->GetXaxis()->SetTitle("cos(#theta_{GJ}) (rad)");
+  costheta_CM_pos_vs_tau_momentum_rec_pa1_20->SetOption("COLZ");
+  TH2F *costheta_CM_neg_vs_tau_momentum_rec_pa1_20 = new TH2F("costheta_CM_neg_vs_tau_momentum_rec_pa1_20","cos(#theta^{*}) vs p_{#tau}(rec)",100,0.8,1.1,100,0,50);
+  costheta_CM_neg_vs_tau_momentum_rec_pa1_20->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  costheta_CM_neg_vs_tau_momentum_rec_pa1_20->GetXaxis()->SetTitle("cos(#theta_{GJ}) (rad)");
+  costheta_CM_neg_vs_tau_momentum_rec_pa1_20->SetOption("COLZ");
   
-  TH2F *costheta_CM_vs_tau_momentum_rec_pa1_23 = new TH2F("costheta_CM_vs_tau_momentum_rec_pa1_23","cos(#theta^{*}) vs p_{#tau}(rec)",100,-1.1,1.1,100,0,50);
-  costheta_CM_vs_tau_momentum_rec_pa1_23->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
-  costheta_CM_vs_tau_momentum_rec_pa1_23->GetXaxis()->SetTitle("cos(#theta^{*}) (rad)");
-  costheta_CM_vs_tau_momentum_rec_pa1_23->SetOption("COLZ");
+  TH2F *costheta_CM_pos_vs_tau_momentum_rec_pa1_23 = new TH2F("costheta_CM_pos_vs_tau_momentum_rec_pa1_23","cos(#theta^{*}) vs p_{#tau}(rec)",100,0.8,1.1,100,0,50);
+  costheta_CM_pos_vs_tau_momentum_rec_pa1_23->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  costheta_CM_pos_vs_tau_momentum_rec_pa1_23->GetXaxis()->SetTitle("cos(#theta_{GJ}) (rad)");
+  costheta_CM_pos_vs_tau_momentum_rec_pa1_23->SetOption("COLZ");
+  TH2F *costheta_CM_neg_vs_tau_momentum_rec_pa1_23 = new TH2F("costheta_CM_neg_vs_tau_momentum_rec_pa1_23","cos(#theta^{*}) vs p_{#tau}(rec)",100,0.8,1.1,100,0,50);
+  costheta_CM_neg_vs_tau_momentum_rec_pa1_23->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  costheta_CM_neg_vs_tau_momentum_rec_pa1_23->GetXaxis()->SetTitle("cos(#theta_{GJ}) (rad)");
+  costheta_CM_neg_vs_tau_momentum_rec_pa1_23->SetOption("COLZ");
   
-  TH2F *costheta_CM_vs_tau_momentum_rec_pa1_25 = new TH2F("costheta_CM_vs_tau_momentum_rec_pa1_25","cos(#theta^{*}) vs p_{#tau}(rec)",100,-1.1,1.1,100,0,50);
-  costheta_CM_vs_tau_momentum_rec_pa1_25->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
-  costheta_CM_vs_tau_momentum_rec_pa1_25->GetXaxis()->SetTitle("cos(#theta^{*}) (rad)");
-  costheta_CM_vs_tau_momentum_rec_pa1_25->SetOption("COLZ");
+  TH2F *costheta_CM_pos_vs_tau_momentum_rec_pa1_25 = new TH2F("costheta_CM_pos_vs_tau_momentum_rec_pa1_25","cos(#theta^{*}) vs p_{#tau}(rec)",100,0.8,1.1,100,0,50);
+  costheta_CM_pos_vs_tau_momentum_rec_pa1_25->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  costheta_CM_pos_vs_tau_momentum_rec_pa1_25->GetXaxis()->SetTitle("cos(#theta_{GJ}) (rad)");
+  costheta_CM_pos_vs_tau_momentum_rec_pa1_25->SetOption("COLZ");
+  TH2F *costheta_CM_neg_vs_tau_momentum_rec_pa1_25 = new TH2F("costheta_CM_neg_vs_tau_momentum_rec_pa1_25","cos(#theta^{*}) vs p_{#tau}(rec)",100,0.8,1.1,100,0,50);
+  costheta_CM_neg_vs_tau_momentum_rec_pa1_25->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  costheta_CM_neg_vs_tau_momentum_rec_pa1_25->GetXaxis()->SetTitle("cos(#theta_{GJ}) (rad)");
+  costheta_CM_neg_vs_tau_momentum_rec_pa1_25->SetOption("COLZ");
   
-  TH2F *costheta_CM_vs_tau_momentum_rec_pa1_27 = new TH2F("costheta_CM_vs_tau_momentum_rec_pa1_27","cos(#theta^{*}) vs p_{#tau}(rec)",100,-1.1,1.1,100,0,50);
-  costheta_CM_vs_tau_momentum_rec_pa1_27->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
-  costheta_CM_vs_tau_momentum_rec_pa1_27->GetXaxis()->SetTitle("cos(#theta^{*}) (rad)");
-  costheta_CM_vs_tau_momentum_rec_pa1_27->SetOption("COLZ");
+  TH2F *costheta_CM_pos_vs_tau_momentum_rec_pa1_27 = new TH2F("costheta_CM_pos_vs_tau_momentum_rec_pa1_27","cos(#theta^{*}) vs p_{#tau}(rec)",100,0.8,1.1,100,0,50);
+  costheta_CM_pos_vs_tau_momentum_rec_pa1_27->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  costheta_CM_pos_vs_tau_momentum_rec_pa1_27->GetXaxis()->SetTitle("cos(#theta_{GJ}) (rad)");
+  costheta_CM_pos_vs_tau_momentum_rec_pa1_27->SetOption("COLZ");
+  TH2F *costheta_CM_neg_vs_tau_momentum_rec_pa1_27 = new TH2F("costheta_CM_neg_vs_tau_momentum_rec_pa1_27","cos(#theta^{*}) vs p_{#tau}(rec)",100,0.8,1.1,100,0,50);
+  costheta_CM_neg_vs_tau_momentum_rec_pa1_27->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  costheta_CM_neg_vs_tau_momentum_rec_pa1_27->GetXaxis()->SetTitle("cos(#theta_{GJ}) (rad)");
+  costheta_CM_neg_vs_tau_momentum_rec_pa1_27->SetOption("COLZ");
   
-  TH2F *costheta_CM_vs_tau_momentum_rec_pa1_30 = new TH2F("costheta_CM_vs_tau_momentum_rec_pa1_30","cos(#theta^{*}) vs p_{#tau}(rec)",100,-1.1,1.1,100,0,50);
-  costheta_CM_vs_tau_momentum_rec_pa1_30->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
-  costheta_CM_vs_tau_momentum_rec_pa1_30->GetXaxis()->SetTitle("cos(#theta^{*}) (rad)");
-  costheta_CM_vs_tau_momentum_rec_pa1_30->SetOption("COLZ");
+  TH2F *costheta_CM_pos_vs_tau_momentum_rec_pa1_30 = new TH2F("costheta_CM_pos_vs_tau_momentum_rec_pa1_30","cos(#theta^{*}) vs p_{#tau}(rec)",100,0.8,1.1,100,0,50);
+  costheta_CM_pos_vs_tau_momentum_rec_pa1_30->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  costheta_CM_pos_vs_tau_momentum_rec_pa1_30->GetXaxis()->SetTitle("cos(#theta_{GJ}) (rad)");
+  costheta_CM_pos_vs_tau_momentum_rec_pa1_30->SetOption("COLZ");
+  TH2F *costheta_CM_neg_vs_tau_momentum_rec_pa1_30 = new TH2F("costheta_CM_neg_vs_tau_momentum_rec_pa1_30","cos(#theta^{*}) vs p_{#tau}(rec)",100,0.8,1.1,100,0,50);
+  costheta_CM_neg_vs_tau_momentum_rec_pa1_30->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  costheta_CM_neg_vs_tau_momentum_rec_pa1_30->GetXaxis()->SetTitle("cos(#theta_{GJ}) (rad)");
+  costheta_CM_neg_vs_tau_momentum_rec_pa1_30->SetOption("COLZ");
   
-  TH2F *costheta_CM_vs_tau_momentum_rec_pa1_35 = new TH2F("costheta_CM_vs_tau_momentum_rec_pa1_35","cos(#theta^{*}) vs p_{#tau}(rec)",100,-1.1,1.1,100,0,50);
-  costheta_CM_vs_tau_momentum_rec_pa1_35->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
-  costheta_CM_vs_tau_momentum_rec_pa1_35->GetXaxis()->SetTitle("cos(#theta^{*}) (rad)");
-  costheta_CM_vs_tau_momentum_rec_pa1_35->SetOption("COLZ");
+  TH2F *costheta_CM_pos_vs_tau_momentum_rec_pa1_35 = new TH2F("costheta_CM_pos_vs_tau_momentum_rec_pa1_35","cos(#theta^{*}) vs p_{#tau}(rec)",100,0.8,1.1,100,0,50);
+  costheta_CM_pos_vs_tau_momentum_rec_pa1_35->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  costheta_CM_pos_vs_tau_momentum_rec_pa1_35->GetXaxis()->SetTitle("cos(#theta_{GJ}) (rad)");
+  costheta_CM_pos_vs_tau_momentum_rec_pa1_35->SetOption("COLZ");
+  TH2F *costheta_CM_neg_vs_tau_momentum_rec_pa1_35 = new TH2F("costheta_CM_neg_vs_tau_momentum_rec_pa1_35","cos(#theta^{*}) vs p_{#tau}(rec)",100,0.8,1.1,100,0,50);
+  costheta_CM_neg_vs_tau_momentum_rec_pa1_35->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  costheta_CM_neg_vs_tau_momentum_rec_pa1_35->GetXaxis()->SetTitle("cos(#theta_{GJ}) (rad)");
+  costheta_CM_neg_vs_tau_momentum_rec_pa1_35->SetOption("COLZ");
   
-  TH2F *costheta_CM_vs_tau_momentum_rec_pa1_40 = new TH2F("costheta_CM_vs_tau_momentum_rec_pa1_40","cos(#theta^{*}) vs p_{#tau}(rec)",100,-1.1,1.1,100,0,50);
-  costheta_CM_vs_tau_momentum_rec_pa1_40->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
-  costheta_CM_vs_tau_momentum_rec_pa1_40->GetXaxis()->SetTitle("cos(#theta^{*}) (rad)");
-  costheta_CM_vs_tau_momentum_rec_pa1_40->SetOption("COLZ");
+  TH2F *costheta_CM_pos_vs_tau_momentum_rec_pa1_40 = new TH2F("costheta_CM_pos_vs_tau_momentum_rec_pa1_40","cos(#theta^{*}) vs p_{#tau}(rec)",100,0.8,1.1,100,0,50);
+  costheta_CM_pos_vs_tau_momentum_rec_pa1_40->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  costheta_CM_pos_vs_tau_momentum_rec_pa1_40->GetXaxis()->SetTitle("cos(#theta_{GJ}) (rad)");
+  costheta_CM_pos_vs_tau_momentum_rec_pa1_40->SetOption("COLZ");
+  TH2F *costheta_CM_neg_vs_tau_momentum_rec_pa1_40 = new TH2F("costheta_CM_neg_vs_tau_momentum_rec_pa1_40","cos(#theta^{*}) vs p_{#tau}(rec)",100,0.8,1.1,100,0,50);
+  costheta_CM_neg_vs_tau_momentum_rec_pa1_40->GetYaxis()->SetTitle("p_{#tau} (GeV/c)"); 
+  costheta_CM_neg_vs_tau_momentum_rec_pa1_40->GetXaxis()->SetTitle("cos(#theta_{GJ}) (rad)");
+  costheta_CM_neg_vs_tau_momentum_rec_pa1_40->SetOption("COLZ");
   //-----------------------------------------------------------------
  
   
@@ -1309,6 +1365,241 @@ int main(int argc,char **argv){
   Omega_minus_a1->GetYaxis()->SetTitle("#");
   //----------------------------------------------------------------------------------
  */
+  /*
+  //---------------------------- angular distributions -------------------------------
+  TH2F *A1_cosbeta_costheta_helicity_plus = new TH2F("A1_cosbeta_costheta_helicity_plus","W^{+}(cos #beta , cos #theta) (h_{#tau}=+1)",50,-1.1,1.1,50,-1.1,1.1);
+  A1_cosbeta_costheta_helicity_plus->GetXaxis()->SetTitle("cos #beta");
+  A1_cosbeta_costheta_helicity_plus->GetYaxis()->SetTitle("cos #theta");
+  //A1_cosbeta_costheta_helicity_plus->GetZaxis()->SetTitle("W^{+}(cos #beta , cos #theta)");
+  A1_cosbeta_costheta_helicity_plus->SetOption("COLZ");
+  
+  TH2F *A1_cosbeta_costheta_helicity_minus = new TH2F("A1_cosbeta_costheta_helicity_minus","W^{-}(cos #beta , cos #theta) (h_{#tau}=-1)",50,-1.1,1.1,50,-1.1,1.1);
+  A1_cosbeta_costheta_helicity_minus->GetXaxis()->SetTitle("cos #beta");
+  A1_cosbeta_costheta_helicity_minus->GetYaxis()->SetTitle("cos #theta");
+  //A1_cosbeta_costheta_helicity_minus->GetZaxis()->SetTitle("W^{-}(cos #beta , cos #theta)");
+  A1_cosbeta_costheta_helicity_minus->SetOption("COLZ");
+  */
+  //----------------------------------------------------------------------------------
+  
+ 
+	//########################################################################################################
+	//############################################ cos alpha #################################################
+	//########################################################################################################
+	TH1F *A1_cosalpha_helicity_plus_tau_gen = new TH1F("A1_cosalpha_helicity_plus_tau_gen","W^{+}(cos #alpha) (h_{#tau}=+1)",50,-1.1,1.1);
+	A1_cosalpha_helicity_plus_tau_gen->GetXaxis()->SetTitle("cos #alpha");
+	A1_cosalpha_helicity_plus_tau_gen->GetYaxis()->SetTitle("#");
+	
+	TH1F *A1_cosalpha_helicity_minus_tau_gen = new TH1F("A1_cosalpha_helicity_minus_tau_gen","W^{-}(cos #alpha) (h_{#tau}=-1)",50,-1.1,1.1);
+	A1_cosalpha_helicity_minus_tau_gen->GetXaxis()->SetTitle("cos #alpha");
+	A1_cosalpha_helicity_minus_tau_gen->GetYaxis()->SetTitle("#");
+	//
+	TH1F *A1_cosalpha_helicity_plus_tau_rec_rest_mass = new TH1F("A1_cosalpha_helicity_plus_tau_rec_rest_mass","W^{+}(cos #alpha) (h_{#tau}=+1)",50,-1.1,1.1);
+	A1_cosalpha_helicity_plus_tau_rec_rest_mass->GetXaxis()->SetTitle("cos #alpha");
+	A1_cosalpha_helicity_plus_tau_rec_rest_mass->GetYaxis()->SetTitle("#");
+	
+	TH1F *A1_cosalpha_helicity_minus_tau_rec_rest_mass = new TH1F("A1_cosalpha_helicity_minus_tau_rec_rest_mass","W^{-}(cos #alpha) (h_{#tau}=-1)",50,-1.1,1.1);
+	A1_cosalpha_helicity_minus_tau_rec_rest_mass->GetXaxis()->SetTitle("cos #alpha");
+	A1_cosalpha_helicity_minus_tau_rec_rest_mass->GetYaxis()->SetTitle("#");
+	//
+	TH1F *A1_cosalpha_helicity_plus_tau_rec_invariant_mass = new TH1F("A1_cosalpha_helicity_plus_tau_rec_invariant_mass","W^{+}(cos #alpha) (h_{#tau}=+1)",50,-1.1,1.1);
+	A1_cosalpha_helicity_plus_tau_rec_invariant_mass->GetXaxis()->SetTitle("cos #alpha");
+	A1_cosalpha_helicity_plus_tau_rec_invariant_mass->GetYaxis()->SetTitle("#");
+	
+	TH1F *A1_cosalpha_helicity_minus_tau_rec_invariant_mass = new TH1F("A1_cosalpha_helicity_minus_tau_rec_invariant_mass","W^{-}(cos #alpha) (h_{#tau}=-1)",50,-1.1,1.1);
+	A1_cosalpha_helicity_minus_tau_rec_invariant_mass->GetXaxis()->SetTitle("cos #alpha");
+	A1_cosalpha_helicity_minus_tau_rec_invariant_mass->GetYaxis()->SetTitle("#");
+	//########################################################################################################
+
+	//########################################################################################################
+	//############################################ cos beta ##################################################
+	//########################################################################################################
+	TH1F *A1_cosbeta_helicity_plus_tau_gen = new TH1F("A1_cosbeta_helicity_plus_tau_gen","W^{+}(cos #beta) (h_{#tau}=+1)",50,-1.1,1.1);
+	A1_cosbeta_helicity_plus_tau_gen->GetXaxis()->SetTitle("cos #beta");
+	A1_cosbeta_helicity_plus_tau_gen->GetYaxis()->SetTitle("#");
+	
+	TH1F *A1_cosbeta_helicity_minus_tau_gen = new TH1F("A1_cosbeta_helicity_minus_tau_gen","W^{-}(cos #beta) (h_{#tau}=-1)",50,-1.1,1.1);
+	A1_cosbeta_helicity_minus_tau_gen->GetXaxis()->SetTitle("cos #beta");
+	A1_cosbeta_helicity_minus_tau_gen->GetYaxis()->SetTitle("#");
+	//
+	TH1F *A1_cosbeta_helicity_plus_tau_rec_rest_mass = new TH1F("A1_cosbeta_helicity_plus_tau_rec_rest_mass","W^{+}(cos #beta) (h_{#tau}=+1)",50,-1.1,1.1);
+	A1_cosbeta_helicity_plus_tau_rec_rest_mass->GetXaxis()->SetTitle("cos #beta");
+	A1_cosbeta_helicity_plus_tau_rec_rest_mass->GetYaxis()->SetTitle("#");
+	
+	TH1F *A1_cosbeta_helicity_minus_tau_rec_rest_mass = new TH1F("A1_cosbeta_helicity_minus_tau_rec_rest_mass","W^{-}(cos #beta) (h_{#tau}=-1)",50,-1.1,1.1);
+	A1_cosbeta_helicity_minus_tau_rec_rest_mass->GetXaxis()->SetTitle("cos #beta");
+	A1_cosbeta_helicity_minus_tau_rec_rest_mass->GetYaxis()->SetTitle("#");
+	//
+	TH1F *A1_cosbeta_helicity_plus_tau_rec_invariant_mass = new TH1F("A1_cosbeta_helicity_plus_tau_rec_invariant_mass","W^{+}(cos #beta) (h_{#tau}=+1)",50,-1.1,1.1);
+	A1_cosbeta_helicity_plus_tau_rec_invariant_mass->GetXaxis()->SetTitle("cos #beta");
+	A1_cosbeta_helicity_plus_tau_rec_invariant_mass->GetYaxis()->SetTitle("#");
+	
+	TH1F *A1_cosbeta_helicity_minus_tau_rec_invariant_mass = new TH1F("A1_cosbeta_helicity_minus_tau_rec_invariant_mass","W^{-}(cos #beta) (h_{#tau}=-1)",50,-1.1,1.1);
+	A1_cosbeta_helicity_minus_tau_rec_invariant_mass->GetXaxis()->SetTitle("cos #beta");
+	A1_cosbeta_helicity_minus_tau_rec_invariant_mass->GetYaxis()->SetTitle("#");
+	//########################################################################################################
+
+	//########################################################################################################
+	//########################################### cos gamma ##################################################
+	//########################################################################################################
+	TH1F *A1_cosgamma_helicity_plus_tau_gen = new TH1F("A1_cogamma_helicity_plus_tau_gen","W^{+}(cos #gamma) (h_{#tau}=+1)",50,-1.1,1.1);
+	A1_cosgamma_helicity_plus_tau_gen->GetXaxis()->SetTitle("cos #gamma");
+	A1_cosgamma_helicity_plus_tau_gen->GetYaxis()->SetTitle("#");
+	
+	TH1F *A1_cosgamma_helicity_minus_tau_gen = new TH1F("A1_cosgamma_helicity_minus_tau_gen","W^{-}(cos #gamma) (h_{#tau}=-1)",50,-1.1,1.1);
+	A1_cosgamma_helicity_minus_tau_gen->GetXaxis()->SetTitle("cos #gamma");
+	A1_cosgamma_helicity_minus_tau_gen->GetYaxis()->SetTitle("#");
+	//
+	TH1F *A1_cosgamma_helicity_plus_tau_rec_rest_mass = new TH1F("A1_cosgamma_helicity_plus_tau_rec_rest_mass","W^{+}(cos #gamma) (h_{#tau}=+1)",50,-1.1,1.1);
+	A1_cosgamma_helicity_plus_tau_rec_rest_mass->GetXaxis()->SetTitle("cos #gamma");
+	A1_cosgamma_helicity_plus_tau_rec_rest_mass->GetYaxis()->SetTitle("#");
+	
+	TH1F *A1_cosgamma_helicity_minus_tau_rec_rest_mass = new TH1F("A1_cosgamma_helicity_minus_tau_rec_rest_mass","W^{-}(cos #gamma) (h_{#tau}=-1)",50,-1.1,1.1);
+	A1_cosgamma_helicity_minus_tau_rec_rest_mass->GetXaxis()->SetTitle("cos #gamma");
+	A1_cosgamma_helicity_minus_tau_rec_rest_mass->GetYaxis()->SetTitle("#");
+	//
+	TH1F *A1_cosgamma_helicity_plus_tau_rec_invariant_mass = new TH1F("A1_cosgamma_helicity_plus_tau_rec_invariant_mass","W^{+}(cos #gamma) (h_{#tau}=+1)",50,-1.1,1.1);
+	A1_cosgamma_helicity_plus_tau_rec_invariant_mass->GetXaxis()->SetTitle("cos #gamma");
+	A1_cosgamma_helicity_plus_tau_rec_invariant_mass->GetYaxis()->SetTitle("#");
+	
+	TH1F *A1_cosgamma_helicity_minus_tau_rec_invariant_mass = new TH1F("A1_cosgamma_helicity_minus_tau_rec_invariant_mass","W^{-}(cos #gamma) (h_{#tau}=-1)",50,-1.1,1.1);
+	A1_cosgamma_helicity_minus_tau_rec_invariant_mass->GetXaxis()->SetTitle("cos #gamma");
+	A1_cosgamma_helicity_minus_tau_rec_invariant_mass->GetYaxis()->SetTitle("#");
+	//########################################################################################################
+
+	
+	//########################################################################################################
+	//########################################### cos theta ##################################################
+	//########################################################################################################
+	TH1F *A1_costheta_helicity_plus_tau_gen = new TH1F("A1_costheta_helicity_plus_tau_gen","W^{+}(cos #theta) (h_{#tau}=+1)",50,-1.1,1.1);
+	A1_costheta_helicity_plus_tau_gen->GetXaxis()->SetTitle("cos #theta");
+	A1_costheta_helicity_plus_tau_gen->GetYaxis()->SetTitle("#");
+	
+	TH1F *A1_costheta_helicity_minus_tau_gen = new TH1F("A1_costheta_helicity_minus_tau_gen","W^{-}(cos #theta) (h_{#tau}=-1)",50,-1.1,1.1);
+	A1_costheta_helicity_minus_tau_gen->GetXaxis()->SetTitle("cos #theta");
+	A1_costheta_helicity_minus_tau_gen->GetYaxis()->SetTitle("#");
+	//
+	TH1F *A1_costheta_helicity_plus_tau_rec_rest_mass = new TH1F("A1_costheta_helicity_plus_tau_rec_rest_mass","W^{+}(cos #theta) (h_{#tau}=+1)",50,-1.1,1.1);
+	A1_costheta_helicity_plus_tau_rec_rest_mass->GetXaxis()->SetTitle("cos #theta");
+	A1_costheta_helicity_plus_tau_rec_rest_mass->GetYaxis()->SetTitle("#");
+	
+	TH1F *A1_costheta_helicity_minus_tau_rec_rest_mass = new TH1F("A1_costheta_helicity_minus_tau_rec_rest_mass","W^{-}(cos #theta) (h_{#tau}=-1)",50,-1.1,1.1);
+	A1_costheta_helicity_minus_tau_rec_rest_mass->GetXaxis()->SetTitle("cos #theta");
+	A1_costheta_helicity_minus_tau_rec_rest_mass->GetYaxis()->SetTitle("#");
+	//
+	TH1F *A1_costheta_helicity_plus_tau_rec_invariant_mass = new TH1F("A1_costheta_helicity_plus_tau_rec_invariant_mass","W^{+}(cos #theta) (h_{#tau}=+1)",50,-1.1,1.1);
+	A1_costheta_helicity_plus_tau_rec_invariant_mass->GetXaxis()->SetTitle("cos #theta");
+	A1_costheta_helicity_plus_tau_rec_invariant_mass->GetYaxis()->SetTitle("#");
+	
+	TH1F *A1_costheta_helicity_minus_tau_rec_invariant_mass = new TH1F("A1_costheta_helicity_minus_tau_rec_invariant_mass","W^{-}(cos #theta) (h_{#tau}=-1)",50,-1.1,1.1);
+	A1_costheta_helicity_minus_tau_rec_invariant_mass->GetXaxis()->SetTitle("cos #theta");
+	A1_costheta_helicity_minus_tau_rec_invariant_mass->GetYaxis()->SetTitle("#");
+	//########################################################################################################
+	
+	
+	//########################################################################################################
+	//###################################### cos theta vs cos alpha ##########################################
+	//########################################################################################################
+	TH2F *A1_cosalpha_costheta_helicity_plus_tau_gen = new TH2F("A1_cosalpha_costheta_helicity_plus_tau_gen","W^{+}(cos #alpha , cos #theta) (h_{#tau}=+1)",50,-1.1,1.1,50,-1.1,1.1);
+	A1_cosalpha_costheta_helicity_plus_tau_gen->GetXaxis()->SetTitle("cos #alpha");
+	A1_cosalpha_costheta_helicity_plus_tau_gen->GetYaxis()->SetTitle("cos #theta");
+	A1_cosalpha_costheta_helicity_plus_tau_gen->SetOption("COLZ");
+	
+	TH2F *A1_cosalpha_costheta_helicity_minus_tau_gen = new TH2F("A1_cosalpha_costheta_helicity_minus_tau_gen","W^{-}(cos #alpha , cos #theta) (h_{#tau}=-1)",50,-1.1,1.1,50,-1.1,1.1);
+	A1_cosalpha_costheta_helicity_minus_tau_gen->GetXaxis()->SetTitle("cos #alpha");
+	A1_cosalpha_costheta_helicity_minus_tau_gen->GetYaxis()->SetTitle("cos #theta");
+	A1_cosalpha_costheta_helicity_minus_tau_gen->SetOption("COLZ");
+	//
+	TH2F *A1_cosalpha_costheta_helicity_plus_tau_rec_rest_mass = new TH2F("A1_cosalpha_costheta_helicity_plus_tau_rec_rest_mass","W^{+}(cos #alpha , cos #theta) (h_{#tau}=+1)",50,-1.1,1.1,50,-1.1,1.1);
+	A1_cosalpha_costheta_helicity_plus_tau_rec_rest_mass->GetXaxis()->SetTitle("cos #alpha");
+	A1_cosalpha_costheta_helicity_plus_tau_rec_rest_mass->GetYaxis()->SetTitle("cos #theta");
+	A1_cosalpha_costheta_helicity_plus_tau_rec_rest_mass->SetOption("COLZ");
+	
+	TH2F *A1_cosalpha_costheta_helicity_minus_tau_rec_rest_mass = new TH2F("A1_cosbalpha_costheta_helicity_minus_tau_rec_rest_mass","W^{-}(cos #alpha , cos #theta) (h_{#tau}=-1)",50,-1.1,1.1,50,-1.1,1.1);
+	A1_cosalpha_costheta_helicity_minus_tau_rec_rest_mass->GetXaxis()->SetTitle("cos #alpha");
+	A1_cosalpha_costheta_helicity_minus_tau_rec_rest_mass->GetYaxis()->SetTitle("cos #theta");
+	A1_cosalpha_costheta_helicity_minus_tau_rec_rest_mass->SetOption("COLZ");
+	//
+	TH2F *A1_cosalpha_costheta_helicity_plus_tau_rec_invariant_mass = new TH2F("A1_cosalpha_costheta_helicity_plus_tau_rec_invariant_mass","W^{+}(cos #alpha , cos #theta) (h_{#tau}=+1)",50,-1.1,1.1,50,-1.1,1.1);
+	A1_cosalpha_costheta_helicity_plus_tau_rec_invariant_mass->GetXaxis()->SetTitle("cos #alpha");
+	A1_cosalpha_costheta_helicity_plus_tau_rec_invariant_mass->GetYaxis()->SetTitle("cos #theta");
+	A1_cosalpha_costheta_helicity_plus_tau_rec_invariant_mass->SetOption("COLZ");
+	
+	TH2F *A1_cosalpha_costheta_helicity_minus_tau_rec_invariant_mass = new TH2F("A1_cosalpha_costheta_helicity_minus_tau_rec_invariant_mass","W^{-}(cos #alpha , cos #theta) (h_{#tau}=-1)",50,-1.1,1.1,50,-1.1,1.1);
+	A1_cosalpha_costheta_helicity_minus_tau_rec_invariant_mass->GetXaxis()->SetTitle("cos #alpha");
+	A1_cosalpha_costheta_helicity_minus_tau_rec_invariant_mass->GetYaxis()->SetTitle("cos #theta");
+	A1_cosalpha_costheta_helicity_minus_tau_rec_invariant_mass->SetOption("COLZ");
+	//########################################################################################################
+
+	//########################################################################################################
+	//####################################### cos theta vs cos beta ##########################################
+	//########################################################################################################
+	TH2F *A1_cosbeta_costheta_helicity_plus_tau_gen = new TH2F("A1_cosbeta_costheta_helicity_plus_tau_gen","W^{+}(cos #beta , cos #theta) (h_{#tau}=+1)",50,-1.1,1.1,50,-1.1,1.1);
+	A1_cosbeta_costheta_helicity_plus_tau_gen->GetXaxis()->SetTitle("cos #beta");
+	A1_cosbeta_costheta_helicity_plus_tau_gen->GetYaxis()->SetTitle("cos #theta");
+	A1_cosbeta_costheta_helicity_plus_tau_gen->SetOption("COLZ");
+	
+	TH2F *A1_cosbeta_costheta_helicity_minus_tau_gen = new TH2F("A1_cosbeta_costheta_helicity_minus_tau_gen","W^{-}(cos #beta , cos #theta) (h_{#tau}=-1)",50,-1.1,1.1,50,-1.1,1.1);
+	A1_cosbeta_costheta_helicity_minus_tau_gen->GetXaxis()->SetTitle("cos #beta");
+	A1_cosbeta_costheta_helicity_minus_tau_gen->GetYaxis()->SetTitle("cos #theta");
+	A1_cosbeta_costheta_helicity_minus_tau_gen->SetOption("COLZ");
+	//
+	TH2F *A1_cosbeta_costheta_helicity_plus_tau_rec_rest_mass = new TH2F("A1_cosbeta_costheta_helicity_plus_tau_rec_rest_mass","W^{+}(cos #beta , cos #theta) (h_{#tau}=+1)",50,-1.1,1.1,50,-1.1,1.1);
+	A1_cosbeta_costheta_helicity_plus_tau_rec_rest_mass->GetXaxis()->SetTitle("cos #beta");
+	A1_cosbeta_costheta_helicity_plus_tau_rec_rest_mass->GetYaxis()->SetTitle("cos #theta");
+	A1_cosbeta_costheta_helicity_plus_tau_rec_rest_mass->SetOption("COLZ");
+	
+	TH2F *A1_cosbeta_costheta_helicity_minus_tau_rec_rest_mass = new TH2F("A1_cosbeta_costheta_helicity_minus_tau_rec_rest_mass","W^{-}(cos #beta , cos #theta) (h_{#tau}=-1)",50,-1.1,1.1,50,-1.1,1.1);
+	A1_cosbeta_costheta_helicity_minus_tau_rec_rest_mass->GetXaxis()->SetTitle("cos #beta");
+	A1_cosbeta_costheta_helicity_minus_tau_rec_rest_mass->GetYaxis()->SetTitle("cos #theta");
+	A1_cosbeta_costheta_helicity_minus_tau_rec_rest_mass->SetOption("COLZ");
+	//
+	TH2F *A1_cosbeta_costheta_helicity_plus_tau_rec_invariant_mass = new TH2F("A1_cosbeta_costheta_helicity_plus_tau_rec_invariant_mass","W^{+}(cos #beta , cos #theta) (h_{#tau}=+1)",50,-1.1,1.1,50,-1.1,1.1);
+	A1_cosbeta_costheta_helicity_plus_tau_rec_invariant_mass->GetXaxis()->SetTitle("cos #beta");
+	A1_cosbeta_costheta_helicity_plus_tau_rec_invariant_mass->GetYaxis()->SetTitle("cos #theta");
+	A1_cosbeta_costheta_helicity_plus_tau_rec_invariant_mass->SetOption("COLZ");
+	
+	TH2F *A1_cosbeta_costheta_helicity_minus_tau_rec_invariant_mass = new TH2F("A1_cosbeta_costheta_helicity_minus_tau_rec_invariant_mass","W^{-}(cos #beta , cos #theta) (h_{#tau}=-1)",50,-1.1,1.1,50,-1.1,1.1);
+	A1_cosbeta_costheta_helicity_minus_tau_rec_invariant_mass->GetXaxis()->SetTitle("cos #beta");
+	A1_cosbeta_costheta_helicity_minus_tau_rec_invariant_mass->GetYaxis()->SetTitle("cos #theta");
+	A1_cosbeta_costheta_helicity_minus_tau_rec_invariant_mass->SetOption("COLZ");
+	//########################################################################################################
+	
+	//########################################################################################################
+	//###################################### cos theta vs cos gamma ##########################################
+	//########################################################################################################
+	TH2F *A1_cosgamma_costheta_helicity_plus_tau_gen = new TH2F("A1_cosgamma_costheta_helicity_plus_tau_gen","W^{+}(cos #gamma , cos #theta) (h_{#tau}=+1)",50,-1.1,1.1,50,-1.1,1.1);
+	A1_cosgamma_costheta_helicity_plus_tau_gen->GetXaxis()->SetTitle("cos #gamma");
+	A1_cosgamma_costheta_helicity_plus_tau_gen->GetYaxis()->SetTitle("cos #theta");
+	A1_cosgamma_costheta_helicity_plus_tau_gen->SetOption("COLZ");
+	
+	TH2F *A1_cosgamma_costheta_helicity_minus_tau_gen = new TH2F("A1_cosgamma_costheta_helicity_minus_tau_gen","W^{-}(cos #gamma , cos #theta) (h_{#tau}=-1)",50,-1.1,1.1,50,-1.1,1.1);
+	A1_cosgamma_costheta_helicity_minus_tau_gen->GetXaxis()->SetTitle("cos #gamma");
+	A1_cosgamma_costheta_helicity_minus_tau_gen->GetYaxis()->SetTitle("cos #theta");
+	A1_cosgamma_costheta_helicity_minus_tau_gen->SetOption("COLZ");
+	//
+	TH2F *A1_cosgamma_costheta_helicity_plus_tau_rec_rest_mass = new TH2F("A1_cosgamma_costheta_helicity_plus_tau_rec_rest_mass","W^{+}(cos #gamma , cos #theta) (h_{#tau}=+1)",50,-1.1,1.1,50,-1.1,1.1);
+	A1_cosgamma_costheta_helicity_plus_tau_rec_rest_mass->GetXaxis()->SetTitle("cos #gamma");
+	A1_cosgamma_costheta_helicity_plus_tau_rec_rest_mass->GetYaxis()->SetTitle("cos #theta");
+	A1_cosgamma_costheta_helicity_plus_tau_rec_rest_mass->SetOption("COLZ");
+	
+	TH2F *A1_cosgamma_costheta_helicity_minus_tau_rec_rest_mass = new TH2F("A1_cosgamma_costheta_helicity_minus_tau_rec_rest_mass","W^{-}(cos #gamma , cos #theta) (h_{#tau}=-1)",50,-1.1,1.1,50,-1.1,1.1);
+	A1_cosgamma_costheta_helicity_minus_tau_rec_rest_mass->GetXaxis()->SetTitle("cos #gamma");
+	A1_cosgamma_costheta_helicity_minus_tau_rec_rest_mass->GetYaxis()->SetTitle("cos #theta");
+	A1_cosgamma_costheta_helicity_minus_tau_rec_rest_mass->SetOption("COLZ");
+	//
+	TH2F *A1_cosgamma_costheta_helicity_plus_tau_rec_invariant_mass = new TH2F("A1_cosgamma_costheta_helicity_plus_tau_rec_invariant_mass","W^{+}(cos #gamma , cos #theta) (h_{#tau}=+1)",50,-1.1,1.1,50,-1.1,1.1);
+	A1_cosgamma_costheta_helicity_plus_tau_rec_invariant_mass->GetXaxis()->SetTitle("cos #gamma");
+	A1_cosgamma_costheta_helicity_plus_tau_rec_invariant_mass->GetYaxis()->SetTitle("cos #theta");
+	A1_cosgamma_costheta_helicity_plus_tau_rec_invariant_mass->SetOption("COLZ");
+	
+	TH2F *A1_cosgamma_costheta_helicity_minus_tau_rec_invariant_mass = new TH2F("A1_cosgamma_costheta_helicity_minus_tau_rec_invariant_mass","W^{-}(cos #gamma , cos #theta) (h_{#tau}=-1)",50,-1.1,1.1,50,-1.1,1.1);
+	A1_cosgamma_costheta_helicity_minus_tau_rec_invariant_mass->GetXaxis()->SetTitle("cos #gamma");
+	A1_cosgamma_costheta_helicity_minus_tau_rec_invariant_mass->GetYaxis()->SetTitle("cos #theta");
+	A1_cosgamma_costheta_helicity_minus_tau_rec_invariant_mass->SetOption("COLZ");
+	//########################################################################################################
+  
+  
+  
   
   TH1F *rhobeta_plus= new TH1F("rhobeta_plus","#rho^{+}",50,-1.1,1.1);
   TH1F *rhobeta_minus= new TH1F("rhobeta_minus","#rho^{-}",50,-1.1,1.1);
@@ -1743,6 +2034,47 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 
     a1Helper a1h;
     a1Helper a1hh;
+    
+    //------------------ RECONSTRUCTED TAU ------------------------
+    //--- tau 1
+    TLorentzVector tau1RecRestMass(0,0,0,0);
+    TLorentzVector tau1RecInvariantMass(0,0,0,0);
+    
+    PolarimetricA1 A1PolTau1RecRestMass;
+    PolarimetricA1 A1PolTau1RecInvariantMass;
+    
+    TauPolInterface A1Tau1RecRestMass;
+    TauPolInterface A1Tau1RecInvariantMass;
+
+    a1Helper A1hTau1RecRestMass;
+    a1Helper A1hTau1RecInvariantMass;
+
+    TauPolInterface TauPolA1Tau1RecRestMass;
+    TauPolInterface TauPolA1Tau1RecInvariantMass;
+
+    vector<TLorentzVector> TauandProd1RecRestMass;
+    vector<TLorentzVector> TauandProd1RecInvariantMass;
+    
+    //----- tau 2
+    TLorentzVector tau2RecRestMass(0,0,0,0);
+    TLorentzVector tau2RecInvariantMass(0,0,0,0);
+    
+    PolarimetricA1 A1PolTau2RecRestMass;
+    PolarimetricA1 A1PolTau2RecInvariantMass;
+    
+    TauPolInterface A1Tau2RecRestMass;
+    TauPolInterface A1Tau2RecInvariantMass;
+
+    a1Helper A1hTau2RecRestMass;
+    a1Helper A1hTau2RecInvariantMass;
+
+    TauPolInterface TauPolA1Tau2RecRestMass;
+    TauPolInterface TauPolA1Tau2RecInvariantMass;
+
+    vector<TLorentzVector> TauandProd2RecRestMass;
+    vector<TLorentzVector> TauandProd2RecInvariantMass; 
+    //-----------------------------------------------------------
+    
     rhoHelper RhoHelp;
     PolarimetricA1 Polarimetr;
     PolarimetricA1 Polarimetr1;
@@ -1967,6 +2299,7 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
     Int_t unphysical_theta = 0;
      if(JAK1==5 && SubJAK1==51){/* a1^- and 3 pions */
 
+       //------------------ Particles with truth tau momentum --------------------
        vector<TLorentzVector> particles;
        particles.clear();
        SortPions(A1Pions1);
@@ -1988,6 +2321,11 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
        a1hh.Configure(particles, a1ospi+a1ss1pi+a1ss2pi);
        TauPolA1.Configure(particles,"a1");
        tauandprod1=particles;
+       
+       
+       
+
+       
        
        /*
        TLorentzVector Pion1(0,0,0,0);
@@ -2037,10 +2375,30 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 	
 	Double_t theta_GJ1 = tau1.Angle(a1LV1.Vect());
 	Double_t theta = a1LV1.Theta();
-	 Double_t phi = a1LV1.Phi();
+	Double_t phi = a1LV1.Phi();
 	 
-	Double_t theta_CM = asin(sin(theta_GJ1)/sin(theta_max1)); 
-	 
+	/*
+	std::cout<<"-----------------------------------"<< std::endl;
+       std::cout<<"a1hh        " << a1hh.costhetaLF() << std::endl;
+       std::cout<<"a1minus_gen " << a1minus_gen.costhetaLF() << std::endl;
+       std::cout<<"tau1 px  gen    " << tau1.Px() << std::endl;
+       std::cout<<"tau1 px  rec    " << tau1.P()*sin(theta)*cos(phi) << std::endl;
+       std::cout<<"tau1 py      " << tau1.Py() << std::endl;
+       std::cout<<"tau1 py  rec    " << tau1.P()*sin(theta)*sin(phi) << std::endl;
+       std::cout<<"tau1 pz      " << tau1.Pz() << std::endl;
+       std::cout<<"tau1 pz  rec    " << tau1.P()*cos(theta) << std::endl;
+	 */
+	//Double_t theta_CM = asin(sin(theta_GJ1)/sin(theta_max1)); 
+	
+	
+	
+	TLorentzVector tau1RF = BoostR(tau1, tau1);
+	TLorentzVector a1TRF = BoostR(a1LV1, tau1RF);
+	Double_t theta_CM = tau1RF.Angle(a1TRF.Vect());
+	
+	
+	
+	/*
 	TVector3 n_tau = tau1.Vect()*(1/tau1.Vect().Mag());
 	TVector3 n_a1 = a1LV1.Vect()*(1/a1LV1.Vect().Mag());
 	
@@ -2056,6 +2414,9 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 	
 	if(scalar_tau_a1<0.){theta_CM = TMath::Pi() - theta_CM;}
 	
+	std::cout<< "theta sin " << theta_CM << std::endl;
+	std::cout<< "theta trf " << theta_CM2 << std::endl;
+	
 	//a1ospi+a1ss1pi+a1ss2pi
 	
 	TVector3 my_nss1 = a1ss1pi.Vect()*(1/a1ss1pi.Vect().Mag());
@@ -2065,8 +2426,21 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 	TVector3 my_nT = tau1.Vect()*(1/tau1.Vect().Mag());
 	TVector3 my_nPerpCrossnL  = my_nPerp.Cross(my_nL);
 	TVector3 my_qvect = a1ospi.Vect()*(1/a1ospi.Vect().Mag());
-  
-  
+	*/
+	
+	// //----------- example ---------  
+	// TLolerntzVector a1Lab;
+	// TLorentzVecor pi1Lab;
+	// TLorentzVecor pi2Lab;
+	// TLorentzVecor pi3Lab;
+
+
+	// TLorentzVector a1RF = BoostR(a1Lab, a1Lab);
+	// TLorentzVector pi1RF = BoostR(pi1Lab, a1Lab);
+	// TLorentzVector pi2RF = BoostR(pi2Lab, a1Lab);
+	// TLorentzVector pi3RF = BoostR(pi3Lab, a1Lab);
+
+	/*
 	//---------------- Angle beta --------------------
 	Double_t cos_beta = my_nT.Dot(my_nPerp);
 	Double_t sin_beta = sqrt(1 - cos_beta*cos_beta);
@@ -2140,10 +2514,10 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 	if(a1hh.TRF_cosbeta() < 0. && a1hh.TRF_sinbeta() > 0.){a1hh_TRF_beta = acos(a1hh.TRF_cosbeta());}
 	if(a1hh.TRF_cosbeta() > 0. && a1hh.TRF_sinbeta() < 0.){a1hh_TRF_beta = asin(a1hh.TRF_sinbeta());}
 	if(a1hh.TRF_cosbeta() < 0. && a1hh.TRF_sinbeta() < 0.){a1hh_TRF_beta = asin(-1*a1hh.TRF_sinbeta()) + TMath::Pi()/2;}
+	*/
 	
 	
-	
-	
+	/*
 	std::cout<< "------------------------------" <<std::endl;
 	std::cout<< "a1ss1pi.P() " << a1ss1pi.P() <<std::endl;
 	std::cout<< "a1ss2pi.P() " << a1ss2pi.P() <<std::endl;
@@ -2181,7 +2555,7 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 	std::cout<< "a1hh.sinbeta() " << a1hh.sinbeta()  <<std::endl;
 	std::cout<< "a1hh.TRF_sinbeta() " << a1hh.TRF_sinbeta() <<std::endl;
 	std::cout<< "a1hh_sinbetaLF " << a1hh_sinbetaLF  <<std::endl;
-	
+	*/
 	/*
 	std::cout<< "------------------------------" <<std::endl;
 	std::cout<< "scalar " << scalar_tau_a1 <<std::endl;
@@ -2241,6 +2615,44 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 	Double_t tau_momentum_mean1 = (tau_momentum_minus1 + tau_momentum_plus1) /2;
 	
 	Double_t tau_momentum_width1 = tau_momentum_plus1 - tau_momentum_minus1;
+	
+	
+	//----------------------- RECONSTRUCTED TAU (MEAN SOLUTION) -------------------------------------
+	
+	Double_t tauMass = 1.77682; // GeV (from PDG)
+	Double_t tau1Theta = tau1.Theta(); // experimentally available with tau direction (secondary vertex - primary vertex)
+	Double_t tau1Phi = tau1.Phi(); // experimentally available with tau direction
+	
+	tau1RecRestMass.SetPxPyPzE(tau_momentum_mean1*sin(tau1Theta)*cos(tau1Phi),tau_momentum_mean1*sin(tau1Theta)*sin(tau1Phi),tau_momentum_mean1*cos(tau1Theta),sqrt(tauMass*tauMass + tau_momentum_mean1*tau_momentum_mean1));
+	tau1RecInvariantMass.SetPxPyPzE(tau_momentum_mean1*sin(tau1Theta)*cos(tau1Phi),tau_momentum_mean1*sin(tau1Theta)*sin(tau1Phi),tau_momentum_mean1*cos(tau1Theta),sqrt(a1LV1.M()*a1LV1.M() + tau_momentum_mean1*tau_momentum_mean1));
+	
+	vector<TLorentzVector> ParticlesTau1RecRestMass;
+	ParticlesTau1RecRestMass.clear();
+	ParticlesTau1RecRestMass.push_back(tau1RecRestMass);
+	ParticlesTau1RecRestMass.push_back(a1ospi);
+	ParticlesTau1RecRestMass.push_back(a1ss1pi);
+	ParticlesTau1RecRestMass.push_back(a1ss2pi);
+       
+	A1PolTau1RecRestMass.Configure(ParticlesTau1RecRestMass, taucharge);
+	A1Tau1RecRestMass.Configure(ParticlesTau1RecRestMass,"a1",taucharge);
+	A1hTau1RecRestMass.Configure(ParticlesTau1RecRestMass, a1ospi+a1ss1pi+a1ss2pi);
+	TauPolA1Tau1RecRestMass.Configure(ParticlesTau1RecRestMass,"a1");
+	TauandProd1RecRestMass=ParticlesTau1RecRestMass;
+	
+	vector<TLorentzVector> ParticlesTau1RecInvariantMass;
+	ParticlesTau1RecInvariantMass.clear();
+	ParticlesTau1RecInvariantMass.push_back(tau1RecInvariantMass);
+	ParticlesTau1RecInvariantMass.push_back(a1ospi);
+	ParticlesTau1RecInvariantMass.push_back(a1ss1pi);
+	ParticlesTau1RecInvariantMass.push_back(a1ss2pi);
+       
+	A1PolTau1RecInvariantMass.Configure(ParticlesTau1RecInvariantMass, taucharge);
+	A1Tau1RecInvariantMass.Configure(ParticlesTau1RecInvariantMass,"a1",taucharge);
+	A1hTau1RecInvariantMass.Configure(ParticlesTau1RecInvariantMass, a1ospi+a1ss1pi+a1ss2pi);
+	TauPolA1Tau1RecInvariantMass.Configure(ParticlesTau1RecInvariantMass,"a1");
+	TauandProd1RecInvariantMass=ParticlesTau1RecInvariantMass;
+	
+	//------------------------------------------------------------------------------------------------
 	
 	/*
 	if(abs(tau_momentum_plus1 - tau_momentum_minus1)<0.5 && tau1.M()*tau1.M() < 2*tau1.M()*a1LV1.P()*sin(-1*theta_GJ1)) {
@@ -2432,18 +2844,256 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 	  tau_momentum_rec2 = tau_momentum_minus2;  
 	  tau_momentum_gen2 = tau2.P();
 	}
-/*
-	std::cout<< "tau1 gen " << tau1.P() <<std::endl;
-	std::cout<< "tau1 rec " << tau_momentum_mean1 <<std::endl;
-	std::cout<< "--------------------------" <<std::endl;
-	std::cout<< "tau2 gen " << tau2.P() <<std::endl;
-	std::cout<< "tau2 rec " << tau_momentum_mean2 <<std::endl;
-	std::cout<< "--------------------------" <<std::endl;
-	*/
+
+
+	//----------------------- RECONSTRUCTED TAU (MEAN SOLUTION) -------------------------------------
+	
+	Double_t tauMass = 1.77682; // GeV (from PDG)
+	Double_t tau2Theta = tau2.Theta(); // experimentally available with tau direction (secondary vertex - primary vertex)
+	Double_t tau2Phi = tau2.Phi(); // experimentally available with tau direction
+	
+	tau2RecRestMass.SetPxPyPzE(tau_momentum_mean2*sin(tau2Theta)*cos(tau2Phi),tau_momentum_mean2*sin(tau2Theta)*sin(tau2Phi),tau_momentum_mean2*cos(tau2Theta),sqrt(tauMass*tauMass + tau_momentum_mean2*tau_momentum_mean2));
+	tau2RecInvariantMass.SetPxPyPzE(tau_momentum_mean2*sin(tau2Theta)*cos(tau2Phi),tau_momentum_mean2*sin(tau2Theta)*sin(tau2Phi),tau_momentum_mean2*cos(tau2Theta),sqrt(a1LV2.M()*a1LV2.M() + tau_momentum_mean2*tau_momentum_mean2));
+	
+	vector<TLorentzVector> ParticlesTau2RecRestMass;
+	ParticlesTau2RecRestMass.clear();
+	ParticlesTau2RecRestMass.push_back(tau2RecRestMass);
+	ParticlesTau2RecRestMass.push_back(a1ospi);
+	ParticlesTau2RecRestMass.push_back(a1ss1pi);
+	ParticlesTau2RecRestMass.push_back(a1ss2pi);
+       
+	A1PolTau2RecRestMass.Configure(ParticlesTau2RecRestMass, taucharge);
+	A1Tau2RecRestMass.Configure(ParticlesTau2RecRestMass,"a1",taucharge);
+	A1hTau2RecRestMass.Configure(ParticlesTau2RecRestMass, a1ospi+a1ss1pi+a1ss2pi);
+	TauPolA1Tau2RecRestMass.Configure(ParticlesTau2RecRestMass,"a1");
+	TauandProd2RecRestMass=ParticlesTau2RecRestMass;
+	
+	vector<TLorentzVector> ParticlesTau2RecInvariantMass;
+	ParticlesTau2RecInvariantMass.clear();
+	ParticlesTau2RecInvariantMass.push_back(tau2RecInvariantMass);
+	ParticlesTau2RecInvariantMass.push_back(a1ospi);
+	ParticlesTau2RecInvariantMass.push_back(a1ss1pi);
+	ParticlesTau2RecInvariantMass.push_back(a1ss2pi);
+       
+	A1PolTau2RecInvariantMass.Configure(ParticlesTau2RecInvariantMass, taucharge);
+	A1Tau2RecInvariantMass.Configure(ParticlesTau2RecInvariantMass,"a1",taucharge);
+	A1hTau2RecInvariantMass.Configure(ParticlesTau2RecInvariantMass, a1ospi+a1ss1pi+a1ss2pi);
+	TauPolA1Tau2RecInvariantMass.Configure(ParticlesTau2RecInvariantMass,"a1");
+	TauandProd2RecInvariantMass=ParticlesTau2RecInvariantMass;
+	
+	//------------------------------------------------------------------------------------------------
+
+	//########################################################################################################
+	//############################################ cos alpha #################################################
+	//########################################################################################################
+	
+	//------------------------------------- Generated tau ----------------------------------------------------
+	A1_cosalpha_helicity_plus_tau_gen->Fill(a1hh.cosalpha(),HelWeightPlus); // tau 1 gen
+	A1_cosalpha_helicity_plus_tau_gen->Fill(a1h.cosalpha(),HelWeightPlus); // tau 2 gen
+	
+	A1_cosalpha_helicity_minus_tau_gen->Fill(a1hh.cosalpha(),HelWeightMinus); // tau 1 gen
+	A1_cosalpha_helicity_minus_tau_gen->Fill(a1h.cosalpha(),HelWeightMinus); // tau 2 gen
+	//--------------------------------------------------------------------------------------------------------
+	
+	//------------------------------- Reconstructed tau (rest mass) ------------------------------------------
+	A1_cosalpha_helicity_plus_tau_rec_rest_mass->Fill(A1hTau1RecRestMass.cosalpha(),HelWeightPlus); // tau 1 rec
+	A1_cosalpha_helicity_plus_tau_rec_rest_mass->Fill(A1hTau2RecRestMass.cosalpha(),HelWeightPlus); // tau 2 rec
+	
+	A1_cosalpha_helicity_minus_tau_rec_rest_mass->Fill(A1hTau1RecRestMass.cosalpha(),HelWeightMinus); // tau 1 rec
+	A1_cosalpha_helicity_minus_tau_rec_rest_mass->Fill(A1hTau2RecRestMass.cosalpha(),HelWeightMinus); // tau 2 rec
+	//--------------------------------------------------------------------------------------------------------
+	
+	//------------------------------- Reconstructed tau (invariant mass) -------------------------------------
+	A1_cosalpha_helicity_plus_tau_rec_invariant_mass->Fill(A1hTau1RecInvariantMass.cosalpha(),HelWeightPlus); // tau 1 rec
+	A1_cosalpha_helicity_plus_tau_rec_invariant_mass->Fill(A1hTau2RecInvariantMass.cosalpha(),HelWeightPlus); // tau 2 rec
+	
+	A1_cosalpha_helicity_minus_tau_rec_invariant_mass->Fill(A1hTau1RecInvariantMass.cosalpha(),HelWeightMinus); // tau 1 rec
+	A1_cosalpha_helicity_minus_tau_rec_invariant_mass->Fill(A1hTau2RecInvariantMass.cosalpha(),HelWeightMinus); // tau 2 rec
+	//--------------------------------------------------------------------------------------------------------
+	//########################################################################################################
+
+	//########################################################################################################
+	//############################################ cos beta ##################################################
+	//########################################################################################################
+	
+	//------------------------------------- Generated tau ----------------------------------------------------
+	A1_cosbeta_helicity_plus_tau_gen->Fill(a1hh.cosbeta(),HelWeightPlus); // tau 1 gen
+	A1_cosbeta_helicity_plus_tau_gen->Fill(a1h.cosbeta(),HelWeightPlus); // tau 2 gen
+	
+	A1_cosbeta_helicity_minus_tau_gen->Fill(a1hh.cosbeta(),HelWeightMinus); // tau 1 gen
+	A1_cosbeta_helicity_minus_tau_gen->Fill(a1h.cosbeta(),HelWeightMinus); // tau 2 gen
+	//--------------------------------------------------------------------------------------------------------
+	
+	//------------------------------- Reconstructed tau (rest mass) ------------------------------------------
+	A1_cosbeta_helicity_plus_tau_rec_rest_mass->Fill(A1hTau1RecRestMass.cosbeta(),HelWeightPlus); // tau 1 rec
+	A1_cosbeta_helicity_plus_tau_rec_rest_mass->Fill(A1hTau2RecRestMass.cosbeta(),HelWeightPlus); // tau 2 rec
+	
+	A1_cosbeta_helicity_minus_tau_rec_rest_mass->Fill(A1hTau1RecRestMass.cosbeta(),HelWeightMinus); // tau 1 rec
+	A1_cosbeta_helicity_minus_tau_rec_rest_mass->Fill(A1hTau2RecRestMass.cosbeta(),HelWeightMinus); // tau 2 rec
+	//--------------------------------------------------------------------------------------------------------
+	
+	//------------------------------- Reconstructed tau (invariant mass) -------------------------------------
+	A1_cosbeta_helicity_plus_tau_rec_invariant_mass->Fill(A1hTau1RecInvariantMass.cosbeta(),HelWeightPlus); // tau 1 rec
+	A1_cosbeta_helicity_plus_tau_rec_invariant_mass->Fill(A1hTau2RecInvariantMass.cosbeta(),HelWeightPlus); // tau 2 rec
+	
+	A1_cosbeta_helicity_minus_tau_rec_invariant_mass->Fill(A1hTau1RecInvariantMass.cosbeta(),HelWeightMinus); // tau 1 rec
+	A1_cosbeta_helicity_minus_tau_rec_invariant_mass->Fill(A1hTau2RecInvariantMass.cosbeta(),HelWeightMinus); // tau 2 rec
+	//--------------------------------------------------------------------------------------------------------
+	//########################################################################################################
+
+	//########################################################################################################
+	//########################################### cos gamma ##################################################
+	//########################################################################################################
+	
+	//------------------------------------- Generated tau ----------------------------------------------------
+	A1_cosgamma_helicity_plus_tau_gen->Fill(a1hh.cosgamma(),HelWeightPlus); // tau 1 gen
+	A1_cosgamma_helicity_plus_tau_gen->Fill(a1h.cosgamma(),HelWeightPlus); // tau 2 gen
+	
+	A1_cosgamma_helicity_minus_tau_gen->Fill(a1hh.cosgamma(),HelWeightMinus); // tau 1 gen
+	A1_cosgamma_helicity_minus_tau_gen->Fill(a1h.cosgamma(),HelWeightMinus); // tau 2 gen
+	//--------------------------------------------------------------------------------------------------------
+	
+	//------------------------------- Reconstructed tau (rest mass) ------------------------------------------
+	A1_cosgamma_helicity_plus_tau_rec_rest_mass->Fill(A1hTau1RecRestMass.cosgamma(),HelWeightPlus); // tau 1 rec
+	A1_cosgamma_helicity_plus_tau_rec_rest_mass->Fill(A1hTau2RecRestMass.cosgamma(),HelWeightPlus); // tau 2 rec
+	
+	A1_cosgamma_helicity_minus_tau_rec_rest_mass->Fill(A1hTau1RecRestMass.cosgamma(),HelWeightMinus); // tau 1 rec
+	A1_cosgamma_helicity_minus_tau_rec_rest_mass->Fill(A1hTau2RecRestMass.cosgamma(),HelWeightMinus); // tau 2 rec
+	//--------------------------------------------------------------------------------------------------------
+	
+	//------------------------------- Reconstructed tau (invariant mass) -------------------------------------
+	A1_cosgamma_helicity_plus_tau_rec_invariant_mass->Fill(A1hTau1RecInvariantMass.cosgamma(),HelWeightPlus); // tau 1 rec
+	A1_cosgamma_helicity_plus_tau_rec_invariant_mass->Fill(A1hTau2RecInvariantMass.cosgamma(),HelWeightPlus); // tau 2 rec
+	
+	A1_cosgamma_helicity_minus_tau_rec_invariant_mass->Fill(A1hTau1RecInvariantMass.cosgamma(),HelWeightMinus); // tau 1 rec
+	A1_cosgamma_helicity_minus_tau_rec_invariant_mass->Fill(A1hTau2RecInvariantMass.cosgamma(),HelWeightMinus); // tau 2 rec
+	//--------------------------------------------------------------------------------------------------------
+	//########################################################################################################
+
+	
+	//########################################################################################################
+	//########################################### cos theta ##################################################
+	//########################################################################################################
+	
+	//------------------------------------- Generated tau ----------------------------------------------------
+	A1_costheta_helicity_plus_tau_gen->Fill(a1hh.costhetaLF(),HelWeightPlus); // tau 1 gen
+	A1_costheta_helicity_plus_tau_gen->Fill(a1h.costhetaLF(),HelWeightPlus); // tau 2 gen
+	
+	A1_costheta_helicity_minus_tau_gen->Fill(a1hh.costhetaLF(),HelWeightMinus); // tau 1 gen
+	A1_costheta_helicity_minus_tau_gen->Fill(a1h.costhetaLF(),HelWeightMinus); // tau 2 gen
+	//--------------------------------------------------------------------------------------------------------
+	
+	//------------------------------- Reconstructed tau (rest mass) ------------------------------------------
+	A1_costheta_helicity_plus_tau_rec_rest_mass->Fill(A1hTau1RecRestMass.costhetaLF(),HelWeightPlus); // tau 1 rec
+	A1_costheta_helicity_plus_tau_rec_rest_mass->Fill(A1hTau2RecRestMass.costhetaLF(),HelWeightPlus); // tau 2 rec
+	
+	A1_costheta_helicity_minus_tau_rec_rest_mass->Fill(A1hTau1RecRestMass.costhetaLF(),HelWeightMinus); // tau 1 rec
+	A1_costheta_helicity_minus_tau_rec_rest_mass->Fill(A1hTau2RecRestMass.costhetaLF(),HelWeightMinus); // tau 2 rec
+	//--------------------------------------------------------------------------------------------------------
+	
+	//------------------------------- Reconstructed tau (invariant mass) -------------------------------------
+	A1_costheta_helicity_plus_tau_rec_invariant_mass->Fill(A1hTau1RecInvariantMass.costhetaLF(),HelWeightPlus); // tau 1 rec
+	A1_costheta_helicity_plus_tau_rec_invariant_mass->Fill(A1hTau2RecInvariantMass.costhetaLF(),HelWeightPlus); // tau 2 rec
+	
+	A1_costheta_helicity_minus_tau_rec_invariant_mass->Fill(A1hTau1RecInvariantMass.costhetaLF(),HelWeightMinus); // tau 1 rec
+	A1_costheta_helicity_minus_tau_rec_invariant_mass->Fill(A1hTau2RecInvariantMass.costhetaLF(),HelWeightMinus); // tau 2 rec
+	//--------------------------------------------------------------------------------------------------------
+	//########################################################################################################
+	
+	
+	//########################################################################################################
+	//###################################### cos theta vs cos alpha ##########################################
+	//########################################################################################################
+	
+	//------------------------------------- Generated tau ----------------------------------------------------
+	A1_cosalpha_costheta_helicity_plus_tau_gen->Fill(a1hh.cosalpha(),a1hh.costhetaLF(),HelWeightPlus); // tau 1 gen
+	A1_cosalpha_costheta_helicity_plus_tau_gen->Fill(a1h.cosalpha(),a1h.costhetaLF(),HelWeightPlus); // tau 2 gen
+	
+	A1_cosalpha_costheta_helicity_minus_tau_gen->Fill(a1hh.cosalpha(),a1hh.costhetaLF(),HelWeightMinus); // tau 1 gen
+	A1_cosalpha_costheta_helicity_minus_tau_gen->Fill(a1h.cosalpha(),a1h.costhetaLF(),HelWeightMinus); // tau 2 gen
+	//--------------------------------------------------------------------------------------------------------
+	
+	//------------------------------- Reconstructed tau (rest mass) ------------------------------------------
+	A1_cosalpha_costheta_helicity_plus_tau_rec_rest_mass->Fill(A1hTau1RecRestMass.cosalpha(),A1hTau1RecRestMass.costhetaLF(),HelWeightPlus); // tau 1 rec
+	A1_cosalpha_costheta_helicity_plus_tau_rec_rest_mass->Fill(A1hTau2RecRestMass.cosalpha(),A1hTau2RecRestMass.costhetaLF(),HelWeightPlus); // tau 2 rec
+	
+	A1_cosalpha_costheta_helicity_minus_tau_rec_rest_mass->Fill(A1hTau1RecRestMass.cosalpha(),A1hTau1RecRestMass.costhetaLF(),HelWeightMinus); // tau 1 rec
+	A1_cosalpha_costheta_helicity_minus_tau_rec_rest_mass->Fill(A1hTau2RecRestMass.cosalpha(),A1hTau2RecRestMass.costhetaLF(),HelWeightMinus); // tau 2 rec
+	//--------------------------------------------------------------------------------------------------------
+	
+	//------------------------------- Reconstructed tau (invariant mass) -------------------------------------
+	A1_cosalpha_costheta_helicity_plus_tau_rec_invariant_mass->Fill(A1hTau1RecInvariantMass.cosalpha(),A1hTau1RecInvariantMass.costhetaLF(),HelWeightPlus); // tau 1 rec
+	A1_cosalpha_costheta_helicity_plus_tau_rec_invariant_mass->Fill(A1hTau2RecInvariantMass.cosalpha(),A1hTau2RecInvariantMass.costhetaLF(),HelWeightPlus); // tau 2 rec
+	
+	A1_cosalpha_costheta_helicity_minus_tau_rec_invariant_mass->Fill(A1hTau1RecInvariantMass.cosalpha(),A1hTau1RecInvariantMass.costhetaLF(),HelWeightMinus); // tau 1 rec
+	A1_cosalpha_costheta_helicity_minus_tau_rec_invariant_mass->Fill(A1hTau2RecInvariantMass.cosalpha(),A1hTau2RecInvariantMass.costhetaLF(),HelWeightMinus); // tau 2 rec
+	//--------------------------------------------------------------------------------------------------------
+	//########################################################################################################
+
+	//########################################################################################################
+	//####################################### cos theta vs cos beta ##########################################
+	//########################################################################################################
+	
+	//------------------------------------- Generated tau ----------------------------------------------------
+	A1_cosbeta_costheta_helicity_plus_tau_gen->Fill(a1hh.cosbeta(),a1hh.costhetaLF(),HelWeightPlus); // tau 1 gen
+	A1_cosbeta_costheta_helicity_plus_tau_gen->Fill(a1h.cosbeta(),a1h.costhetaLF(),HelWeightPlus); // tau 2 gen
+	
+	A1_cosbeta_costheta_helicity_minus_tau_gen->Fill(a1hh.cosbeta(),a1hh.costhetaLF(),HelWeightMinus); // tau 1 gen
+	A1_cosbeta_costheta_helicity_minus_tau_gen->Fill(a1h.cosbeta(),a1h.costhetaLF(),HelWeightMinus); // tau 2 gen
+	//--------------------------------------------------------------------------------------------------------
+	
+	//------------------------------- Reconstructed tau (rest mass) ------------------------------------------
+	A1_cosbeta_costheta_helicity_plus_tau_rec_rest_mass->Fill(A1hTau1RecRestMass.cosbeta(),A1hTau1RecRestMass.costhetaLF(),HelWeightPlus); // tau 1 rec
+	A1_cosbeta_costheta_helicity_plus_tau_rec_rest_mass->Fill(A1hTau2RecRestMass.cosbeta(),A1hTau2RecRestMass.costhetaLF(),HelWeightPlus); // tau 2 rec
+	
+	A1_cosbeta_costheta_helicity_minus_tau_rec_rest_mass->Fill(A1hTau1RecRestMass.cosbeta(),A1hTau1RecRestMass.costhetaLF(),HelWeightMinus); // tau 1 rec
+	A1_cosbeta_costheta_helicity_minus_tau_rec_rest_mass->Fill(A1hTau2RecRestMass.cosbeta(),A1hTau2RecRestMass.costhetaLF(),HelWeightMinus); // tau 2 rec
+	//--------------------------------------------------------------------------------------------------------
+	
+	//------------------------------- Reconstructed tau (invariant mass) -------------------------------------
+	A1_cosbeta_costheta_helicity_plus_tau_rec_invariant_mass->Fill(A1hTau1RecInvariantMass.cosbeta(),A1hTau1RecInvariantMass.costhetaLF(),HelWeightPlus); // tau 1 rec
+	A1_cosbeta_costheta_helicity_plus_tau_rec_invariant_mass->Fill(A1hTau2RecInvariantMass.cosbeta(),A1hTau2RecInvariantMass.costhetaLF(),HelWeightPlus); // tau 2 rec
+	
+	A1_cosbeta_costheta_helicity_minus_tau_rec_invariant_mass->Fill(A1hTau1RecInvariantMass.cosbeta(),A1hTau1RecInvariantMass.costhetaLF(),HelWeightMinus); // tau 1 rec
+	A1_cosbeta_costheta_helicity_minus_tau_rec_invariant_mass->Fill(A1hTau2RecInvariantMass.cosbeta(),A1hTau2RecInvariantMass.costhetaLF(),HelWeightMinus); // tau 2 rec
+	//--------------------------------------------------------------------------------------------------------
+	//########################################################################################################
+	
+	//########################################################################################################
+	//###################################### cos theta vs cos gamma ##########################################
+	//########################################################################################################
+	
+	//------------------------------------- Generated tau ----------------------------------------------------
+	A1_cosgamma_costheta_helicity_plus_tau_gen->Fill(a1hh.cosgamma(),a1hh.costhetaLF(),HelWeightPlus); // tau 1 gen
+	A1_cosgamma_costheta_helicity_plus_tau_gen->Fill(a1h.cosgamma(),a1h.costhetaLF(),HelWeightPlus); // tau 2 gen
+	
+	A1_cosgamma_costheta_helicity_minus_tau_gen->Fill(a1hh.cosgamma(),a1hh.costhetaLF(),HelWeightMinus); // tau 1 gen
+	A1_cosgamma_costheta_helicity_minus_tau_gen->Fill(a1h.cosgamma(),a1h.costhetaLF(),HelWeightMinus); // tau 2 gen
+	//--------------------------------------------------------------------------------------------------------
+	
+	//------------------------------- Reconstructed tau (rest mass) ------------------------------------------
+	A1_cosgamma_costheta_helicity_plus_tau_rec_rest_mass->Fill(A1hTau1RecRestMass.cosgamma(),A1hTau1RecRestMass.costhetaLF(),HelWeightPlus); // tau 1 rec
+	A1_cosgamma_costheta_helicity_plus_tau_rec_rest_mass->Fill(A1hTau2RecRestMass.cosgamma(),A1hTau2RecRestMass.costhetaLF(),HelWeightPlus); // tau 2 rec
+	
+	A1_cosgamma_costheta_helicity_minus_tau_rec_rest_mass->Fill(A1hTau1RecRestMass.cosgamma(),A1hTau1RecRestMass.costhetaLF(),HelWeightMinus); // tau 1 rec
+	A1_cosgamma_costheta_helicity_minus_tau_rec_rest_mass->Fill(A1hTau2RecRestMass.cosgamma(),A1hTau2RecRestMass.costhetaLF(),HelWeightMinus); // tau 2 rec
+	//--------------------------------------------------------------------------------------------------------
+	
+	//------------------------------- Reconstructed tau (invariant mass) -------------------------------------
+	A1_cosgamma_costheta_helicity_plus_tau_rec_invariant_mass->Fill(A1hTau1RecInvariantMass.cosgamma(),A1hTau1RecInvariantMass.costhetaLF(),HelWeightPlus); // tau 1 rec
+	A1_cosgamma_costheta_helicity_plus_tau_rec_invariant_mass->Fill(A1hTau2RecInvariantMass.cosgamma(),A1hTau2RecInvariantMass.costhetaLF(),HelWeightPlus); // tau 2 rec
+	
+	A1_cosgamma_costheta_helicity_minus_tau_rec_invariant_mass->Fill(A1hTau1RecInvariantMass.cosgamma(),A1hTau1RecInvariantMass.costhetaLF(),HelWeightMinus); // tau 1 rec
+	A1_cosgamma_costheta_helicity_minus_tau_rec_invariant_mass->Fill(A1hTau2RecInvariantMass.cosgamma(),A1hTau2RecInvariantMass.costhetaLF(),HelWeightMinus); // tau 2 rec
+	//--------------------------------------------------------------------------------------------------------
+	//########################################################################################################
+	
 	
 	
 	
 	}
+	
+
 	
 	
 	
@@ -2663,40 +3313,66 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 	if(a1LV1.P() >19.6 && a1LV1.P() <20.4){
 	  Momentum_tau_rec_vs_theta_pa1_20->Fill(theta_GJ1,tau_momentum_plus1);
 	  Momentum_tau_rec_vs_theta_pa1_20->Fill(theta_GJ1,tau_momentum_minus1);
-	  theta_CM_vs_tau_momentum_rec_pa1_20->Fill(theta_GJ1,tau_momentum_plus1);
-	  theta_CM_vs_tau_momentum_rec_pa1_20->Fill(theta_GJ1,tau_momentum_minus1);
-	  costheta_CM_vs_tau_momentum_rec_pa1_20->Fill(theta_GJ1,tau_momentum_plus1);
-	  costheta_CM_vs_tau_momentum_rec_pa1_20->Fill(theta_GJ1,tau_momentum_minus1);}
+	  
+	  if(theta_CM > TMath::Pi()/2){theta_CM_pos_vs_tau_momentum_rec_pa1_20->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM > TMath::Pi()/2){theta_CM_pos_vs_tau_momentum_rec_pa1_20->Fill(theta_GJ1,tau_momentum_minus1);}
+	  if(theta_CM < TMath::Pi()/2){theta_CM_neg_vs_tau_momentum_rec_pa1_20->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM < TMath::Pi()/2){theta_CM_neg_vs_tau_momentum_rec_pa1_20->Fill(theta_GJ1,tau_momentum_minus1);}
+	  if(theta_CM > TMath::Pi()/2){costheta_CM_pos_vs_tau_momentum_rec_pa1_20->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM > TMath::Pi()/2){costheta_CM_pos_vs_tau_momentum_rec_pa1_20->Fill(theta_GJ1,tau_momentum_minus1);}
+	  if(theta_CM < TMath::Pi()/2){costheta_CM_neg_vs_tau_momentum_rec_pa1_20->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM < TMath::Pi()/2){costheta_CM_neg_vs_tau_momentum_rec_pa1_20->Fill(theta_GJ1,tau_momentum_minus1);}}
+	  
 	if(a1LV1.P() >22.6 && a1LV1.P() <23.4){
 	  Momentum_tau_rec_vs_theta_pa1_23->Fill(theta_GJ1,tau_momentum_plus1);
 	  Momentum_tau_rec_vs_theta_pa1_23->Fill(theta_GJ1,tau_momentum_minus1);
-	  theta_CM_vs_tau_momentum_rec_pa1_23->Fill(theta_GJ1,tau_momentum_plus1);
-	  theta_CM_vs_tau_momentum_rec_pa1_23->Fill(theta_GJ1,tau_momentum_minus1);
-	  costheta_CM_vs_tau_momentum_rec_pa1_23->Fill(theta_GJ1,tau_momentum_plus1);
-	  costheta_CM_vs_tau_momentum_rec_pa1_23->Fill(theta_GJ1,tau_momentum_minus1);}
+	  
+	  if(theta_CM > TMath::Pi()/2){theta_CM_pos_vs_tau_momentum_rec_pa1_23->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM > TMath::Pi()/2){theta_CM_pos_vs_tau_momentum_rec_pa1_23->Fill(theta_GJ1,tau_momentum_minus1);}
+	  if(theta_CM < TMath::Pi()/2){theta_CM_neg_vs_tau_momentum_rec_pa1_23->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM < TMath::Pi()/2){theta_CM_neg_vs_tau_momentum_rec_pa1_23->Fill(theta_GJ1,tau_momentum_minus1);}
+	  if(theta_CM > TMath::Pi()/2){costheta_CM_pos_vs_tau_momentum_rec_pa1_23->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM > TMath::Pi()/2){costheta_CM_pos_vs_tau_momentum_rec_pa1_23->Fill(theta_GJ1,tau_momentum_minus1);}
+	  if(theta_CM < TMath::Pi()/2){costheta_CM_neg_vs_tau_momentum_rec_pa1_23->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM < TMath::Pi()/2){costheta_CM_neg_vs_tau_momentum_rec_pa1_23->Fill(theta_GJ1,tau_momentum_minus1);}}
 	if(a1LV1.P() >24.6 && a1LV1.P() <25.4){
 	  Momentum_tau_rec_vs_theta_pa1_25->Fill(theta_GJ1,tau_momentum_plus1);
 	  Momentum_tau_rec_vs_theta_pa1_25->Fill(theta_GJ1,tau_momentum_minus1);
-	  theta_CM_vs_tau_momentum_rec_pa1_25->Fill(theta_GJ1,tau_momentum_plus1);
-	  theta_CM_vs_tau_momentum_rec_pa1_25->Fill(theta_GJ1,tau_momentum_minus1);
-	  costheta_CM_vs_tau_momentum_rec_pa1_25->Fill(theta_GJ1,tau_momentum_plus1);
-	  costheta_CM_vs_tau_momentum_rec_pa1_25->Fill(theta_GJ1,tau_momentum_minus1);}
+	  
+	  if(theta_CM > TMath::Pi()/2){theta_CM_pos_vs_tau_momentum_rec_pa1_25->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM > TMath::Pi()/2){theta_CM_pos_vs_tau_momentum_rec_pa1_25->Fill(theta_GJ1,tau_momentum_minus1);} 
+	  if(theta_CM < TMath::Pi()/2){theta_CM_neg_vs_tau_momentum_rec_pa1_25->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM < TMath::Pi()/2){theta_CM_neg_vs_tau_momentum_rec_pa1_25->Fill(theta_GJ1,tau_momentum_minus1);}
+	  if(theta_CM > TMath::Pi()/2){costheta_CM_pos_vs_tau_momentum_rec_pa1_25->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM > TMath::Pi()/2){costheta_CM_pos_vs_tau_momentum_rec_pa1_25->Fill(theta_GJ1,tau_momentum_minus1);}
+	  if(theta_CM < TMath::Pi()/2){costheta_CM_neg_vs_tau_momentum_rec_pa1_25->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM < TMath::Pi()/2){costheta_CM_neg_vs_tau_momentum_rec_pa1_25->Fill(theta_GJ1,tau_momentum_minus1);}}
 	if(a1LV1.P() >26.6 && a1LV1.P() <27.4){
 	  Momentum_tau_rec_vs_theta_pa1_27->Fill(theta_GJ1,tau_momentum_plus1);
 	  Momentum_tau_rec_vs_theta_pa1_27->Fill(theta_GJ1,tau_momentum_minus1);
-	  theta_CM_vs_tau_momentum_rec_pa1_27->Fill(theta_GJ1,tau_momentum_plus1);
-	  theta_CM_vs_tau_momentum_rec_pa1_27->Fill(theta_GJ1,tau_momentum_minus1);
-	  costheta_CM_vs_tau_momentum_rec_pa1_27->Fill(theta_GJ1,tau_momentum_plus1);
-	  costheta_CM_vs_tau_momentum_rec_pa1_27->Fill(theta_GJ1,tau_momentum_minus1);}
+	  
+	  if(theta_CM > TMath::Pi()/2){theta_CM_pos_vs_tau_momentum_rec_pa1_27->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM > TMath::Pi()/2){theta_CM_pos_vs_tau_momentum_rec_pa1_27->Fill(theta_GJ1,tau_momentum_minus1);}
+	  if(theta_CM < TMath::Pi()/2){theta_CM_neg_vs_tau_momentum_rec_pa1_27->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM < TMath::Pi()/2){theta_CM_neg_vs_tau_momentum_rec_pa1_27->Fill(theta_GJ1,tau_momentum_minus1);}
+	  if(theta_CM > TMath::Pi()/2){costheta_CM_pos_vs_tau_momentum_rec_pa1_27->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM > TMath::Pi()/2){costheta_CM_pos_vs_tau_momentum_rec_pa1_27->Fill(theta_GJ1,tau_momentum_minus1);}
+	  if(theta_CM < TMath::Pi()/2){costheta_CM_neg_vs_tau_momentum_rec_pa1_27->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM < TMath::Pi()/2){costheta_CM_neg_vs_tau_momentum_rec_pa1_27->Fill(theta_GJ1,tau_momentum_minus1);}}
 	if(a1LV1.P() >29.6 && a1LV1.P() <30.4){
 	  Momentum_tau_rec_vs_theta_pa1_30->Fill(theta_GJ1,tau_momentum_plus1);
 	  Momentum_tau_rec_vs_theta_pa1_30->Fill(theta_GJ1,tau_momentum_minus1);
 	  Momentum_tau_plus_rec_vs_theta_pa1_30->Fill(theta_GJ1,tau_momentum_plus1);
 	  Momentum_tau_minus_rec_vs_theta_pa1_30->Fill(theta_GJ1,tau_momentum_minus1);
-	  theta_CM_vs_tau_momentum_rec_pa1_30->Fill(theta_GJ1,tau_momentum_plus1);
-	  theta_CM_vs_tau_momentum_rec_pa1_30->Fill(theta_GJ1,tau_momentum_minus1);
-	  costheta_CM_vs_tau_momentum_rec_pa1_30->Fill(theta_GJ1,tau_momentum_plus1);
-	  costheta_CM_vs_tau_momentum_rec_pa1_30->Fill(theta_GJ1,tau_momentum_minus1);
+	  
+	  if(theta_CM > TMath::Pi()/2){theta_CM_pos_vs_tau_momentum_rec_pa1_30->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM > TMath::Pi()/2){theta_CM_pos_vs_tau_momentum_rec_pa1_30->Fill(theta_GJ1,tau_momentum_minus1);}
+	  if(theta_CM < TMath::Pi()/2){theta_CM_neg_vs_tau_momentum_rec_pa1_30->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM < TMath::Pi()/2){theta_CM_neg_vs_tau_momentum_rec_pa1_30->Fill(theta_GJ1,tau_momentum_minus1);}
+	  if(theta_CM > TMath::Pi()/2){costheta_CM_pos_vs_tau_momentum_rec_pa1_30->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM > TMath::Pi()/2){costheta_CM_pos_vs_tau_momentum_rec_pa1_30->Fill(theta_GJ1,tau_momentum_minus1);}
+	  if(theta_CM < TMath::Pi()/2){costheta_CM_neg_vs_tau_momentum_rec_pa1_30->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM < TMath::Pi()/2){costheta_CM_neg_vs_tau_momentum_rec_pa1_30->Fill(theta_GJ1,tau_momentum_minus1);}
 	  //std::cout << "theta max 30 " << theta_max << std::endl;
 	  if(theta_GJ1 >= theta_max1){Mass_a1_above_theta_max_plus_pa1_30->Fill(theta_GJ1,a1LV1.M());}
 	  if(theta_GJ1 < theta_max1){Mass_a1_above_theta_max_minus_pa1_30->Fill(theta_GJ1,a1LV1.M());}}
@@ -2705,10 +3381,15 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 	  Momentum_tau_rec_vs_theta_pa1_35->Fill(theta_GJ1,tau_momentum_minus1);
 	  Momentum_tau_plus_rec_vs_theta_pa1_35->Fill(theta_GJ1,tau_momentum_plus1);
 	  Momentum_tau_minus_rec_vs_theta_pa1_35->Fill(theta_GJ1,tau_momentum_minus1);
-	  theta_CM_vs_tau_momentum_rec_pa1_35->Fill(theta_GJ1,tau_momentum_plus1);
-	  theta_CM_vs_tau_momentum_rec_pa1_35->Fill(theta_GJ1,tau_momentum_minus1);
-	  costheta_CM_vs_tau_momentum_rec_pa1_35->Fill(theta_GJ1,tau_momentum_plus1);
-	  costheta_CM_vs_tau_momentum_rec_pa1_35->Fill(theta_GJ1,tau_momentum_minus1);
+	  
+	  if(theta_CM > TMath::Pi()/2){theta_CM_pos_vs_tau_momentum_rec_pa1_35->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM > TMath::Pi()/2){theta_CM_pos_vs_tau_momentum_rec_pa1_35->Fill(theta_GJ1,tau_momentum_minus1);}
+	  if(theta_CM < TMath::Pi()/2){theta_CM_neg_vs_tau_momentum_rec_pa1_35->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM < TMath::Pi()/2){theta_CM_neg_vs_tau_momentum_rec_pa1_35->Fill(theta_GJ1,tau_momentum_minus1);}
+	  if(theta_CM > TMath::Pi()/2){costheta_CM_pos_vs_tau_momentum_rec_pa1_35->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM > TMath::Pi()/2){costheta_CM_pos_vs_tau_momentum_rec_pa1_35->Fill(theta_GJ1,tau_momentum_minus1);}
+	  if(theta_CM < TMath::Pi()/2){costheta_CM_neg_vs_tau_momentum_rec_pa1_35->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM < TMath::Pi()/2){costheta_CM_neg_vs_tau_momentum_rec_pa1_35->Fill(theta_GJ1,tau_momentum_minus1);}
 	  //std::cout << "theta max 35 " << theta_max << std::endl;
 	  if(theta_GJ1 >= theta_max1){Mass_a1_above_theta_max_plus_pa1_35->Fill(theta_GJ1,a1LV1.M());}
 	  if(theta_GJ1 < theta_max1){Mass_a1_above_theta_max_minus_pa1_35->Fill(theta_GJ1,a1LV1.M());}}
@@ -2717,10 +3398,15 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 	  Momentum_tau_rec_vs_theta_pa1_40->Fill(theta_GJ1,tau_momentum_minus1);
 	  Momentum_tau_plus_rec_vs_theta_pa1_40->Fill(theta_GJ1,tau_momentum_plus1);
 	  Momentum_tau_minus_rec_vs_theta_pa1_40->Fill(theta_GJ1,tau_momentum_minus1);
-	  theta_CM_vs_tau_momentum_rec_pa1_40->Fill(theta_GJ1,tau_momentum_plus1);
-	  theta_CM_vs_tau_momentum_rec_pa1_40->Fill(theta_GJ1,tau_momentum_minus1);
-	  costheta_CM_vs_tau_momentum_rec_pa1_40->Fill(theta_GJ1,tau_momentum_plus1);
-	  costheta_CM_vs_tau_momentum_rec_pa1_40->Fill(theta_GJ1,tau_momentum_minus1);
+	  
+	  if(theta_CM > TMath::Pi()/2){theta_CM_pos_vs_tau_momentum_rec_pa1_40->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM > TMath::Pi()/2){theta_CM_pos_vs_tau_momentum_rec_pa1_40->Fill(theta_GJ1,tau_momentum_minus1);}
+	  if(theta_CM < TMath::Pi()/2){theta_CM_neg_vs_tau_momentum_rec_pa1_40->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM < TMath::Pi()/2){theta_CM_neg_vs_tau_momentum_rec_pa1_40->Fill(theta_GJ1,tau_momentum_minus1);}
+	  if(theta_CM > TMath::Pi()/2){costheta_CM_pos_vs_tau_momentum_rec_pa1_40->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM > TMath::Pi()/2){costheta_CM_pos_vs_tau_momentum_rec_pa1_40->Fill(theta_GJ1,tau_momentum_minus1);}
+	  if(theta_CM < TMath::Pi()/2){costheta_CM_neg_vs_tau_momentum_rec_pa1_40->Fill(theta_GJ1,tau_momentum_plus1);}
+	  if(theta_CM < TMath::Pi()/2){costheta_CM_neg_vs_tau_momentum_rec_pa1_40->Fill(theta_GJ1,tau_momentum_minus1);}
 	  //std::cout << "theta max 40 " << theta_max << std::endl;
 	  if(theta_GJ1 >= theta_max1){Mass_a1_above_theta_max_plus_pa1_40->Fill(theta_GJ1,a1LV1.M());}
 	  if(theta_GJ1 < theta_max1){Mass_a1_above_theta_max_minus_pa1_40->Fill(theta_GJ1,a1LV1.M());}}
@@ -2797,10 +3483,11 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
 	if(a1LV1.P() >39.6 && a1LV1.P() <40.4 && (a1LV1.E()/a1LV1.M())<(tau1.E()/tau1.M())){
 	  Momentum_tau_rec_vs_theta_pa1_40_small_ma1->Fill(theta_GJ1,tau_momentum_plus1);
 	  Momentum_tau_rec_vs_theta_pa1_40_small_ma1->Fill(theta_GJ1,tau_momentum_minus1);}
+	  
 	if(a1LV1.P() >39.6 && a1LV1.P() <40.4 && (a1LV1.E()/a1LV1.M())>(tau1.E()/tau1.M())){
 	  Momentum_tau_rec_vs_theta_pa1_40_large_ma1->Fill(theta_GJ1,tau_momentum_plus1);
-	  Momentum_tau_rec_vs_theta_pa1_40_large_ma1->Fill(theta_GJ1,tau_momentum_minus1);}
-	//------------------------------------------------------------------------------------
+	  Momentum_tau_rec_vs_theta_pa1_40_large_ma1->Fill(theta_GJ1,tau_momentum_minus1);} 
+	 
 	
 	/*
 	//-------------------------- Crossing ---------------------------------------------
@@ -2905,31 +3592,10 @@ TH1F *hmag= new TH1F("hmag","hmag",40,0.5,1.5);
   
 	
 	
-	
-	
-	
-	/*
-	//------------------------- omega (helicity)-------------------------------------
-	Omega_plus_a1->Fill(a1LV.getOmega(),HelWeightPlus);
-	Omega_minus_a1->Fill(a1LV.getOmega(),HelWeightMinus);
-	//----------------------------------------------------------------------------------
-	*/
-	
-	
-	//if(theta_GJ > theta_max -0.0001 && theta_GJ <= theta_max){ ambiguity_a1_momentum->Fill(a1LV.P());}
-
-	
-	
-	
-     }
+ 
+  }    
      
     
-     /*
-     if (theta_GJ > theta_max){ 
-       ++unphysical_theta; 
-       std::cout<< "unphysical events " << unphysical_theta <<std::endl;
-     }
-     */
     //--------------------------------  a1
      /*
 std::cout << "nb solu + "<< nb_tau_momentum_plus << std::endl;
@@ -3095,9 +3761,10 @@ std::cout << "nb solu + "<< nb_tau_momentum_plus << std::endl;
 	if(HelWeightMinus==1)     a1_mcos2gamma_minus->Fill(a1h.getMoment(a1h.costhetaLF(),"c2g", -1));                 
       }
     }
+    // somehistofor_TauR->Fill(....,HelWeightPlus);
+    // somehistofor_TauL->Fill(....,HelWeightMinus);
     
-    //----------------------------- pairs -----------------
-
+    
     
     if(JAK1==4 &&JAK2==3 ){
       if(ApplyCut){

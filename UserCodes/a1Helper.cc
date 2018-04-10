@@ -468,6 +468,8 @@ a1Helper::cosbetaLF(){
   return ospionVect.Dot(ss1pionVect.Cross(ss2pionVect)) /LFa1LV.P()/T;
 }
 
+
+  
 double
 a1Helper::VV1(){ //  this is -V1^{2}
   double QQ = _Q*_Q;
